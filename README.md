@@ -1,6 +1,6 @@
 <div align="center">
 
-# Publish data
+# Datapub
 
 [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/datopian/ckan3-js-sdk/issues)
 [![The MIT License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](http://opensource.org/licenses/MIT)
@@ -19,13 +19,13 @@ React-based framework for building data publishing flows (esp for CKAN)
 First, clone the repo via git:
 
 ```bash
-$ git clone git@github.com:datopian/publish-dat.git
+$ git clone git@github.com:datopian/datapub.git
 ```
 
 And then install dependencies with npm.
 
 ```bash
-$ cd publish-dat
+$ cd datapub
 $ npm install
 ```
 

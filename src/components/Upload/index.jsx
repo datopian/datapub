@@ -1,7 +1,9 @@
 import React from "react";
 import axios from "axios";
 
-class Uploader extends React.Component {
+import { Uploader, FileAPI } from 'ckan3-js-sdk'
+
+class Upload extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -16,7 +18,14 @@ class Uploader extends React.Component {
       loaded: 0,
       status: null,
     });
+
+    // create an instance of a object
+    const file = new FileAPI.HTML5File(event.target.files[0])
+    const uploader = new Uploader('key', 'organization-name', 'dataset-name', 'api')
+
     console.log(event.target.files[0]);
+    console.log(uploader)
+    console.log(file)
   };
 
   onClickHandler = () => {
@@ -64,4 +73,4 @@ class Uploader extends React.Component {
   }
 }
 
-export default Uploader;
+export default Upload;

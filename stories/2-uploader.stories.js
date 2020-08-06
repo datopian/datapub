@@ -2,19 +2,19 @@
 import React from "react";
 import { action } from '@storybook/addon-actions';
 
-import Uploader from '../src/components/Uploader'
+import Upload from '../src/components/Upload'
 import '../src/App.css';
 
 export default {
-  title: 'Components /Uploader',
-  component: Uploader,
+  title: 'Components /Upload',
+  component: Upload,
 };
 
 
-export const Idle = () => <Uploader/>;
+export const Idle = () => <Upload/>;
 
-export const Loading = () => <Uploader/>;
+export const Loading = () => <Upload/>;
 
-export const Success = () => <Uploader/>;
+export const Success = () => <Upload/>;
 
-export const Failed = () => <Uploader/>;
+export const Failed = () => <Upload/>;

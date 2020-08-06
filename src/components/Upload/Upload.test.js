@@ -2,9 +2,9 @@ import React from 'react';
 import { render } from '@testing-library/react';
 import ReactDOM from 'react-dom';
 
-import Uploader from './'
+import Upload from '.'
 
-it('render Uploader without crashing', () => {
+it('render Upload without crashing', () => {
     const div = document.createElement('div');
-    ReactDOM.render(<Uploader />, div);
+    ReactDOM.render(<Upload />, div);
   });

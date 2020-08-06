@@ -1,12 +1,12 @@
 import React from 'react';
 import './App.css';
 
-import Uploader from './components/Uploader'
+import Upload from './components/Upload'
 
 function App() {
   return (
     <div className="App">
-      <Uploader/>
+      <Upload/>
     </div>
   );
 }

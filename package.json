@@ -9,7 +9,8 @@
     "axios": "^0.19.2",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "react-scripts": "3.4.1"
+    "react-scripts": "3.4.1",
+    "ckan3-js-sdk": "datopian/ckan3-js-sdk"
   },
   "scripts": {
     "start": "react-scripts start",

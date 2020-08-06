@@ -15,6 +15,14 @@ React-based framework for building data publishing flows (esp for CKAN)
 - [Node](https://nodejs.org/en/)
 - [NPM Package Manager](https://www.npmjs.com/)
 
+## Built with
+
+- [create-react-app](https://cryptojs.gitbook.io/docs/)
+- [axios](https://github.com/axios/axios)
+- [Storybook](https://storybook.js.org/)
+- [Sest](https://jestjs.io/)
+- [Ckan3-js-sdk](https://github.com/datopian/ckan3-js-sdk)
+
 ## Install
 
 First, clone the repo via git:
@@ -36,7 +44,7 @@ $ npm install
 $ npm run start
 ```
 
-## Run storybook
+## Run Storybook
 
 ```bash
 $ npm run storybook
@@ -48,10 +56,26 @@ or
 $ yarn storybook
 ```
 
+## Run Tests
+
+```bash
+$ npm test
+```
+
+or 
+
+```bash
+$ yarn test
+```
+
 Run the app in the development mode.<br />
 Open [http://localhost:3000/](http://localhost:3000/) to view it in the browser.
 
 The page will reload if you make edits.<br />
+
+## Contributing
+
+Please make sure to read the [CONTRIBUTING.md](CONTRIBUTING.md) Guide before making a pull request.
 
 ## License
 

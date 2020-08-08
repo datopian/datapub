@@ -53,9 +53,9 @@ class Upload extends React.Component {
       .then(response => response.json())
       .then(response => console.log(response))
     
-    // console.log(event.target.files[0]);
-    // console.log(uploader)
-    // console.log(file)
+    console.log(event.target.files[0]);
+    console.log(uploader)
+    console.log(file)
   };
 
   onClickHandler = () => {

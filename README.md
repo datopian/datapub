@@ -6,7 +6,7 @@
 ![build](https://github.com/datopian/datapub/workflows/datapub%20actions/badge.svg)
 [![The MIT License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](http://opensource.org/licenses/MIT)
 
-React-based framework for building data publishing flows (esp for CKAN)
+React-based framework for building data publishing flows (esp for CKAN). This application will communicate with [ckanext-external-storage](https://github.com/datopian/ckanext-external-storage).
 
 </div>
 
@@ -18,9 +18,9 @@ React-based framework for building data publishing flows (esp for CKAN)
 ## Built with
 
 - [create-react-app](https://cryptojs.gitbook.io/docs/)
-- [axios](https://github.com/axios/axios)
 - [Storybook](https://storybook.js.org/)
-- [Sest](https://jestjs.io/)
+- [enzyme](https://github.com/enzymejs/enzyme)
+- [Jest](https://jestjs.io/)
 - [Ckan3-js-sdk](https://github.com/datopian/ckan3-js-sdk)
 
 ## Install
@@ -44,7 +44,11 @@ $ npm install
 $ npm run start
 ```
 
-## Run Storybook
+## Storybook
+
+Storybook is a tool that prepares a development environment for UI components. It allows you to develop and design your graphical interfaces quickly, isolated, and independently. Making it possible to define different states for components, thus documenting their states.
+
+### Run storybook
 
 ```bash
 $ npm run storybook

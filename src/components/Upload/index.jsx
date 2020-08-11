@@ -7,6 +7,7 @@ class Upload extends React.Component {
     this.state = {
       selectedFile: null,
       loaded: 0,
+      success: null
     };
   }
 
@@ -51,6 +52,7 @@ class Upload extends React.Component {
     console.log("File:", file)
   };
   render() {
+    const { success } = this.state
     return (
       <div className="uploader-wrapper">
         <input
@@ -67,7 +69,8 @@ class Upload extends React.Component {
           Upload
         </button>
         <h2>loaded: {Math.round(this.state.loaded)} %</h2>
-        <h2>Status: {this.state.success && "Success"}</h2>
+        <h2>{success === true && "File upload success"}</h2>
+        <h2>{success === false && "Upload failed"}</h2>
       </div>
     );
   }

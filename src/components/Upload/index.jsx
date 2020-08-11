@@ -1,6 +1,4 @@
 import React from "react";
-import axios from "axios";
-
 import { Uploader, FileAPI } from 'ckan3-js-sdk'
 
 class Upload extends React.Component {
@@ -16,69 +14,41 @@ class Upload extends React.Component {
     this.setState({
       selectedFile: event.target.files[0],
       loaded: 0,
-      status: null,
+      success: null,
     });
+  };
+  
+  onUploadProgress = (progressEvent) => {
+    this.setState({
+      loaded: (progressEvent.loaded / progressEvent.total) * 100
+    })
+  }
 
-    /**
-     * Push stuff
-     */
-    const config = {
-      authToken: 'be270cae-1c77-4853-b8c1-30b6cf5e9878',
-      api: 'http://localhost:5000',
-      organizationId: 'myorg',
-      datasetId: 'new-test-3',
-    }
-
-    const scopes = {
-      "scopes": [`obj:${config.organizationId}/${config.datasetId}/*:read,write`]
-    }
+  onClickHandler = () => {
+    const { selectedFile } = this.state
+    const { scopes, config, authzUrl } = this.props
+    const { authToken, api,organizationId, datasetId } = config
 
     // create an instance of a object
-    const file = new FileAPI.HTML5File(event.target.files[0])
-    const uploader = new Uploader(`${config.authToken}`, `${config.organizationId}`, `${config.datasetId}`, `${config.api}`)
+    const file = new FileAPI.HTML5File(selectedFile)
+    const uploader = new Uploader(`${authToken}`, `${organizationId}`, `${datasetId}`, `${api}`)
 
-
-    // authz path
-    const path = '/api/action/authz_authorize'
-
-    // Get the JWT token from authz
-    fetch(`${path}`,{
+    // Get the JWT token from authz and upload file to the storage
+    fetch(`${authzUrl}`,{
         method: 'POST',
         headers: {  
           'Content-Type':'application/json',
-          Authorization: config.authToken,
+          Authorization: authToken,
         },
         body: JSON.stringify(scopes)
       })
       .then(response => response.json())
-      .then(response => console.log(response))
-    
-    console.log(event.target.files[0]);
-    console.log(uploader)
-    console.log(file)
-  };
-
-  onClickHandler = () => {
-    const data = new FormData();
-    data.append("file", this.state.selectedFile, this.state.selectedFile.name);
-
-    let config = {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-      onUploadProgress: (progressEvent) => {
-        this.setState({
-          loaded: (progressEvent.loaded / progressEvent.total) * 100,
-        });
-      },
-    };
-    axios
-      .put("http://localhost:3000/upload", data, config)
-      .then((response) => {
-        this.setState({
-          status: response.status,
-        });
-      });
+      .then(response => uploader.push(file, response.result.token, this.onUploadProgress))
+      .then(response => this.setState({success: response.success}))
+      .catch(error => console.log('error: ', error))
+  
+    console.log("uploader:", uploader)
+    console.log("File:", file)
   };
   render() {
     return (
@@ -97,10 +67,27 @@ class Upload extends React.Component {
           Upload
         </button>
         <h2>loaded: {Math.round(this.state.loaded)} %</h2>
-        <h2>Status code: {this.state.status}</h2>
+        <h2>Status: {this.state.success && "Success"}</h2>
       </div>
     );
   }
+}
+
+/** 
+ * If the parent component doesn't specify a `config` and scope prop, then
+ * the default values will be used.
+ * */ 
+Upload.defaultProps = {
+  config: {
+    authToken: 'be270cae-1c77-4853-b8c1-30b6cf5e9878',
+    api: 'http://localhost:9419',
+    organizationId: 'myorg',
+    datasetId: 'new-sample',
+  },
+  scopes: {
+    "scopes": [`obj:myorg/new-sample/*:read,write`]
+  },
+  authzUrl: 'http://localhost:5000/api/action/authz_authorize'
 }
 
 export default Upload;

@@ -1,13 +1,18 @@
 import React from "react";
 import { Uploader, FileAPI } from 'ckan3-js-sdk'
 
+import ProgressBar from '../ProgressBar';
+
 class Upload extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       selectedFile: null,
       loaded: 0,
-      success: null
+      success: null,
+      fileSize: 0,
+      timeRemaining: 0,
+      start: ''
     };
   }
 
@@ -20,12 +25,21 @@ class Upload extends React.Component {
   };
   
   onUploadProgress = (progressEvent) => {
+    console.log("loaded:",progressEvent.loaded);
+    let end = new Date().getTime()
+    let duration = (end - this.state.start) / 1000
+    let bps = progressEvent.loaded / duration
+    let kbps = bps / 1024
+    kbps = Math.round(kbps)
+    let timeRemaining = ((this.state.fileSize - progressEvent.loaded) / kbps)
     this.setState({
-      loaded: (progressEvent.loaded / progressEvent.total) * 100
+      loaded: (progressEvent.loaded / progressEvent.total) * 100,
+      timeRemaining
     })
   }
 
   onClickHandler = () => {
+    const start = new Date().getTime()
     const { selectedFile } = this.state
     const { scopes, config, authzUrl } = this.props
     const { authToken, api,organizationId, datasetId } = config
@@ -33,6 +47,8 @@ class Upload extends React.Component {
     // create an instance of a object
     const file = new FileAPI.HTML5File(selectedFile)
     const uploader = new Uploader(`${authToken}`, `${organizationId}`, `${datasetId}`, `${api}`)
+
+    this.setState({fileSize: file.size(), start})
 
     // Get the JWT token from authz and upload file to the storage
     fetch(`${authzUrl}`,{
@@ -68,7 +84,15 @@ class Upload extends React.Component {
         >
           Upload
         </button>
-        <h2>loaded: {Math.round(this.state.loaded)} %</h2>
+        {/* <h2>loaded: {Math.round(this.state.loaded)} %</h2> */}
+        <ProgressBar 
+          progress={Math.round(this.state.loaded)}
+          size={50}
+          strokeWidth={5}
+          circleOneStroke='#d9edfe'
+          circleTwoStroke={"#7ea9e1"}
+        />
+        <span className="uploader-seconds">{this.state.timeRemaining} minutes Left</span> 
         <h2>{success === true && "File upload success"}</h2>
         <h2>{success === false && "Upload failed"}</h2>
       </div>

@@ -47,3 +47,7 @@ code {
 .uploader-btn:hover {
   background-color: #48E68B;
 }
+
+.uploader-seconds {
+  font-size: 0.65rem;
+}

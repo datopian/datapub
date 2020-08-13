@@ -12,6 +12,7 @@ const ProgressBar = (props) => {
     strokeWidth,
     circleOneStroke,
     circleTwoStroke,
+    timeRemaining,
   } = props;
 
   const center = size / 2;
@@ -51,6 +52,7 @@ const ProgressBar = (props) => {
           {progress}%
         </text>
       </svg>
+      {timeRemaining > 0 &&  <span className="time-remaining">{timeRemaining > 60 ? `${Math.floor(timeRemaining /60)} minute${Math.floor(timeRemaining /60) > 1 ? 's' : ''}` : `${Math.floor(timeRemaining)} second${timeRemaining > 1 ? 's' : ''}`} left</span>}
     </>
   );
 };

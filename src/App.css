@@ -22,9 +22,15 @@ code {
 
 
 .uploader-wrapper {
-  display: grid;
   width: 50%;
   margin: 0 auto;
+}
+
+.uploader-info {
+  display: grid;
+  grid-template-columns: 1fr 1fr 100px;
+  justify-items: center;
+  align-items: center;
 }
 
 .uploader-input {
@@ -33,7 +39,7 @@ code {
 
 .uploader-btn {
   border-radius: 5px;
-  padding: 15px 45px;
+  padding: 15px 35px;
   font-size: 22px;
   margin: 0 auto;
   color: #fff;
@@ -46,8 +52,4 @@ code {
 
 .uploader-btn:hover {
   background-color: #48E68B;
-}
-
-.uploader-seconds {
-  font-size: 0.65rem;
 }

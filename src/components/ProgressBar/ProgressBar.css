@@ -19,3 +19,7 @@
     fill: #fff;
     font-weight: bold;
 }
+
+.time-remaining  {
+    font-size: 0.65rem;
+}

@@ -25,4 +25,13 @@ describe("<Upload />", () => {
 
     expect(wrapper.state().selectedFile).toEqual('sample.csv');
   });
+
+  it('format size in Bytes, KB, MB, GB', () => {
+    const wrapper = shallow(<Upload />)
+
+    expect(wrapper.instance().onFormatBytes(100)).toEqual('100 Bytes');
+    expect(wrapper.instance().onFormatBytes(1000)).toEqual('1 KB');
+    expect(wrapper.instance().onFormatBytes(1222222)).toEqual('1.2 MB');
+    expect(wrapper.instance().onFormatBytes(1222222222)).toEqual('1.2 GB');
+  });
 });

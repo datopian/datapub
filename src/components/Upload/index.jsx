@@ -3,33 +3,52 @@ import { Uploader, FileAPI } from "ckan3-js-sdk";
 import PropTypes from "prop-types";
 import UploadIcon from "../../assets/computing-cloud.svg";
 import ProgressBar from "../ProgressBar";
+import Metadata from "../Metadata";
 
 class Upload extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       selectedFile: null,
+      fileSize: 0, 
+      formattedSize: '0 KB',
+      metadata: {
+        path: "",
+        title: "",
+        encode: "",
+        description: "",
+        format: ""
+      },
+      start: "",
       loaded: 0,
       success: false,
       error: false,
-      fileSize: 0,
       timeRemaining: 0,
-      start: "",
-      formattedSize: '',
     };
   }
 
   onChangeHandler = (event) => {
-    let formattedSize = '0 KB'
+    let { formattedSize, metadata } = this.state
+    let {title, encode, description} = metadata
+
     if (event.target.files.length > 0) {
       formattedSize = this.onFormatBytes(event.target.files[0].size)
+      encode = this.getFileExtension(event.target.files[0].name)
+      title = this.onFormatTitle(event.target.files[0].name)
     }
     this.setState({
       selectedFile: event.target.files[0],
       loaded: 0,
       success: false,
       error: false,
-      formattedSize
+      formattedSize,
+      metadata: {
+        path: event.target.files[0].name,
+        title,
+        encode,
+        description,
+        format: encode
+      }
     });
   };
 
@@ -98,8 +117,35 @@ class Upload extends React.Component {
       .catch((error) => this.setState({ error: true }));
   };
 
+  getFileExtension = (filename) => {
+    return (/[.]/.exec(filename)) ? /[^.]+$/.exec(filename)[0] : undefined;
+  }
+
+  onFormatTitle = (name) => {
+    return name.replace(/\.[^/.]+$/, "").replace(/_/g, ' ').replace(/-/g, ' ');
+  }
+
+  handleChangeMetadata = (event) => {
+    const target = event.target;
+    const value = target.value;
+    const name = target.name;
+    const {metadata} = this.state
+
+    this.setState({
+      metadata: {
+        ...metadata,
+        [name]: value
+      }
+    });
+  }
+
+  handleSubmitMetadata = (event) => {
+    event.preventDefault();
+    console.log('Seu sabor favorito é: ', this.state.metadata);
+  }
+
   render() {
-    const { success, error, timeRemaining, selectedFile, formattedSize } = this.state;
+    const { success, error, timeRemaining, selectedFile, formattedSize, metadata} = this.state;
     return (
       <div className="upload-wrapper">
         <div className="upload-drop-area">
@@ -118,8 +164,10 @@ class Upload extends React.Component {
           </span>
         </div>
         <div className="upload-info">
+        {selectedFile && (
+          <>
           <ul className="upload-list">
-            {selectedFile && (
+           
               <li className="upload-list-item">
                 <div>
                   <p className="upload-file-name">{selectedFile.name}</p>
@@ -136,9 +184,10 @@ class Upload extends React.Component {
                   />
                 </div>
               </li>
-            )}
           </ul>
-          
+          <Metadata metadata={metadata} handleSubmit={this.handleSubmitMetadata} handleChange={this.handleChangeMetadata}/>
+          </>
+          )}
         </div>
         <div>
           <h2 className="upload-message">{success && "File upload success"}</h2>
@@ -160,7 +209,6 @@ class Upload extends React.Component {
  * If the parent component doesn't specify a `config` and scope prop, then
  * the default values will be used.
  * */
-
 Upload.defaultProps = {
   config: {
     authToken: "be270cae-1c77-4853-b8c1-30b6cf5e9878",

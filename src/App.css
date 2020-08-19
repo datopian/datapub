@@ -15,7 +15,7 @@ code {
 .App {
   text-align: center;
   background-color: hsl(220, 13%, 18%);
-  height: 100vh;
+  min-height: 100vh;
   color: #fff;
   padding-top: 10%;
 }

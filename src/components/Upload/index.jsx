@@ -1,7 +1,7 @@
 import React from "react";
 import { Uploader, FileAPI } from "ckan3-js-sdk";
 import PropTypes from "prop-types";
-import UploadIcon from "../../assets/computing-cloud.svg";
+import UploadIcon from "../../assets/images/computing-cloud.svg";
 import ProgressBar from "../ProgressBar";
 import Metadata from "../Metadata";
 
@@ -13,11 +13,15 @@ class Upload extends React.Component {
       fileSize: 0, 
       formattedSize: '0 KB',
       metadata: {
+        name: "",
         path: "",
         title: "",
-        encode: "",
+        encoding: "",
         description: "",
-        format: ""
+        format: "",
+        bytes: 0,
+        mediatype: "",
+        hash: "",
       },
       start: "",
       loaded: 0,
@@ -27,27 +31,36 @@ class Upload extends React.Component {
     };
   }
 
-  onChangeHandler = (event) => {
-    let { formattedSize, metadata } = this.state
-    let {title, encode, description} = metadata
+  onChangeHandler = async (event) => {
+    let { formattedSize, metadata, selectedFile } = this.state
+    let { name, title, path, hash, format } = metadata
 
     if (event.target.files.length > 0) {
       formattedSize = this.onFormatBytes(event.target.files[0].size)
-      encode = this.getFileExtension(event.target.files[0].name)
+      format = this.getFileExtension(event.target.files[0].name)
       title = this.onFormatTitle(event.target.files[0].name)
+      name = this.onFormatName(event.target.files[0].name)
+      path = event.target.files[0].name
+      selectedFile = event.target.files[0]
+      const file = new FileAPI.HTML5File(selectedFile);
+      hash = await file.sha256()
     }
     this.setState({
-      selectedFile: event.target.files[0],
+      selectedFile,
       loaded: 0,
       success: false,
       error: false,
       formattedSize,
       metadata: {
-        path: event.target.files[0].name,
+        name,
+        path,
         title,
-        encode,
-        description,
-        format: encode
+        encoding: "",
+        description: "",
+        format,
+        bytes: selectedFile.size,
+        mediatype: selectedFile.type,
+        hash: `SHA256:${hash}`
       }
     });
   };
@@ -83,14 +96,15 @@ class Upload extends React.Component {
     return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i];
   };
 
-  onClickHandler = () => {
+  onClickHandler = async () => {
     const start = new Date().getTime();
-    const { selectedFile } = this.state;
+    const { selectedFile, metadata } = this.state;
     const { scopes, config, authzUrl } = this.props;
     const { authToken, api, organizationId, datasetId } = config;
 
     // create an instance of a object
     const file = new FileAPI.HTML5File(selectedFile);
+
     const uploader = new Uploader(
       `${authToken}`,
       `${organizationId}`,
@@ -98,7 +112,7 @@ class Upload extends React.Component {
       `${api}`
     );
 
-    this.setState({ fileSize: file.size(), start });
+    this.setState({ metadata: {...metadata }, fileSize: file.size(), start });
 
     // Get the JWT token from authz and upload file to the storage
     fetch(`${authzUrl}`, {
@@ -125,6 +139,10 @@ class Upload extends React.Component {
     return name.replace(/\.[^/.]+$/, "").replace(/_/g, ' ').replace(/-/g, ' ');
   }
 
+  onFormatName = (name) => {
+    return name.replace(/\.[^/.]+$/, "");
+  }
+
   handleChangeMetadata = (event) => {
     const target = event.target;
     const value = target.value;
@@ -141,7 +159,7 @@ class Upload extends React.Component {
 
   handleSubmitMetadata = (event) => {
     event.preventDefault();
-    console.log('Seu sabor favorito é: ', this.state.metadata);
+    console.log('Test: ', this.state.metadata);
   }
 
   render() {

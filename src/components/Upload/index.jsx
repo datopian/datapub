@@ -10,8 +10,8 @@ class Upload extends React.Component {
     super(props);
     this.state = {
       selectedFile: null,
-      fileSize: 0, 
-      formattedSize: '0 KB',
+      fileSize: 0,
+      formattedSize: "0 KB",
       metadata: {
         name: "",
         path: "",
@@ -22,28 +22,30 @@ class Upload extends React.Component {
         bytes: 0,
         mediatype: "",
         hash: "",
+        license: ""
       },
       start: "",
       loaded: 0,
       success: false,
       error: false,
+      loading: false,
       timeRemaining: 0,
     };
   }
 
   onChangeHandler = async (event) => {
-    let { formattedSize, metadata, selectedFile } = this.state
-    let { name, title, path, hash, format } = metadata
+    let { formattedSize, metadata, selectedFile } = this.state;
+    let { name, title, path, hash, format } = metadata;
 
     if (event.target.files.length > 0) {
-      formattedSize = this.onFormatBytes(event.target.files[0].size)
-      format = this.getFileExtension(event.target.files[0].name)
-      title = this.onFormatTitle(event.target.files[0].name)
-      name = this.onFormatName(event.target.files[0].name)
-      path = event.target.files[0].name
-      selectedFile = event.target.files[0]
+      formattedSize = this.onFormatBytes(event.target.files[0].size);
+      format = this.getFileExtension(event.target.files[0].name);
+      title = this.onFormatTitle(event.target.files[0].name);
+      name = this.onFormatName(event.target.files[0].name);
+      path = event.target.files[0].name;
+      selectedFile = event.target.files[0];
       const file = new FileAPI.HTML5File(selectedFile);
-      hash = await file.sha256()
+      hash = await file.sha256();
     }
     this.setState({
       selectedFile,
@@ -57,12 +59,14 @@ class Upload extends React.Component {
         title,
         encoding: "",
         description: "",
+        license: "",
         format,
         bytes: selectedFile.size,
         mediatype: selectedFile.type,
-        hash: `SHA256:${hash}`
-      }
+        hash: `SHA256:${hash}`,
+      },
     });
+    this.onClickHandler()
   };
 
   onUploadProgress = (progressEvent) => {
@@ -112,7 +116,12 @@ class Upload extends React.Component {
       `${api}`
     );
 
-    this.setState({ metadata: {...metadata }, fileSize: file.size(), start });
+    this.setState({
+      metadata: { ...metadata },
+      fileSize: file.size(),
+      start,
+      loading: true,
+    });
 
     // Get the JWT token from authz and upload file to the storage
     fetch(`${authzUrl}`, {
@@ -127,45 +136,61 @@ class Upload extends React.Component {
       .then((response) =>
         uploader.push(file, response.result.token, this.onUploadProgress)
       )
-      .then((response) => this.setState({ success: response.success }))
-      .catch((error) => this.setState({ error: true }));
+      .then((response) =>
+        this.setState({ success: response.success, loading: false })
+      )
+      .catch((error) => this.setState({ error: true, loading: false }));
   };
 
   getFileExtension = (filename) => {
-    return (/[.]/.exec(filename)) ? /[^.]+$/.exec(filename)[0] : undefined;
-  }
+    return /[.]/.exec(filename) ? /[^.]+$/.exec(filename)[0] : undefined;
+  };
 
   onFormatTitle = (name) => {
-    return name.replace(/\.[^/.]+$/, "").replace(/_/g, ' ').replace(/-/g, ' ');
-  }
+    return name
+      .replace(/\.[^/.]+$/, "")
+      .replace(/_/g, " ")
+      .replace(/-/g, " ");
+  };
 
   onFormatName = (name) => {
     return name.replace(/\.[^/.]+$/, "");
-  }
+  };
 
   handleChangeMetadata = (event) => {
     const target = event.target;
     const value = target.value;
     const name = target.name;
-    const {metadata} = this.state
+    const { metadata } = this.state;
 
     this.setState({
       metadata: {
         ...metadata,
-        [name]: value
-      }
+        [name]: value,
+      },
     });
-  }
+  };
 
   handleSubmitMetadata = (event) => {
     event.preventDefault();
-    console.log('Test: ', this.state.metadata);
-  }
+    console.log("Test: ", this.state.metadata);
+  };
 
   render() {
-    const { success, error, timeRemaining, selectedFile, formattedSize, metadata} = this.state;
+    const {
+      success,
+      error,
+      timeRemaining,
+      selectedFile,
+      formattedSize,
+      metadata,
+      loading,
+    } = this.state;
     return (
       <div className="upload-wrapper">
+        <div className="upload-header">
+          <h2 className="upload-header__title">Datapub Upload</h2>
+        </div>
         <div className="upload-drop-area">
           <input
             className="upload-input"
@@ -182,42 +207,42 @@ class Upload extends React.Component {
           </span>
         </div>
         <div className="upload-info">
-        {selectedFile && (
-          <>
-          <ul className="upload-list">
-           
-              <li className="upload-list-item">
-                <div>
-                  <p className="upload-file-name">{selectedFile.name}</p>
-                  <p className="upload-file-size">{formattedSize}</p>
-                </div>
-                <div>
-                  <ProgressBar
-                    progress={Math.round(this.state.loaded)}
-                    size={50}
-                    strokeWidth={5}
-                    circleOneStroke="#d9edfe"
-                    circleTwoStroke={"#7ea9e1"}
-                    timeRemaining={timeRemaining}
-                  />
-                </div>
-              </li>
-          </ul>
-          <Metadata metadata={metadata} handleSubmit={this.handleSubmitMetadata} handleChange={this.handleChangeMetadata}/>
-          </>
+          {selectedFile && (
+            <>
+              <ul className="upload-list">
+                <li className="list-item">
+                  <div className="upload-list-item">
+                    <div>
+                      <p className="upload-file-name">{selectedFile.name}</p>
+                      <p className="upload-file-size">{formattedSize}</p>
+                    </div>
+                    <div>
+                      <ProgressBar
+                        progress={Math.round(this.state.loaded)}
+                        size={50}
+                        strokeWidth={5}
+                        circleOneStroke="#d9edfe"
+                        circleTwoStroke={"#7ea9e1"}
+                        timeRemaining={timeRemaining}
+                      />
+                    </div>
+                  </div>
+                </li>
+              </ul>
+              <h2 className="upload-message">
+                {success && "File upload success"}
+              </h2>
+              <h2 className="upload-message">{error && "Upload failed"}</h2>
+            </>
           )}
         </div>
-        <div>
-          <h2 className="upload-message">{success && "File upload success"}</h2>
-          <h2 className="upload-message">{error && "Upload failed"}</h2>
-          <button
-            className="upload-btn"
-            type="button"
-            onClick={this.onClickHandler}
-          >
-            Upload
-          </button>
-        </div>
+
+        <Metadata
+          isUploaded={success}
+          metadata={metadata}
+          handleSubmit={this.handleSubmitMetadata}
+          handleChange={this.handleChangeMetadata}
+        />
       </div>
     );
   }

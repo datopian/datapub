@@ -1,6 +1,14 @@
+.metadata-form {
+  grid-area: meta;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 20px;
+}
+
 .metadata-name {
   color: #1a3b5d;
   text-align: left;
+  grid-area: name;
 }
 
 .metadata-label {
@@ -33,12 +41,27 @@
   font-family: "Source Sans Pro", sans-serif;
   box-sizing: border-box;
 }
-/* &:hover,
-      &:focus {
-        border-color: #3d9cff;
-      }
-  
-      &:focus {
-        box-shadow: 0px 10px 20px -13px rgba(32, 56, 117, 0.35);
-      }
-    } */
+
+.metadata-btn {
+  margin-top: 17px;
+  border-radius: 5px;
+  padding: 10px 25px;
+  height: 45px;
+  /* max-width: 200px; */
+  font-size: 1.2rem;
+  color: #fff;
+  background-color: #00A7E1;
+  outline: none;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 11px 3px rgba(18, 22, 33, 0.05);
+}
+
+.metadata-btn:disabled {
+  background: #e3e9ed !important;
+  cursor: default;
+}
+
+.metadata-btn:hover {
+  background-color: #009ace;
+}

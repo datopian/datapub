@@ -238,7 +238,7 @@ class Upload extends React.Component {
         </div>
 
         <Metadata
-          isUploaded={success}
+          loading={loading}
           metadata={metadata}
           handleSubmit={this.handleSubmitMetadata}
           handleChange={this.handleChangeMetadata}

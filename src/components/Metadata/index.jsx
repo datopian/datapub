@@ -7,7 +7,7 @@ import formatData from "../../db/resource_formats.json";
 import licenseData from "../../db/licenses.json";
 
 const Metadata = (props) => {
-  const { metadata, handleChange, handleSubmit, isUploaded } = props;
+  const { metadata, handleChange, handleSubmit, loading } = props;
 
   return (
     <>
@@ -94,7 +94,7 @@ const Metadata = (props) => {
             ))}
           </select>
         </div>
-        <input disabled={!isUploaded} className="metadata-btn" type="submit" value="Save Metadata" />
+        <input disabled={loading} className="metadata-btn" type="submit" value="Save Metadata" />
       </form>
     </>
   );
@@ -104,7 +104,7 @@ Metadata.propTypes = {
   metadata: PropTypes.object.isRequired,
   handleChange: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,
-  isUploaded: PropTypes.bool.isRequired,
+  loading: PropTypes.bool.isRequired,
 }
 
 export default Metadata;

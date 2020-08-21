@@ -39,10 +39,11 @@
   },
   "devDependencies": {
     "@babel/core": "^7.11.1",
-    "@storybook/addon-actions": "^5.3.19",
-    "@storybook/addon-links": "^5.3.19",
-    "@storybook/addons": "^5.3.19",
-    "@storybook/react": "^5.3.19",
+    "@storybook/addon-actions": "^6.0.16",
+    "@storybook/addon-controls": "^6.0.16",
+    "@storybook/addon-links": "^6.0.16",
+    "@storybook/addons": "^6.0.16",
+    "@storybook/react": "^6.0.16",
     "babel-loader": "^8.1.0",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.3"

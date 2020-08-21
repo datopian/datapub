@@ -4,10 +4,8 @@ import PropTypes from "prop-types";
 import "./Metadata.css";
 import encodeData from "../../db/encode.json";
 import formatData from "../../db/resource_formats.json";
-import licenseData from "../../db/licenses.json";
 
-const Metadata = (props) => {
-  const { metadata, handleChange, handleSubmit, loading } = props;
+const Metadata = ({ metadata, loading, selectedFile, handleChange, handleSubmit }) => {
 
   return (
     <>
@@ -77,24 +75,7 @@ const Metadata = (props) => {
             ))}
           </select>
         </div>
-        <div className="metadata-input">
-          <label className="metadata-label" htmlFor="license">
-            License:
-          </label>
-          <select
-            className="metadata-input__input"
-            name="license"
-            value={metadata.license || ""}
-            onChange={handleChange}
-          >
-            {licenseData.map((item) => (
-              <option key={`format-${item.value}`} value={item.value}>
-                {item.label}
-              </option>
-            ))}
-          </select>
-        </div>
-        <input disabled={loading} className="metadata-btn" type="submit" value="Save Metadata" />
+        <input disabled={loading || !selectedFile} className="metadata-btn" type="submit" value="Save Metadata" />
       </form>
     </>
   );
@@ -105,6 +86,7 @@ Metadata.propTypes = {
   handleChange: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,
   loading: PropTypes.bool.isRequired,
+  selectedFile: PropTypes.bool.isRequired,
 }
 
 export default Metadata;

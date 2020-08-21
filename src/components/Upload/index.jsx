@@ -22,7 +22,6 @@ class Upload extends React.Component {
         bytes: 0,
         mediatype: "",
         hash: "",
-        license: ""
       },
       start: "",
       loaded: 0,
@@ -59,7 +58,6 @@ class Upload extends React.Component {
         title,
         encoding: "",
         description: "",
-        license: "",
         format,
         bytes: selectedFile.size,
         mediatype: selectedFile.type,
@@ -172,8 +170,8 @@ class Upload extends React.Component {
   };
 
   handleSubmitMetadata = (event) => {
-    event.preventDefault();
     console.log("Test: ", this.state.metadata);
+    event.preventDefault();
   };
 
   render() {
@@ -239,6 +237,7 @@ class Upload extends React.Component {
 
         <Metadata
           loading={loading}
+          selectedFile={selectedFile}
           metadata={metadata}
           handleSubmit={this.handleSubmitMetadata}
           handleChange={this.handleChangeMetadata}

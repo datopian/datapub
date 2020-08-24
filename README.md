@@ -48,6 +48,8 @@ $ npm run start
 
 Storybook is a tool that prepares a development environment for UI components. It allows you to develop and design your graphical interfaces quickly, isolated, and independently. Making it possible to define different states for components, thus documenting their states.
 
+**Note**: Every push will run GitHub actions to deploy in GitHub pages. You can check online at https://datopian.github.io/datapub
+
 ### Run storybook
 
 ```bash

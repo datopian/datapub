@@ -86,7 +86,6 @@ Metadata.propTypes = {
   handleChange: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,
   loading: PropTypes.bool.isRequired,
-  selectedFile: PropTypes.bool.isRequired,
 }
 
 export default Metadata;

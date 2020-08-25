@@ -17,12 +17,14 @@ Default.args = {
     schema: {
         fields: [
             {
+              title: '',
               name: 'a',
               type: 'string',
               description: 'column a is about X',
               format: '...'
             },
             {
+              title: '',
               name: 'b',
               type: 'integer',
               description: 'column b is about X',

@@ -6,7 +6,14 @@
     "boolean",
     "object",
     "array",
-    "null",
+    "date",
+    "time",
+    "datetime",
+    "year",
+    "yearmonth",
+    "duration",
+    "geopoint",
+    "geojson",
     "any"
   ]
 }

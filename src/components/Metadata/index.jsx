@@ -5,8 +5,7 @@ import "./Metadata.css";
 import encodeData from "../../db/encode.json";
 import formatData from "../../db/resource_formats.json";
 
-const Metadata = ({ metadata, loading, selectedFile, handleChange, handleSubmit }) => {
-
+const Metadata = ({ metadata, handleChange, handleSubmit, uploadSuccess }) => {
   return (
     <>
       <h3 className="metadata-name">{metadata.path}</h3>
@@ -74,7 +73,12 @@ const Metadata = ({ metadata, loading, selectedFile, handleChange, handleSubmit 
             ))}
           </select>
         </div>
-        <input disabled={loading || !selectedFile} className="metadata-btn" type="submit" value="Save Metadata" />
+        <input
+          disabled={!uploadSuccess}
+          className="metadata-btn"
+          type="submit"
+          value="Save Metadata"
+        />
       </form>
     </>
   );
@@ -85,6 +89,6 @@ Metadata.propTypes = {
   handleChange: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,
   loading: PropTypes.bool.isRequired,
-}
+};
 
 export default Metadata;

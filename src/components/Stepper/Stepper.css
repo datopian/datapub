@@ -1,39 +1,58 @@
 .step-wrapper {
     color: #222222;
     display: grid;
-    grid-template-columns: 100px 200px 100px;
+    grid-template-columns: 160px 200px 160px;
+    grid-template-areas: "stepOne divLine stepTwo";
+    width: 80%;
     align-items: center;
     justify-items: center;
     align-content: center;
     justify-content: center;
-    width: 100%;
     margin: 1rem auto;
 }
 
 .step-number {
     border-radius: 50%;
-    border: 1px solid grey;
     width: 20px;
     height: 20px;
     padding: 3px;
     text-align: center;
     margin-bottom: 1.2rem;
+    margin: 0 auto;
+    cursor: pointer;
+}
+
+.step-one {
+    grid-area: stepOne;
+}
+
+.step-two {
+    grid-area: stepTwo;
 }
 
 .step-number-selected {
-    border: 1px solid #bdbdbd;
-    color: #838383;
+    background-color: #00A7E1;
+    color: #ffffff;
 }
 
 .step-number-disabled {
-    border: 1px solid #838383
+    border: 1px solid #e3ebff;
+}
+
+.step-description {
+    margin-top: 1rem;
+    width: 100%;
+    cursor: pointer;
+}
+
+.step-description-active {
+    font-weight: bold;
 }
 
 .divider-line {
-    height: 1px;
-    background-color: #bdbdbd;
+    grid-area: divLine;
+    height: 2px;
+    background-color: #e3ebff;
     width: 100%;
-    margin-bottom: 1rem;
-    /* margin: 0;
-    padding: 0; */
+    margin-bottom: 3rem;
 }

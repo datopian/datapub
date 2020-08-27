@@ -59,3 +59,8 @@
     color: #fff;
     font-weight: 500;
 }
+
+.table-btn-save:disabled {
+  background: #e3e9ed !important;
+  cursor: default;
+}

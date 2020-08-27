@@ -73,6 +73,7 @@ const TableSchema = (props) => {
           <div className="table-schema-help_row">Format</div>
           <button
             className="table-btn-save"
+            disabled={!props.uploadSuccess}
             onClick={() => console.log("Save schema:", schema)}
           >
             Save

@@ -5,6 +5,7 @@ import UploadIcon from "../../assets/images/computing-cloud.svg";
 import ProgressBar from "../ProgressBar";
 import Metadata from "../Metadata";
 import Stepper from "../Stepper";
+import TableSchema from "../TableSchema";
 
 class Upload extends React.Component {
   constructor(props) {
@@ -30,7 +31,21 @@ class Upload extends React.Component {
       error: false,
       loading: false,
       timeRemaining: 0,
-      step: 0,
+      currentStep: 1,
+      steps: [
+        {
+          class: "step-one",
+          stepNumber: 1,
+          description: "Edit Metadata",
+          completed: false,
+        },
+        {
+          class: "step-two",
+          stepNumber: 2,
+          description: "Edit Schema",
+          completed: false,
+        },
+      ],
     };
   }
 
@@ -176,6 +191,10 @@ class Upload extends React.Component {
     event.preventDefault();
   };
 
+  onChangeStep = (step) => {
+    this.setState({ currentStep: step });
+  };
+
   render() {
     const {
       success,
@@ -185,11 +204,11 @@ class Upload extends React.Component {
       formattedSize,
       metadata,
       loading,
-      step,
+      currentStep,
+      steps,
     } = this.state;
     return (
       <div className="upload-wrapper">
-
         <div className="upload-header">
           <h2 className="upload-header__title">Datapub Upload</h2>
         </div>
@@ -202,7 +221,11 @@ class Upload extends React.Component {
               name="file"
               onChange={this.onChangeHandler}
             />
-            <img className="upload-area__drop__icon" src={UploadIcon} alt="upload-icon" />
+            <img
+              className="upload-area__drop__icon"
+              src={UploadIcon}
+              alt="upload-icon"
+            />
             <span className="upload-area__drop__text">
               Drag and drop your files
               <br />
@@ -244,23 +267,27 @@ class Upload extends React.Component {
 
         <div className="upload-stepper">
           <Stepper
-            direction="horizontal"
-            currentStepNumber={1 - 1}
-            steps={[]}
-            stepColor="purple"
+            currentStep={currentStep}
+            steps={steps}
+            onChangeStep={this.onChangeStep}
           />
         </div>
 
         <div className="upload-edit-area">
-          <Metadata
-            loading={loading}
-            selectedFile={selectedFile}
-            metadata={metadata}
-            handleSubmit={this.handleSubmitMetadata}
-            handleChange={this.handleChangeMetadata}
-          />
+          {currentStep === 1 && (
+            <Metadata
+              loading={loading}
+              uploadSuccess={success}
+              selectedFile={selectedFile}
+              metadata={metadata}
+              handleSubmit={this.handleSubmitMetadata}
+              handleChange={this.handleChangeMetadata}
+            />
+          )}
+          {currentStep === 2 && (
+            <TableSchema uploadSuccess={success} {...Mock} />
+          )}
         </div>
-
       </div>
     );
   }
@@ -287,6 +314,43 @@ Upload.propTypes = {
   config: PropTypes.object.isRequired,
   scopes: PropTypes.object.isRequired,
   authzUrl: PropTypes.string.isRequired,
+};
+
+const Mock = {
+  schema: {
+    fields: [
+      {
+        title: "",
+        name: "name",
+        type: "string",
+        description: "",
+        format: "",
+      },
+      {
+        title: "",
+        name: "age",
+        type: "integer",
+        description: "",
+        format: "",
+      },
+      {
+        title: "",
+        name: "address",
+        type: "string",
+        description: "",
+        format: "",
+      },
+    ],
+  },
+  data: [
+    { name: "Eathan Pritchard", age: 25, address: "1201 Tompkins Dr Madison" },
+    { name: "Zidan Berg", age: 22, address: "1309 Tompkins Dr Madison" },
+    { name: "Raisa Kinney", age: 32, address: "1497 Tompkins Dr Madison" },
+    { name: "Cara Woodley", age: 30, address: "1197  Buckeye Rd  Madison" },
+    { name: "Komal Robbins", age: 42, address: "1192  Buckeye Rd  Madison" },
+    { name: "Deacon Childs", age: 28, address: "1027 Tompkins Dr Madison" },
+    { name: "Ayse Shaw", age: 21, address: "1233 Buckeye Rd Madison" },
+  ],
 };
 
 export default Upload;

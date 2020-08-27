@@ -7,12 +7,13 @@ import "./TableSchema.css";
 
 const TableSchema = (props) => {
   const [schema, setSchema] = useState(props.schema.fields);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const data = React.useMemo(() => [...props.data], []);
 
   const columnsSchema = props.schema.fields.map((item) => {
     return { Header: item.name, accessor: item.name };
   });
-
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const columns = React.useMemo(() => [...columnsSchema], []);
   const {
     getTableProps,

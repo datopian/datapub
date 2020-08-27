@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import UploadIcon from "../../assets/images/computing-cloud.svg";
 import ProgressBar from "../ProgressBar";
 import Metadata from "../Metadata";
+import Stepper from "../Stepper";
 
 class Upload extends React.Component {
   constructor(props) {
@@ -29,6 +30,7 @@ class Upload extends React.Component {
       error: false,
       loading: false,
       timeRemaining: 0,
+      step: 0,
     };
   }
 
@@ -64,7 +66,7 @@ class Upload extends React.Component {
         hash: `SHA256:${hash}`,
       },
     });
-    this.onClickHandler()
+    this.onClickHandler();
   };
 
   onUploadProgress = (progressEvent) => {
@@ -183,65 +185,82 @@ class Upload extends React.Component {
       formattedSize,
       metadata,
       loading,
+      step,
     } = this.state;
     return (
       <div className="upload-wrapper">
+
         <div className="upload-header">
           <h2 className="upload-header__title">Datapub Upload</h2>
         </div>
-        <div className="upload-drop-area">
-          <input
-            className="upload-input"
-            type="file"
-            name="file"
-            onChange={this.onChangeHandler}
-          />
-          <img className="upload-icon" src={UploadIcon} alt="upload-icon" />
-          <span className="upload-text">
-            Drag and drop your files
-            <br />
-            or <br />
-            click to select
-          </span>
-        </div>
-        <div className="upload-info">
-          {selectedFile && (
-            <>
-              <ul className="upload-list">
-                <li className="list-item">
-                  <div className="upload-list-item">
-                    <div>
-                      <p className="upload-file-name">{selectedFile.name}</p>
-                      <p className="upload-file-size">{formattedSize}</p>
+
+        <div className="upload-area">
+          <div className="upload-area__drop">
+            <input
+              className="upload-area__drop__input"
+              type="file"
+              name="file"
+              onChange={this.onChangeHandler}
+            />
+            <img className="upload-area__drop__icon" src={UploadIcon} alt="upload-icon" />
+            <span className="upload-area__drop__text">
+              Drag and drop your files
+              <br />
+              or <br />
+              click to select
+            </span>
+          </div>
+          <div className="upload-area__info">
+            {selectedFile && (
+              <>
+                <ul className="upload-list">
+                  <li className="list-item">
+                    <div className="upload-list-item">
+                      <div>
+                        <p className="upload-file-name">{selectedFile.name}</p>
+                        <p className="upload-file-size">{formattedSize}</p>
+                      </div>
+                      <div>
+                        <ProgressBar
+                          progress={Math.round(this.state.loaded)}
+                          size={50}
+                          strokeWidth={5}
+                          circleOneStroke="#d9edfe"
+                          circleTwoStroke={"#7ea9e1"}
+                          timeRemaining={timeRemaining}
+                        />
+                      </div>
                     </div>
-                    <div>
-                      <ProgressBar
-                        progress={Math.round(this.state.loaded)}
-                        size={50}
-                        strokeWidth={5}
-                        circleOneStroke="#d9edfe"
-                        circleTwoStroke={"#7ea9e1"}
-                        timeRemaining={timeRemaining}
-                      />
-                    </div>
-                  </div>
-                </li>
-              </ul>
-              <h2 className="upload-message">
-                {success && "File upload success"}
-              </h2>
-              <h2 className="upload-message">{error && "Upload failed"}</h2>
-            </>
-          )}
+                  </li>
+                </ul>
+                <h2 className="upload-message">
+                  {success && "File upload success"}
+                </h2>
+                <h2 className="upload-message">{error && "Upload failed"}</h2>
+              </>
+            )}
+          </div>
         </div>
 
-        <Metadata
-          loading={loading}
-          selectedFile={selectedFile}
-          metadata={metadata}
-          handleSubmit={this.handleSubmitMetadata}
-          handleChange={this.handleChangeMetadata}
-        />
+        <div className="upload-stepper">
+          <Stepper
+            direction="horizontal"
+            currentStepNumber={1 - 1}
+            steps={[]}
+            stepColor="purple"
+          />
+        </div>
+
+        <div className="upload-edit-area">
+          <Metadata
+            loading={loading}
+            selectedFile={selectedFile}
+            metadata={metadata}
+            handleSubmit={this.handleSubmitMetadata}
+            handleChange={this.handleChangeMetadata}
+          />
+        </div>
+
       </div>
     );
   }

@@ -64,12 +64,11 @@ const Metadata = ({ metadata, loading, selectedFile, handleChange, handleSubmit 
           </label>
           <select
             className="metadata-input__input"
-            name="format"
             value={metadata.format || ""}
             onChange={handleChange}
           >
             {formatData.map((item) => (
-              <option key={`format-${item[0]}`} value={item[2]}>
+              <option key={`format-${item[0]}`} value={item[0].toLowerCase()}>
                 {item[0]}
               </option>
             ))}

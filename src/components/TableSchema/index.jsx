@@ -75,7 +75,7 @@ const TableSchema = (props) => {
           <button
             className="table-btn-save"
             disabled={!props.uploadSuccess}
-            onClick={() => console.log("Save schema:", schema)}
+            onClick={() => props.handleSubmitSchema(schema, 1)}
           >
             Save
           </button>

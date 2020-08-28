@@ -80,6 +80,20 @@ class Upload extends React.Component {
         mediatype: selectedFile.type,
         hash: `SHA256:${hash}`,
       },
+      steps: [
+        {
+          class: "step-one",
+          stepNumber: 1,
+          description: "Edit Metadata",
+          completed: false,
+        },
+        {
+          class: "step-two",
+          stepNumber: 2,
+          description: "Edit Schema",
+          completed: false,
+        },
+      ]
     });
     this.onClickHandler();
   };
@@ -186,14 +200,27 @@ class Upload extends React.Component {
     });
   };
 
-  handleSubmitMetadata = (event) => {
-    console.log("Test: ", this.state.metadata);
+  handleSubmitMetadata = (event, index) => {
+    this.handleSaveStep(index)
     event.preventDefault();
+    console.log("Metadata state: ", this.state.metadata);
+  };
+
+  handleSubmitSchema = (schema, index) => {
+    this.handleSaveStep(index)
+    console.log("Schema state: ", schema);
   };
 
   onChangeStep = (step) => {
     this.setState({ currentStep: step });
   };
+
+  handleSaveStep = (index) => {
+    let newSteps = [...this.state.steps]
+    newSteps[index].completed = true
+
+    this.setState({steps: newSteps})
+  }
 
   render() {
     const {
@@ -267,8 +294,8 @@ class Upload extends React.Component {
 
         <div className="upload-stepper">
           <Stepper
-            currentStep={currentStep}
             steps={steps}
+            currentStep={currentStep}
             onChangeStep={this.onChangeStep}
           />
         </div>
@@ -285,7 +312,7 @@ class Upload extends React.Component {
             />
           )}
           {currentStep === 2 && (
-            <TableSchema uploadSuccess={success} {...Mock} />
+            <TableSchema uploadSuccess={success} {...Mock} handleSubmitSchema={this.handleSubmitSchema}/>
           )}
         </div>
       </div>

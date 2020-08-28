@@ -9,7 +9,7 @@ const Metadata = ({ metadata, handleChange, handleSubmit, uploadSuccess }) => {
   return (
     <>
       <h3 className="metadata-name">{metadata.path}</h3>
-      <form className="metadata-form" onSubmit={handleSubmit}>
+      <form className="metadata-form" onSubmit={(event) => handleSubmit(event, 0)}>
         <div className="metadata-input">
           <label className="metadata-label" htmlFor="title">
             Title:
@@ -73,12 +73,7 @@ const Metadata = ({ metadata, handleChange, handleSubmit, uploadSuccess }) => {
             ))}
           </select>
         </div>
-        <input
-          disabled={!uploadSuccess}
-          className="metadata-btn"
-          type="submit"
-          value="Save Metadata"
-        />
+        <button  disabled={!uploadSuccess} className="metadata-btn">Save Metadata</button>
       </form>
     </>
   );
@@ -88,7 +83,7 @@ Metadata.propTypes = {
   metadata: PropTypes.object.isRequired,
   handleChange: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,
-  loading: PropTypes.bool.isRequired,
+  uploadSuccess: PropTypes.bool.isRequired,
 };
 
 export default Metadata;

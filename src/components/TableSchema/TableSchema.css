@@ -58,6 +58,8 @@
     border-radius: 3px;
     color: #fff;
     font-weight: 500;
+    cursor: pointer;
+    outline: 0;
 }
 
 .table-btn-save:disabled {

@@ -10,9 +10,9 @@ export default {
 
 const Template = (args) => <TableSchema {...args} />;
 
-export const Default = Template.bind({});
+export const Idle = Template.bind({});
 
-Default.args = {
+Idle.args = {
   schema: {
     fields: [
       {
@@ -47,4 +47,18 @@ Default.args = {
     { name: "Deacon Childs", age: 28, address: "1027 Tompkins Dr Madison" },
     { name: "Ayse Shaw", age: 21, address: "1233 Buckeye Rd Madison" },
   ],
+};
+
+
+export const Loading = Template.bind({});
+
+Loading.args = {
+    ...Idle.args,
+};
+
+export const Success = Template.bind({});
+
+Success.args = {
+    ...Idle.args,
+    uploadSuccess: true
 };

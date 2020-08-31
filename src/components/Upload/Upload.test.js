@@ -34,4 +34,31 @@ describe("<Upload />", () => {
     expect(wrapper.instance().onFormatBytes(1222222)).toEqual('1.2 MB');
     expect(wrapper.instance().onFormatBytes(1222222222)).toEqual('1.2 GB');
   });
+
+  it('format title', () => {
+    const wrapper = shallow(<Upload />)
+
+    expect(wrapper.instance().onFormatTitle("sample-data.csv")).toEqual('sample data');
+    expect(wrapper.instance().onFormatTitle("sample_data.csv")).toEqual('sample data');
+    expect(wrapper.instance().onFormatTitle("sample-data_csv.csv")).toEqual('sample data csv');
+    expect(wrapper.instance().onFormatTitle("sampleData.csv")).toEqual('sampleData');
+  });
+
+  it('get file extension', () => {
+    const wrapper = shallow(<Upload />)
+
+    expect(wrapper.instance().getFileExtension("sample.csv")).toEqual('csv');
+    expect(wrapper.instance().getFileExtension("sample.html")).toEqual('html');
+    expect(wrapper.instance().getFileExtension("sample.xls")).toEqual('xls');
+    expect(wrapper.instance().getFileExtension("sampleData.doc")).toEqual('doc');
+  });
+
+  it('format name', () => {
+    const wrapper = shallow(<Upload />)
+
+    expect(wrapper.instance().onFormatName("sample.csv")).toEqual('sample');
+    expect(wrapper.instance().onFormatName("sample_data.html")).toEqual('sample_data');
+    expect(wrapper.instance().onFormatName("sample-data.xls")).toEqual('sample-data');
+    expect(wrapper.instance().onFormatName("sample-Data.doc")).toEqual('sample-Data');
+  });
 });

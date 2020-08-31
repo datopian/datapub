@@ -1,0 +1,26 @@
+.upload-area__url {
+  text-align: left;
+  width: 95%;
+  margin: 0 auto;
+}
+
+.upload-area__url__label {
+  display: block;
+  padding: 4px;
+}
+
+.upload-area__url__input {
+  width: 100%;
+  height: 40px;
+  border-radius: 5px;
+  box-shadow: none;
+  border: 1px solid #ced6e0;
+  transition: all 0.3s ease-in-out;
+  font-size: 18px;
+  padding: 5px 15px;
+  background: none;
+  color: #1a3b5d;
+  font-family: "Source Sans Pro", sans-serif;
+  box-sizing: border-box;
+  font-size: 1rem;
+}

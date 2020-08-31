@@ -1,0 +1,62 @@
+
+.upload-area__drop {
+    position: relative;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    height: 220px;
+  }
+  
+  .upload-area__drop__input {
+    grid-area: drop;
+    padding: 1rem 1rem;
+    position: relative;
+    display: grid;
+    grid-template-columns: auto auto;
+    align-items: center;
+    min-height: 200px;
+    border: 1px dashed #3f4c6b;
+    margin: 0px auto;
+    width: 95%;
+    border-radius: 8px;
+    cursor: pointer;
+    outline: 0;
+    box-sizing: border-box;
+    z-index: 10;
+    color: transparent;
+  }
+  
+  .upload-area__drop__input::-webkit-file-upload-button {
+    flex-shrink: 0;
+    font-size: 0.65rem;
+    color: #ffffff;
+    border-radius: 3px;
+    padding: 8px 15px;
+    margin: 0;
+    text-transform: uppercase;
+    text-align: center;
+    border: none;
+    outline: 0;
+    margin: 0 auto;
+    visibility: hidden;
+  }
+  
+  .upload-area__drop__icon {
+    width: 80px;
+    position: absolute;
+    top: 20%;
+    left: 40%;
+    cursor: pointer;
+    fill: #e3ebff;
+  }
+  
+  .upload-area__drop__text {
+    color: lightslategrey;
+    opacity: 0.7;
+    font-weight: 400;
+    position: absolute;
+    top: 55%;
+    font-size: 0.78rem;
+    cursor: pointer;
+  }

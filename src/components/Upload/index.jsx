@@ -1,11 +1,12 @@
 import React from "react";
 import { Uploader, FileAPI } from "ckan3-js-sdk";
 import PropTypes from "prop-types";
-import UploadIcon from "../../assets/images/computing-cloud.svg";
 import ProgressBar from "../ProgressBar";
 import Metadata from "../Metadata";
 import Stepper from "../Stepper";
 import TableSchema from "../TableSchema";
+import InputFile from "../InputFile";
+import InputUrl from "../InputUrl";
 
 class Upload extends React.Component {
   constructor(props) {
@@ -93,7 +94,7 @@ class Upload extends React.Component {
           description: "Edit Schema",
           completed: false,
         },
-      ]
+      ],
     });
     this.onClickHandler();
   };
@@ -201,13 +202,13 @@ class Upload extends React.Component {
   };
 
   handleSubmitMetadata = (event, index) => {
-    this.handleSaveStep(index)
+    this.handleSaveStep(index);
     event.preventDefault();
     console.log("Metadata state: ", this.state.metadata);
   };
 
   handleSubmitSchema = (schema, index) => {
-    this.handleSaveStep(index)
+    this.handleSaveStep(index);
     console.log("Schema state: ", schema);
   };
 
@@ -216,11 +217,11 @@ class Upload extends React.Component {
   };
 
   handleSaveStep = (index) => {
-    let newSteps = [...this.state.steps]
-    newSteps[index].completed = true
+    let newSteps = [...this.state.steps];
+    newSteps[index].completed = true;
 
-    this.setState({steps: newSteps})
-  }
+    this.setState({ steps: newSteps });
+  };
 
   render() {
     const {
@@ -239,27 +240,10 @@ class Upload extends React.Component {
         <div className="upload-header">
           <h2 className="upload-header__title">Datapub Upload</h2>
         </div>
-
+        
         <div className="upload-area">
-          <div className="upload-area__drop">
-            <input
-              className="upload-area__drop__input"
-              type="file"
-              name="file"
-              onChange={this.onChangeHandler}
-            />
-            <img
-              className="upload-area__drop__icon"
-              src={UploadIcon}
-              alt="upload-icon"
-            />
-            <span className="upload-area__drop__text">
-              Drag and drop your files
-              <br />
-              or <br />
-              click to select
-            </span>
-          </div>
+          <InputFile onChangeHandler={this.onChangeHandler} />
+          <InputUrl onChangeUrl={(event) => console.log(event.target.value)}/>
           <div className="upload-area__info">
             {selectedFile && (
               <>
@@ -312,7 +296,11 @@ class Upload extends React.Component {
             />
           )}
           {currentStep === 2 && (
-            <TableSchema uploadSuccess={success} {...Mock} handleSubmitSchema={this.handleSubmitSchema}/>
+            <TableSchema
+              uploadSuccess={success}
+              {...Mock}
+              handleSubmitSchema={this.handleSubmitSchema}
+            />
           )}
         </div>
       </div>

@@ -44,6 +44,11 @@ $ npm install
 $ npm run start
 ```
 
+Run the app in the development mode.<br />
+Open [http://localhost:3000/](http://localhost:3000/) to view it in the browser.
+
+The page will reload if you make edits.<br />
+
 ## Storybook
 
 Storybook is a tool that prepares a development environment for UI components. It allows you to develop and design your graphical interfaces quickly, isolated, and independently. Making it possible to define different states for components, thus documenting their states.
@@ -74,10 +79,11 @@ or
 $ yarn test
 ```
 
-Run the app in the development mode.<br />
-Open [http://localhost:3000/](http://localhost:3000/) to view it in the browser.
+To run tests + coverage
 
-The page will reload if you make edits.<br />
+```bash
+$ yarn test:watch
+```
 
 ## Contributing
 

@@ -3,7 +3,7 @@ const path = require('path');
 // Add fs mockFile because storybook broken without the fs
 module.exports = {
   stories: ['../stories/**/*.stories.js'],
-  addons: ['@storybook/addon-actions', '@storybook/addon-links', '@storybook/addon-controls'],
+  addons: ['@storybook/addon-actions', '@storybook/addon-links', '@storybook/addon-controls', '@storybook/addon-docs'],
   webpackFinal: async (storybookBaseConfig, configType) => {
     storybookBaseConfig.resolve.alias = {
       ...storybookBaseConfig.resolve.alias,

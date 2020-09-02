@@ -10,5 +10,5 @@ export default {
 };
 
 
-export const Idle = () => <Upload />;
+export const Idle = () => <div style={{ textAlign: "center"}}><Upload /></div>;
 

@@ -8,6 +8,7 @@ import TableSchema from "../TableSchema";
 import InputFile from "../InputFile";
 import InputUrl from "../InputUrl";
 import { getFileExtension, onFormatTitle, onFormatName, onFormatBytes } from '../../utils'
+import Choose from "../Choose";
 
 class Upload extends React.Component {
   constructor(props) {
@@ -217,8 +218,7 @@ class Upload extends React.Component {
         </div>
 
         <div className="upload-area">
-          <InputFile onChangeHandler={this.onChangeHandler} />
-          <InputUrl onChangeUrl={(event) => console.log(event.target.value)}/>
+          <Choose onChangeHandler={this.onChangeHandler} onChangeUrl={(event) => console.log("Get url:", event.target.value)}/>
           <div className="upload-area__info">
             {selectedFile && (
               <>

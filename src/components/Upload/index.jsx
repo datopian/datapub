@@ -7,6 +7,7 @@ import Stepper from "../Stepper";
 import TableSchema from "../TableSchema";
 import InputFile from "../InputFile";
 import InputUrl from "../InputUrl";
+import { getFileExtension, onFormatTitle, onFormatName, onFormatBytes } from '../../utils'
 
 class Upload extends React.Component {
   constructor(props) {
@@ -55,10 +56,10 @@ class Upload extends React.Component {
     let { name, title, path, hash, format } = metadata;
 
     if (event.target.files.length > 0) {
-      formattedSize = this.onFormatBytes(event.target.files[0].size);
-      format = this.getFileExtension(event.target.files[0].name);
-      title = this.onFormatTitle(event.target.files[0].name);
-      name = this.onFormatName(event.target.files[0].name);
+      formattedSize = onFormatBytes(event.target.files[0].size);
+      format = getFileExtension(event.target.files[0].name);
+      title = onFormatTitle(event.target.files[0].name);
+      name = onFormatName(event.target.files[0].name);
       path = event.target.files[0].name;
       selectedFile = event.target.files[0];
       const file = new FileAPI.HTML5File(selectedFile);
@@ -118,18 +119,6 @@ class Upload extends React.Component {
     });
   };
 
-  onFormatBytes = (bytes, decimals = 1) => {
-    if (bytes === 0) return "0 Bytes";
-
-    const k = 1000;
-    const dm = decimals < 0 ? 0 : decimals;
-    const sizes = ["Bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
-
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i];
-  };
-
   onClickHandler = async () => {
     const start = new Date().getTime();
     const { selectedFile, metadata } = this.state;
@@ -172,20 +161,6 @@ class Upload extends React.Component {
       .catch((error) => this.setState({ error: true, loading: false }));
   };
 
-  getFileExtension = (filename) => {
-    return /[.]/.exec(filename) ? /[^.]+$/.exec(filename)[0] : undefined;
-  };
-
-  onFormatTitle = (name) => {
-    return name
-      .replace(/\.[^/.]+$/, "")
-      .replace(/_/g, " ")
-      .replace(/-/g, " ");
-  };
-
-  onFormatName = (name) => {
-    return name.replace(/\.[^/.]+$/, "");
-  };
 
   handleChangeMetadata = (event) => {
     const target = event.target;
@@ -240,7 +215,7 @@ class Upload extends React.Component {
         <div className="upload-header">
           <h2 className="upload-header__title">Datapub Upload</h2>
         </div>
-        
+
         <div className="upload-area">
           <InputFile onChangeHandler={this.onChangeHandler} />
           <InputUrl onChangeUrl={(event) => console.log(event.target.value)}/>

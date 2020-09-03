@@ -6,7 +6,9 @@ import Upload from './components/Upload'
 export class ResourceEditor extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      datasetId: this.props.datasetId
+    };
   }
 
   render() {

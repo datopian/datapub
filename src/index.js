@@ -24,7 +24,10 @@ const element = document.getElementById('ResourceEditor');
 if (element) {
   ReactDOM.render(
     <React.StrictMode>
-      <App datasetId={element.getAttribute('data-dataset-id')} />
+      <App
+        datasetId={ element.getAttribute('data-dataset-id') }
+        resource={ element.getAttribute('data-resource')}
+      />
     </React.StrictMode>,
     element
   );

@@ -3,7 +3,7 @@ import './App.css';
 
 import Upload from './components/Upload'
 
-function App() {
+export function ResourceEditor() {
   return (
     <div className="App">
       <Upload/>
@@ -11,4 +11,4 @@ function App() {
   );
 }
 
-export default App;
+export default ResourceEditor;

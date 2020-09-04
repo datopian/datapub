@@ -2,22 +2,19 @@
   "name": "datapub",
   "version": "0.1.0",
   "private": false,
-  "main": "src/index.js",
+  "main": "dist/index.js",
   "dependencies": {
-    "@testing-library/jest-dom": "^4.2.4",
-    "@testing-library/react": "^9.3.2",
-    "@testing-library/user-event": "^7.1.2",
     "axios": "^0.19.2",
     "ckan3-js-sdk": "datopian/ckan3-js-sdk",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-scripts": "^3.4.3",
-    "react-table": "^7.5.0",
-    "react-test-renderer": "^16.13.1"
+    "react-table": "^7.5.0"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "dist": "rm -rf dist/ && mkdir dist && mkdir dist/css && NODE_ENV=production babel src/ -d dist/ --copy-files",
     "test": "react-scripts test",
     "test:watch": "npm run test -- --coverage --watchAll",
     "eject": "react-scripts eject",
@@ -41,7 +38,10 @@
     ]
   },
   "devDependencies": {
+    "@babel/cli": "^7.11.6",
     "@babel/core": "^7.11.1",
+    "@babel/preset-env": "^7.11.5",
+    "@babel/preset-react": "^7.10.4",
     "@storybook/addon-actions": "^6.0.16",
     "@storybook/addon-controls": "^6.0.16",
     "@storybook/addon-docs": "^6.0.21",
@@ -50,8 +50,21 @@
     "@storybook/addons": "^6.0.16",
     "@storybook/react": "^6.0.16",
     "@storybook/storybook-deployer": "^2.8.6",
+    "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/react": "^9.3.2",
+    "@testing-library/user-event": "^7.1.2",
     "babel-loader": "^8.1.0",
     "enzyme": "^3.11.0",
-    "enzyme-adapter-react-16": "^1.15.3"
+    "enzyme-adapter-react-16": "^1.15.3",
+    "react-test-renderer": "^16.13.1"
+  },
+  "babel": {
+    "presets": [
+      "@babel/preset-env",
+      "@babel/preset-react"
+    ],
+    "plugins": [
+      "@babel/plugin-proposal-class-properties"
+    ]
   }
 }

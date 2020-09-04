@@ -1,0 +1,19 @@
+{
+  "type": [
+    "string",
+    "number",
+    "integer",
+    "boolean",
+    "object",
+    "array",
+    "date",
+    "time",
+    "datetime",
+    "year",
+    "yearmonth",
+    "duration",
+    "geopoint",
+    "geojson",
+    "any"
+  ]
+}

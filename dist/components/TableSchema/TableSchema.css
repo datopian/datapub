@@ -1,0 +1,68 @@
+.table-container {
+  display: grid;
+  grid-template-columns: 200px 100%;
+}
+
+.table-schema-help {
+  margin-top: 3rem;
+}
+
+.table-schema-help_row {
+  padding: 1.3rem;
+}
+
+.table-thead-tr {
+  height: 50px;
+  border-radius: 8px;
+}
+
+.table-thead-th {
+  background: #f1f1f1;
+  color: #363844;
+  font-weight: bold;
+}
+
+.table-tbody-tr-help {
+  background: #ffffff;
+  color: #363844;
+  height: 40px;
+}
+
+.table-tbody-td {
+    padding: 10px;
+    border: solid 1px #f1f1f1;
+    background: #fff;
+}
+
+.table-tbody-input {
+  border: none;
+  padding: 20px 10px 20px 10px;
+}
+
+.table-tbody-select {
+  position: relative;
+  display: inline-block;
+  vertical-align: middle;
+  margin: 10px;
+  background-color: #fafafa;
+  width: 100%;
+  border: none;
+  padding: 10px;
+}
+
+.table-btn-save {
+    padding: 10px;
+    width: 90%;
+    background-color: #4FA8FD;
+    border: none;
+    border-radius: 3px;
+    color: #fff;
+    font-weight: 500;
+    cursor: pointer;
+    outline: 0;
+}
+
+.table-btn-save:disabled {
+  background: #e3e9ed !important;
+  cursor: default;
+}

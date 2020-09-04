@@ -1,0 +1,58 @@
+.switch-wrapper {
+    color: #222222;
+    display: grid;
+    grid-template-columns: 160px 200px 160px;
+    grid-template-areas: "switchOne divLine switchTwo";
+    width: 80%;
+    align-items: center;
+    justify-items: center;
+    align-content: center;
+    justify-content: center;
+    margin: 1rem auto;
+}
+
+.switch-number {
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    padding: 3px;
+    text-align: center;
+    margin-bottom: 1.2rem;
+    margin: 0 auto;
+    cursor: pointer;
+}
+
+.switch-one {
+    grid-area: switchOne;
+}
+
+.switch-two {
+    grid-area: switchTwo;
+}
+
+.switch-number-selected {
+    background-color: #00A7E1;
+    color: #ffffff;
+}
+
+.switch-number-disabled {
+    border: 1px solid #e3ebff;
+}
+
+.switch-description {
+    margin-top: 1rem;
+    width: 100%;
+    cursor: pointer;
+}
+
+.switch-description-active {
+    font-weight: bold;
+}
+
+.divider-line {
+    grid-area: divLine;
+    height: 2px;
+    background-color: #e3ebff;
+    width: 100%;
+    margin-bottom: 3rem;
+}

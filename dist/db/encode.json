@@ -1,0 +1,62 @@
+[
+    {
+      "value": "utf_8",
+      "label": "UTF-8"
+    },
+    {
+      "value": "iso_8859_1",
+      "label": "ISO-8859-1"
+    },
+    {
+      "value": "windows_1251",
+      "label": "Windows-1251"
+    },
+    {
+      "value": "windows_1252",
+      "label": "Windows-1252"
+    },
+    {
+      "value": "shift_jis",
+      "label": "Shift JIS"
+    },
+    {
+      "value": "gb2312",
+      "label": "GB2312"
+    },
+    {
+      "value": "euc_kr",
+      "label": "EUC-KR"
+    },
+    {
+      "value": "iso_8859_2",
+      "label": "ISO-8859-2"
+    },
+    {
+      "value": "windows_1250",
+      "label": "Windows-1250"
+    },
+    {
+      "value": "euc_jp",
+      "label": "EUC-JP"
+    },
+    {
+      "value": "gbk",
+      "label": "GBK"
+    },
+    {
+      "value": "big5",
+      "label": "Big5"
+    },
+    {
+      "value": "iso_8859_15",
+      "label": "ISO-8859-15"
+    },
+    {
+      "value": "windows_1256",
+      "label": "Windows-1256"
+    },
+    {
+      "value": "iso_8859_9",
+      "label": "ISO-8859-9"
+    }
+  ]

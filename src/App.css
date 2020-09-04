@@ -35,7 +35,7 @@ code {
   grid-template-areas:
     "header header"
     "uploadArea uploadArea"
-    "stepper stepper"
+    "switcher switcher"
     "editArea editArea";
   row-gap: 20px;
   column-gap: 20px;
@@ -107,8 +107,8 @@ code {
   color: #3f4656;
 }
 
-.upload-stepper {
-  grid-area: stepper;
+.upload-switcher {
+  grid-area: switcher;
 }
 
 .upload-edit-area {

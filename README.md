@@ -23,7 +23,49 @@ React-based framework for building data publishing flows (esp for CKAN). This ap
 - [Jest](https://jestjs.io/)
 - [Ckan3-js-sdk](https://github.com/datopian/ckan3-js-sdk)
 
-## Install
+## Usage
+
+There are several ways of using this library:
+
+### Automatically mount the app
+
+Define a HTML element with id `ResourceEditor` where the app will mounted. You also need to have `data-dataset-id` and `data-resource` attributes:
+
+```html
+<div id="ResourceEditor" data-dataset-id="test-id" data-resource="{}"></div>
+```
+
+Where `data-dataset-id` is an id of a CKAN dataset and `data-resource` is a descriptor of a resource. When creating a new resource, you can just skip that attribute.
+
+### Explicitly mounting
+
+You can also explicitly call a function to mount the app to specific place in your page:
+
+```javascript
+const elementId = 'root';
+const datasetId = 'test-id'
+// Make sure the module is loaded first, otherwise, this function won't be available
+mountResourceEditorApp(myElementId, datasetId);
+```
+
+### Import specific components
+
+Another way of using the library is to import specific components for your needs:
+
+```javascript
+import React from 'react';
+import { ResourceEditor } from 'datapub';
+
+const MyComponent = (props) => {
+  return (
+    <ResourceEditor datasetId={} resource={} />
+  )
+}
+```
+
+## Developers
+
+### Install
 
 First, clone the repo via git:
 
@@ -38,7 +80,7 @@ $ cd datapub
 $ npm install
 ```
 
-## Run
+### Run
 
 ```bash
 $ npm run start
@@ -49,31 +91,31 @@ Open [http://localhost:3000/](http://localhost:3000/) to view it in the browser.
 
 The page will reload if you make edits.<br />
 
-## Storybook
+### Storybook
 
 Storybook is a tool that prepares a development environment for UI components. It allows you to develop and design your graphical interfaces quickly, isolated, and independently. Making it possible to define different states for components, thus documenting their states.
 
 **Note**: Every push will run GitHub actions to deploy in GitHub pages. You can check online at https://datopian.github.io/datapub
 
-### Run storybook
+#### Run storybook
 
 ```bash
 $ npm run storybook
 ```
 
-or 
+or
 
 ```bash
 $ yarn storybook
 ```
 
-## Run Tests
+### Run Tests
 
 ```bash
 $ npm test
 ```
 
-or 
+or
 
 ```bash
 $ yarn test

@@ -1,8 +1,8 @@
-.step-wrapper {
+.switch-wrapper {
     color: #222222;
     display: grid;
     grid-template-columns: 160px 200px 160px;
-    grid-template-areas: "stepOne divLine stepTwo";
+    grid-template-areas: "switchOne divLine switchTwo";
     width: 80%;
     align-items: center;
     justify-items: center;
@@ -11,7 +11,7 @@
     margin: 1rem auto;
 }
 
-.step-number {
+.switch-number {
     border-radius: 50%;
     width: 20px;
     height: 20px;
@@ -22,30 +22,30 @@
     cursor: pointer;
 }
 
-.step-one {
-    grid-area: stepOne;
+.switch-one {
+    grid-area: switchOne;
 }
 
-.step-two {
-    grid-area: stepTwo;
+.switch-two {
+    grid-area: switchTwo;
 }
 
-.step-number-selected {
+.switch-number-selected {
     background-color: #00A7E1;
     color: #ffffff;
 }
 
-.step-number-disabled {
+.switch-number-disabled {
     border: 1px solid #e3ebff;
 }
 
-.step-description {
+.switch-description {
     margin-top: 1rem;
     width: 100%;
     cursor: pointer;
 }
 
-.step-description-active {
+.switch-description-active {
     font-weight: bold;
 }
 

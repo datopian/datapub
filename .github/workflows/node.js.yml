@@ -34,8 +34,8 @@ jobs:
       run: npm test
 
     - name: Build
-      run: npm run build
-    
+      run: CI=false npm run build
+
     - name: Deploy storybook to Github Pages
       run: npm run deploy-storybook -- --ci
       env:

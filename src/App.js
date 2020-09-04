@@ -1,7 +1,7 @@
 import React from 'react';
 import Metadata from "./components/Metadata";
 import TableSchema from "./components/TableSchema";
-import Stepper from "./components/Stepper";
+import Switcher from "./components/Switcher";
 import './App.css';
 
 import Upload from './components/Upload'
@@ -74,8 +74,8 @@ export class ResourceEditor extends React.Component {
 
           <Upload resource={this.state.resource} metadataHandler={this.metadataHandler} />
 
-          <div className="upload-stepper">
-            <Stepper
+          <div className="upload-switcher">
+            <Switcher
               metadataOrSchema={metadataOrSchema}
               switcher={this.switcher}
             />

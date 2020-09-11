@@ -31,7 +31,7 @@ code {
   min-height: 60%;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  grid-template-rows: auto  500px auto auto;
+  grid-template-rows: auto  300px auto auto;
   grid-template-areas:
     "header header"
     "uploadArea uploadArea"

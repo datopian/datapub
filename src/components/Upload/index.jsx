@@ -1,5 +1,5 @@
 import React from "react";
-import { Uploader, FileAPI } from "ckan3-js-sdk";
+import { Client, Open  } from "ckanClient";
 import data from "data.js";
 import toArray from "stream-to-array";
 import PropTypes from "prop-types";
@@ -74,9 +74,9 @@ class Upload extends React.Component {
     const { authToken, api, organizationId, datasetId } = config;
 
     // create an instance of a object
-    const file = new FileAPI.HTML5File(selectedFile);
+    const file = new Open.HTML5File(selectedFile);
 
-    const uploader = new Uploader(
+    const client = new Client(
       `${authToken}`,
       `${organizationId}`,
       `${datasetId}`,
@@ -90,21 +90,9 @@ class Upload extends React.Component {
     });
 
     // Get the JWT token from authz and upload file to the storage
-    fetch(`${authzUrl}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: authToken,
-      },
-      body: JSON.stringify(scopes),
-    })
-      .then((response) => response.json())
-      .then((response) =>
-        uploader.push(file, response.result.token, this.onUploadProgress)
-      )
-      .then((response) =>
-        this.setState({ success: response.success, loading: false })
-      )
+    client.ckanAuthz(`${authzUrl}`)
+      .then((response) => client.push(file, response.result.token, this.onUploadProgress))
+      .then((response) => this.setState({ success: response.success, loading: false }))
       .catch((error) => this.setState({ error: true, loading: false }));
   };
 
@@ -170,7 +158,7 @@ Upload.defaultProps = {
   scopes: {
     scopes: [`obj:myorg/data-test-2/*:read,write`],
   },
-  authzUrl: "http://localhost:5000/api/action/authz_authorize",
+  authzUrl: "http://localhost:5000",
 };
 
 Upload.propTypes = {

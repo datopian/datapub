@@ -72,13 +72,6 @@ const TableSchema = (props) => {
           <div className="table-schema-help_row">Description</div>
           <div className="table-schema-help_row">Type</div>
           <div className="table-schema-help_row">Format</div>
-          <button
-            className="table-btn-save"
-            disabled={!props.uploadSuccess}
-            onClick={() => props.handleSubmitSchema(schema, 1)}
-          >
-            Save
-          </button>
         </div>
         <div className="table">
           <table {...getTableProps()}>

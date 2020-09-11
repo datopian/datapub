@@ -6,11 +6,11 @@ import types from "../../db/types.json";
 import "./TableSchema.css";
 
 const TableSchema = (props) => {
-  const [schema, setSchema] = useState(props.schema.fields);
+  const [schema, setSchema] = useState(props.schema);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const data = React.useMemo(() => [...props.data], []);
 
-  const columnsSchema = props.schema.fields.map((item) => {
+  const columnsSchema = schema.fields.map((item) => {
     return { Header: item.name, accessor: item.name };
   });
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -31,7 +31,7 @@ const TableSchema = (props) => {
 
   const renderEditSchemaField = (key) => {
     if (key === "type") {
-      return schema.map((item, index) => (
+      return schema.fields.map((item, index) => (
         <td key={`schema-type-field-${key}-${index}`}>
           <select
             className="table-tbody-select"
@@ -52,7 +52,7 @@ const TableSchema = (props) => {
         </td>
       ));
     }
-    return schema.map((item, index) => (
+    return schema.fields.map((item, index) => (
       <td key={`schema-field-${key}-${index}`}>
         <input
           className="table-tbody-input"

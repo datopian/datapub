@@ -48,7 +48,7 @@ const Metadata = ({ metadata, handleChange, handleSubmit, uploadSuccess }) => {
             onChange={handleChange}
           >
             <option value="" disabled>
-              Encode
+              Select...
             </option>
             {encodeData.map((item) => (
               <option key={`format-${item.value}`} value={item.value}>
@@ -63,9 +63,14 @@ const Metadata = ({ metadata, handleChange, handleSubmit, uploadSuccess }) => {
           </label>
           <select
             className="metadata-input__input"
+            name="format"
+            id="format"
             value={metadata.format || ""}
             onChange={handleChange}
           >
+            <option value="" disabled>
+              Select...
+            </option>
             {formatData.map((item) => (
               <option key={`format-${item[0]}`} value={item[0].toLowerCase()}>
                 {item[0]}

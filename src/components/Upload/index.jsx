@@ -1,8 +1,10 @@
 import React from "react";
 import { Uploader, FileAPI } from "ckan3-js-sdk";
+import data from "data.js";
+import toArray from "stream-to-array";
 import PropTypes from "prop-types";
 import ProgressBar from "../ProgressBar";
-import { getFileExtension, onFormatTitle, onFormatName, onFormatBytes } from '../../utils'
+import { onFormatBytes } from '../../utils';
 import Choose from "../Choose";
 
 class Upload extends React.Component {
@@ -26,18 +28,13 @@ class Upload extends React.Component {
 
     if (event.target.files.length > 0) {
       selectedFile = event.target.files[0];
-      formattedSize = onFormatBytes(selectedFile.size);
-      const file = new FileAPI.HTML5File(selectedFile);
-      const hash = await file.sha256();
-      this.props.metadataHandler({
-        name: onFormatName(selectedFile.name),
-        path: selectedFile.name,
-        title: onFormatTitle(selectedFile.name),
-        format: getFileExtension(selectedFile.name),
-        bytes: selectedFile.size,
-        mediatype: selectedFile.type,
-        hash: `SHA256:${hash}`,
-      })
+      const file = data.open(selectedFile);
+      const rowStream = await file.rows({size: 20, keyed: true});
+      file.descriptor._values = await toArray(rowStream);
+      await file.addSchema();
+      formattedSize = onFormatBytes(file.size);
+      const hash = await file.hash();
+      this.props.metadataHandler(Object.assign(file.descriptor, {hash}))
     }
 
     this.setState({

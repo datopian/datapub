@@ -6,6 +6,7 @@
   "dependencies": {
     "axios": "^0.19.2",
     "ckan3-js-sdk": "datopian/ckan3-js-sdk",
+    "data.js": "git+https://github.com/datopian/data.js.git",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-scripts": "^3.4.3",

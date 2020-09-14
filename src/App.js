@@ -91,9 +91,7 @@ export class ResourceEditor extends React.Component {
               <TableSchema
                 schema={this.state.resource.schema || {fields: []}}
                 data={
-                  this.state.resource.sample ||
-                  this.state.resource._values ||
-                  this.state.resource.data || []
+                  this.state.resource.sample || []
                 }
               />
             )}

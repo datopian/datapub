@@ -49,10 +49,6 @@ export class ResourceEditor extends React.Component {
     console.log("Metadata state: ", this.state.resource);
   };
 
-  handleSubmitSchema = (schema, index) => {
-    console.log("Schema state: ", schema);
-  };
-
   switcher = (name) => {
     const ui = {...this.state.ui}
     ui.metadataOrSchema = name
@@ -93,10 +89,12 @@ export class ResourceEditor extends React.Component {
             )}
             {metadataOrSchema === 'schema' && (
               <TableSchema
-                uploadSuccess={success}
                 schema={this.state.resource.schema || {fields: []}}
-                data={this.state.resource.data || this.state.resource._values}
-                handleSubmitSchema={this.handleSubmitSchema}
+                data={
+                  this.state.resource.sample ||
+                  this.state.resource._values ||
+                  this.state.resource.data || []
+                }
               />
             )}
           </div>

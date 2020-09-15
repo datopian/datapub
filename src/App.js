@@ -21,9 +21,9 @@ export class ResourceEditor extends React.Component {
         success: false,
         error: false,
         loading: false,
-        metadataOrSchema: 'metadata',
-        client: ''
-      }
+        metadataOrSchema: 'metadata'
+      },
+      client: null
     };
     this.metadataHandler = this.metadataHandler.bind(this);
   }

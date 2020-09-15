@@ -35,7 +35,7 @@ class Upload extends React.Component {
         console.error(e);
       }
       formattedSize = onFormatBytes(file.size);
-      const hash = await file.hash();
+      const hash = await file.hashSha256();
       this.props.metadataHandler(Object.assign(file.descriptor, {hash}))
     }
 

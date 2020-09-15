@@ -7105,7 +7105,7 @@ data-urls@^1.0.0, data-urls@^1.1.0:
 
 "data.js@git+https://github.com/datopian/data.js.git":
   version "0.12.11"
-  resolved "git+https://github.com/datopian/data.js.git#3adb84d1cdf21345a0b87f82cb0ff7a005f3c90f"
+  resolved "git+https://github.com/datopian/data.js.git#41005e354d44c20505466ef7735bdecade84b4cc"
   dependencies:
     "@babel/polyfill" "^7.4.4"
     browserify "^16.5.2"
@@ -8759,6 +8759,11 @@ fresh@0.5.2:
   version "0.5.2"
   resolved "https://registry.yarnpkg.com/fresh/-/fresh-0.5.2.tgz#3d8cadd90d976569fa835ab1f8e4b23a105605a7"
   integrity sha1-PYyt2Q2XZWn6g1qx+OSyOhBWBac=
+
+frictionless-ckan-mapper-js@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/frictionless-ckan-mapper-js/-/frictionless-ckan-mapper-js-1.0.0.tgz#856b5bcad12bfbeb72084219fba621aca211700a"
+  integrity sha512-/6/5ECgB1sBuKmgbeXHFi4yiSudZszaGUOhlbsqMybGy9IAFwPX8Pu6rqN7aXjTvzWTUJ0bTh2LsNaB9EuPugQ==
 
 from2@^2.1.0:
   version "2.3.0"

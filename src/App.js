@@ -1,6 +1,7 @@
 import React from 'react';
 import { Client } from "ckanClient";
 import PropTypes from "prop-types";
+import frictionlessCkanMapper from "frictionless-ckan-mapper-js";
 
 import Metadata from "./components/Metadata";
 import TableSchema from "./components/TableSchema";

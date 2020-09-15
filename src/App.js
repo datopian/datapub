@@ -1,4 +1,7 @@
 import React from 'react';
+import { Client } from "ckanClient";
+import PropTypes from "prop-types";
+
 import Metadata from "./components/Metadata";
 import TableSchema from "./components/TableSchema";
 import Switcher from "./components/Switcher";
@@ -18,10 +21,24 @@ export class ResourceEditor extends React.Component {
         success: false,
         error: false,
         loading: false,
-        metadataOrSchema: 'metadata'
+        metadataOrSchema: 'metadata',
+        client: ''
       }
     };
     this.metadataHandler = this.metadataHandler.bind(this);
+  }
+
+  componentWillMount() {
+    const { config } = this.props;
+    const { authToken, api, organizationId, datasetId } = config;
+
+    const client = new Client(
+      `${authToken}`,
+      `${organizationId}`,
+      `${datasetId}`,
+      `${api}`
+    );
+    this.setState({client})
   }
 
   metadataHandler(resource) {
@@ -46,7 +63,13 @@ export class ResourceEditor extends React.Component {
 
   handleSubmitMetadata = (event, index) => {
     event.preventDefault();
-    console.log("Metadata state: ", this.state.resource);
+
+    const { resource, client } = this.state;
+    // create new resource variable and delete _values
+    const newResource = resource
+    delete newResource._values
+  
+    client.push(newResource)
   };
 
   handleSubmitSchema = (schema, index) => {
@@ -72,7 +95,7 @@ export class ResourceEditor extends React.Component {
             <h2 className="upload-header__title">Resource Editor</h2>
           </div>
 
-          <Upload resource={this.state.resource} metadataHandler={this.metadataHandler} />
+          <Upload client={this.state.client} resource={this.state.resource} metadataHandler={this.metadataHandler} />
 
           <div className="upload-switcher">
             <Switcher
@@ -105,5 +128,22 @@ export class ResourceEditor extends React.Component {
     );
   }
 }
+
+/**
+ * If the parent component doesn't specify a `config` and scope prop, then
+ * the default values will be used.
+ * */
+ ResourceEditor.defaultProps = {
+  config: {
+    authToken: "be270cae-1c77-4853-b8c1-30b6cf5e9878",
+    api: "http://localhost:5000",
+    organizationId: "myorg",
+    datasetId: "data-test-2",
+  },
+};
+
+ResourceEditor.propTypes = {
+  config: PropTypes.object.isRequired,
+};
 
 export default ResourceEditor;

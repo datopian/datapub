@@ -1,7 +1,6 @@
 import React from 'react';
 import { Client } from "ckanClient";
 import PropTypes from "prop-types";
-import frictionlessCkanMapper from "frictionless-ckan-mapper-js";
 
 import Metadata from "./components/Metadata";
 import TableSchema from "./components/TableSchema";
@@ -66,13 +65,13 @@ export class ResourceEditor extends React.Component {
     event.preventDefault();
 
     const { resource, client } = this.state;
-    // Update resource
-    const ckanResource = frictionlessCkanMapper.resourceFrictionlessToCkan(
-      resource.descriptor
-    )
-    client.action('resource_update', Object.assign(ckanResource, {
-      package_id: this.state.datasetId
-    }))
+    // Save resource metadata updates (including schema)
+    const datasetMetadata = client.retrieve(this.state.datasetId);
+    // Here we're only handling single resource but in the future we need to
+    // refactor this to manage multiple resources:
+    datasetMetadata.resources[0] = resource.descriptor;
+    // TODO: do we need to remove 'sample' attribute from resource descriptor?
+    client.push(datasetMetadata);
   };
 
   switcher = (name) => {

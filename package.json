@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "dependencies": {
     "axios": "^0.19.2",
-    "ckanClient": "git+https://github.com/datopian/ckan-client-js",
+    "ckanClient": "git+https://github.com/datopian/ckan-client-js.git",
     "data.js": "git+https://github.com/datopian/data.js.git",
     "frictionless-ckan-mapper-js": "^1.0.0",
     "react": "^16.13.1",

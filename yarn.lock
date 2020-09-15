@@ -6231,6 +6231,14 @@ cipher-base@^1.0.0, cipher-base@^1.0.1, cipher-base@^1.0.3:
     axios "^0.19.2"
     crypto-js "^4.0.0"
 
+"ckanClient@git+https://github.com/datopian/ckan-client-js.git":
+  version "0.2.0"
+  resolved "git+https://github.com/datopian/ckan-client-js.git#b3cb22401aab0cd1cb08c5517d8ed30da53df305"
+  dependencies:
+    axios "^0.19.2"
+    crypto-js "^4.0.0"
+    frictionless-ckan-mapper-js "^1.0.0"
+
 class-utils@^0.3.5:
   version "0.3.6"
   resolved "https://registry.yarnpkg.com/class-utils/-/class-utils-0.3.6.tgz#f93369ae8b9a7ce02fd41faad0ca83033190c463"

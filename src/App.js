@@ -65,11 +65,13 @@ export class ResourceEditor extends React.Component {
     event.preventDefault();
 
     const { resource, client } = this.state;
-    // create new resource variable and delete _values
-    const newResource = resource
-    delete newResource.sample
-
-    client.push(newResource)
+    // Update resource
+    const ckanResource = frictionlessCkanMapper.resourceFrictionlessToCkan(
+      resource.descriptor
+    )
+    client.action('resource_update', Object.assign(ckanResource, {
+      package_id: this.state.datasetId
+    }))
   };
 
   switcher = (name) => {

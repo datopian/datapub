@@ -1,5 +1,6 @@
 import React from "react";
-import f11s from "data.js"
+import data from "data.js";
+import frictionlessCkanMapper from 'frictionless-ckan-mapper-js';
 import toArray from "stream-to-array";
 import ProgressBar from "../ProgressBar";
 import { onFormatBytes } from '../../utils';
@@ -74,7 +75,7 @@ class Upload extends React.Component {
     const { selectedFile } = this.state;
     const { client } = this.props;
 
-    const resource = f11s.open(selectedFile)
+    const resource = data.open(selectedFile)
 
     this.setState({
       fileSize: resource.size,
@@ -85,7 +86,13 @@ class Upload extends React.Component {
     // Use client to upload file to the storage and track the progress
     client.pushBlob(resource, this.onUploadProgress)
       .then((response) => this.setState({ success: response.success, loading: false }))
-      .then(() => client.create(resource))
+      .then(() => {
+        // Once upload is done, create a resource
+        const ckanResource = frictionlessCkanMapper.resourceFrictionlessToCkan(
+          resource.descriptor
+        )
+        client.action('resource_create', ckanResource)
+      })
       .catch((error) => this.setState({ error: true, loading: false }));
   };
 

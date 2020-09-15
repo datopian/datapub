@@ -10,6 +10,7 @@ class Upload extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      datasetId: props.datasetId,
       selectedFile: null,
       fileSize: 0,
       formattedSize: "0 KB",
@@ -91,7 +92,9 @@ class Upload extends React.Component {
         const ckanResource = frictionlessCkanMapper.resourceFrictionlessToCkan(
           resource.descriptor
         )
-        client.action('resource_create', ckanResource)
+        client.action('resource_create', Object.assign(ckanResource, {
+          package_id: this.state.datasetId
+        }))
       })
       .catch((error) => this.setState({ error: true, loading: false }));
   };

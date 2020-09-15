@@ -91,7 +91,12 @@ export class ResourceEditor extends React.Component {
             <h2 className="upload-header__title">Resource Editor</h2>
           </div>
 
-          <Upload client={this.state.client} resource={this.state.resource} metadataHandler={this.metadataHandler} />
+          <Upload
+            client={this.state.client}
+            resource={this.state.resource}
+            metadataHandler={this.metadataHandler}
+            datasetId={this.state.datasetId}
+          />
 
           <div className="upload-switcher">
             <Switcher

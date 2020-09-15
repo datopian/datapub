@@ -67,13 +67,9 @@ export class ResourceEditor extends React.Component {
     const { resource, client } = this.state;
     // create new resource variable and delete _values
     const newResource = resource
-    delete newResource._values
-  
-    client.push(newResource)
-  };
+    delete newResource.sample
 
-  handleSubmitSchema = (schema, index) => {
-    console.log("Schema state: ", schema);
+    client.push(newResource)
   };
 
   switcher = (name) => {
@@ -116,10 +112,10 @@ export class ResourceEditor extends React.Component {
             )}
             {metadataOrSchema === 'schema' && (
               <TableSchema
-                uploadSuccess={success}
                 schema={this.state.resource.schema || {fields: []}}
-                data={this.state.resource.data || this.state.resource._values}
-                handleSubmitSchema={this.handleSubmitSchema}
+                data={
+                  this.state.resource.sample || []
+                }
               />
             )}
           </div>

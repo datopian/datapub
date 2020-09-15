@@ -26,10 +26,14 @@ class Upload extends React.Component {
 
     if (event.target.files.length > 0) {
       selectedFile = event.target.files[0];
-      const file = f11s.open(selectedFile);
-      const rowStream = await file.rows({size: 20, keyed: true});
-      file.descriptor._values = await toArray(rowStream);
-      await file.addSchema();
+      const file = data.open(selectedFile);
+      try {
+        const rowStream = await file.rows({size: 20, keyed: true});
+        file.descriptor.sample = await toArray(rowStream);
+        await file.addSchema();
+      } catch(e) {
+        console.error(e);
+      }
       formattedSize = onFormatBytes(file.size);
       const hash = await file.hash();
       this.props.metadataHandler(Object.assign(file.descriptor, {hash}))
@@ -42,7 +46,7 @@ class Upload extends React.Component {
       error: false,
       formattedSize,
     });
-    
+
     this.onClickHandler();
   };
 

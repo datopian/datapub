@@ -13,7 +13,7 @@ export class ResourceEditor extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      datasetId: this.props.datasetId,
+      datasetId: this.props.config.datasetId,
       resource: this.props.resource || {},
       ui: {
         fileOrLink: '',

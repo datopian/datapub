@@ -5,14 +5,15 @@ import App from './App';
 
 // Mount the ResourceEditor app explicitly
 // (make sure you call the function after it's loaded)
-function mountResourceEditorApp([elementId, datasetId] = ['root', undefined]) {
-  if (!datasetId) {
-    throw Error('Dataset id is required.')
-  }
-
+function mountResourceEditorApp([elementId, config, resource] = ['root', {
+  authToken: null,
+  api: null,
+  organizationId: null,
+  datasetId: null
+}, {}]) {
   ReactDOM.render(
     <React.StrictMode>
-      <App datasetId={datasetId} />
+      <App config={config} resource={resource} />
     </React.StrictMode>,
     document.getElementById(elementId)
   );
@@ -22,10 +23,17 @@ function mountResourceEditorApp([elementId, datasetId] = ['root', undefined]) {
 // Automatically mount the app if an element with id='ResourceEditor' exists
 const element = document.getElementById('ResourceEditor');
 if (element) {
+  const config = {
+    datasetId: element.getAttribute('data-dataset-id')
+    api: element.getAttribute('data-api')
+    authToken: element.getAttribute('data-auth-token')
+    organizationId: element.getAttribute('data-organization-id')
+  }
+
   ReactDOM.render(
     <React.StrictMode>
       <App
-        datasetId={ element.getAttribute('data-dataset-id') }
+        config={config}
         resource={ element.getAttribute('data-resource')}
       />
     </React.StrictMode>,

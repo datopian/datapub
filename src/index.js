@@ -24,9 +24,9 @@ function mountResourceEditorApp([elementId, config, resource] = ['root', {
 const element = document.getElementById('ResourceEditor');
 if (element) {
   const config = {
-    datasetId: element.getAttribute('data-dataset-id')
-    api: element.getAttribute('data-api')
-    authToken: element.getAttribute('data-auth-token')
+    datasetId: element.getAttribute('data-dataset-id'),
+    api: element.getAttribute('data-api'),
+    authToken: element.getAttribute('data-auth-token'),
     organizationId: element.getAttribute('data-organization-id')
   }
 

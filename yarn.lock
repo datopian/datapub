@@ -6224,12 +6224,13 @@ cipher-base@^1.0.0, cipher-base@^1.0.1, cipher-base@^1.0.3:
     inherits "^2.0.1"
     safe-buffer "^5.0.1"
 
-"ckanClient@git+https://github.com/datopian/ckan-client-js":
-  version "1.0.0"
-  resolved "git+https://github.com/datopian/ckan-client-js#1edf3373dce9449c453b44aae25bda6c1284f538"
+"ckanClient@git+https://github.com/datopian/ckan-client-js.git":
+  version "0.2.0"
+  resolved "git+https://github.com/datopian/ckan-client-js.git#47c99604aa5f300f732f25cfa8fc0032354b1169"
   dependencies:
     axios "^0.19.2"
     crypto-js "^4.0.0"
+    frictionless-ckan-mapper-js "^1.0.0"
 
 class-utils@^0.3.5:
   version "0.3.6"
@@ -7104,8 +7105,8 @@ data-urls@^1.0.0, data-urls@^1.1.0:
     whatwg-url "^7.0.0"
 
 "data.js@git+https://github.com/datopian/data.js.git":
-  version "0.12.11"
-  resolved "git+https://github.com/datopian/data.js.git#3adb84d1cdf21345a0b87f82cb0ff7a005f3c90f"
+  version "0.13.0"
+  resolved "git+https://github.com/datopian/data.js.git#82b026a481d33ea0a620f5afb52a30588cd5c753"
   dependencies:
     "@babel/polyfill" "^7.4.4"
     browserify "^16.5.2"
@@ -8759,6 +8760,11 @@ fresh@0.5.2:
   version "0.5.2"
   resolved "https://registry.yarnpkg.com/fresh/-/fresh-0.5.2.tgz#3d8cadd90d976569fa835ab1f8e4b23a105605a7"
   integrity sha1-PYyt2Q2XZWn6g1qx+OSyOhBWBac=
+
+frictionless-ckan-mapper-js@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/frictionless-ckan-mapper-js/-/frictionless-ckan-mapper-js-1.0.0.tgz#856b5bcad12bfbeb72084219fba621aca211700a"
+  integrity sha512-/6/5ECgB1sBuKmgbeXHFi4yiSudZszaGUOhlbsqMybGy9IAFwPX8Pu6rqN7aXjTvzWTUJ0bTh2LsNaB9EuPugQ==
 
 from2@^2.1.0:
   version "2.3.0"

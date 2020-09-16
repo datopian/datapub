@@ -1,4 +1,7 @@
 import React from 'react';
+import { Client } from "ckanClient";
+import PropTypes from "prop-types";
+
 import Metadata from "./components/Metadata";
 import TableSchema from "./components/TableSchema";
 import Switcher from "./components/Switcher";
@@ -10,7 +13,7 @@ export class ResourceEditor extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      datasetId: this.props.datasetId,
+      datasetId: this.props.config.datasetId,
       resource: this.props.resource || {},
       ui: {
         fileOrLink: '',
@@ -19,9 +22,24 @@ export class ResourceEditor extends React.Component {
         error: false,
         loading: false,
         metadataOrSchema: 'metadata'
-      }
+      },
+      client: null
     };
     this.metadataHandler = this.metadataHandler.bind(this);
+  }
+
+  componentWillMount() {
+    const { config } = this.props;
+    const { authToken, api, lfs, organizationId, datasetId } = config;
+
+    const client = new Client(
+      `${authToken}`,
+      `${organizationId}`,
+      `${datasetId}`,
+      `${api}`,
+      `${lfs}`
+    );
+    this.setState({client})
   }
 
   metadataHandler(resource) {
@@ -44,13 +62,19 @@ export class ResourceEditor extends React.Component {
     });
   };
 
-  handleSubmitMetadata = (event, index) => {
+  handleSubmitMetadata = async (event, index) => {
     event.preventDefault();
-    console.log("Metadata state: ", this.state.resource);
-  };
 
-  handleSubmitSchema = (schema, index) => {
-    console.log("Schema state: ", schema);
+    const { resource, client } = this.state;
+    // Save resource metadata updates (including schema)
+    const datasetMetadata = await client.retrieve(this.state.datasetId);
+
+    // Here we're only handling single resource but in the future we need to
+    // refactor this to manage multiple resources:
+    delete resource.sample;
+    datasetMetadata.resources.push(resource);
+    // TODO: do we need to remove 'sample' attribute from resource descriptor?
+    client.push(datasetMetadata);
   };
 
   switcher = (name) => {
@@ -72,7 +96,12 @@ export class ResourceEditor extends React.Component {
             <h2 className="upload-header__title">Resource Editor</h2>
           </div>
 
-          <Upload resource={this.state.resource} metadataHandler={this.metadataHandler} />
+          <Upload
+            client={this.state.client}
+            resource={this.state.resource}
+            metadataHandler={this.metadataHandler}
+            datasetId={this.state.datasetId}
+          />
 
           <div className="upload-switcher">
             <Switcher
@@ -93,10 +122,10 @@ export class ResourceEditor extends React.Component {
             )}
             {metadataOrSchema === 'schema' && (
               <TableSchema
-                uploadSuccess={success}
                 schema={this.state.resource.schema || {fields: []}}
-                data={this.state.resource.data || this.state.resource._values}
-                handleSubmitSchema={this.handleSubmitSchema}
+                data={
+                  this.state.resource.sample || []
+                }
               />
             )}
           </div>
@@ -105,5 +134,23 @@ export class ResourceEditor extends React.Component {
     );
   }
 }
+
+/**
+ * If the parent component doesn't specify a `config` and scope prop, then
+ * the default values will be used.
+ * */
+ ResourceEditor.defaultProps = {
+  config: {
+    authToken: "be270cae-1c77-4853-b8c1-30b6cf5e9878",
+    api: "http://localhost:5000",
+    lfs: "http://localhost:5001", // Feel free to modify this
+    organizationId: "myorg",
+    datasetId: "data-test-2",
+  },
+};
+
+ResourceEditor.propTypes = {
+  config: PropTypes.object.isRequired,
+};
 
 export default ResourceEditor;

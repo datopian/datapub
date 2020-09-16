@@ -1,8 +1,7 @@
 import React from "react";
-import { Client, Open  } from "ckanClient";
 import data from "data.js";
+import frictionlessCkanMapper from 'frictionless-ckan-mapper-js';
 import toArray from "stream-to-array";
-import PropTypes from "prop-types";
 import ProgressBar from "../ProgressBar";
 import { onFormatBytes } from '../../utils';
 import Choose from "../Choose";
@@ -11,6 +10,7 @@ class Upload extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      datasetId: props.datasetId,
       selectedFile: null,
       fileSize: 0,
       formattedSize: "0 KB",
@@ -29,11 +29,15 @@ class Upload extends React.Component {
     if (event.target.files.length > 0) {
       selectedFile = event.target.files[0];
       const file = data.open(selectedFile);
-      const rowStream = await file.rows({size: 20, keyed: true});
-      file.descriptor._values = await toArray(rowStream);
-      await file.addSchema();
+      try {
+        const rowStream = await file.rows({size: 20, keyed: true});
+        file.descriptor.sample = await toArray(rowStream);
+        await file.addSchema();
+      } catch(e) {
+        console.error(e);
+      }
       formattedSize = onFormatBytes(file.size);
-      const hash = await file.hash();
+      const hash = await file.hashSha256();
       this.props.metadataHandler(Object.assign(file.descriptor, {hash}))
     }
 
@@ -44,7 +48,7 @@ class Upload extends React.Component {
       error: false,
       formattedSize,
     });
-    
+
     this.onClickHandler();
   };
 
@@ -70,29 +74,29 @@ class Upload extends React.Component {
   onClickHandler = async () => {
     const start = new Date().getTime();
     const { selectedFile } = this.state;
-    const { scopes, config, authzUrl } = this.props;
-    const { authToken, api, organizationId, datasetId } = config;
+    const { client } = this.props;
 
-    // create an instance of a object
-    const file = new Open.HTML5File(selectedFile);
-
-    const client = new Client(
-      `${authToken}`,
-      `${organizationId}`,
-      `${datasetId}`,
-      `${api}`
-    );
+    const resource = data.open(selectedFile)
 
     this.setState({
-      fileSize: file.size(),
+      fileSize: resource.size,
       start,
       loading: true,
     });
 
-    // Get the JWT token from authz and upload file to the storage
-    client.ckanAuthz(`${authzUrl}`)
-      .then((response) => client.push(file, response.result.token, this.onUploadProgress))
+    // Use client to upload file to the storage and track the progress
+    client.pushBlob(resource, this.onUploadProgress)
       .then((response) => this.setState({ success: response.success, loading: false }))
+      .then(() => {
+        // Once upload is done, create a resource
+        const ckanResource = frictionlessCkanMapper.resourceFrictionlessToCkan(
+          resource.descriptor
+        )
+        delete ckanResource.sample
+        client.action('resource_create', Object.assign(ckanResource, {
+          package_id: this.state.datasetId
+        }))
+      })
       .catch((error) => this.setState({ error: true, loading: false }));
   };
 
@@ -143,28 +147,5 @@ class Upload extends React.Component {
     );
   }
 }
-
-/**
- * If the parent component doesn't specify a `config` and scope prop, then
- * the default values will be used.
- * */
-Upload.defaultProps = {
-  config: {
-    authToken: "be270cae-1c77-4853-b8c1-30b6cf5e9878",
-    api: "http://localhost:9419",
-    organizationId: "myorg",
-    datasetId: "data-test-2",
-  },
-  scopes: {
-    scopes: [`obj:myorg/data-test-2/*:read,write`],
-  },
-  authzUrl: "http://localhost:5000",
-};
-
-Upload.propTypes = {
-  config: PropTypes.object.isRequired,
-  scopes: PropTypes.object.isRequired,
-  authzUrl: PropTypes.string.isRequired,
-};
 
 export default Upload;

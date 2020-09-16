@@ -7105,8 +7105,8 @@ data-urls@^1.0.0, data-urls@^1.1.0:
     whatwg-url "^7.0.0"
 
 "data.js@git+https://github.com/datopian/data.js.git":
-  version "0.12.11"
-  resolved "git+https://github.com/datopian/data.js.git#41005e354d44c20505466ef7735bdecade84b4cc"
+  version "0.13.0"
+  resolved "git+https://github.com/datopian/data.js.git#82b026a481d33ea0a620f5afb52a30588cd5c753"
   dependencies:
     "@babel/polyfill" "^7.4.4"
     browserify "^16.5.2"

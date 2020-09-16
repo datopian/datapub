@@ -92,6 +92,7 @@ class Upload extends React.Component {
         const ckanResource = frictionlessCkanMapper.resourceFrictionlessToCkan(
           resource.descriptor
         )
+        delete ckanResource.sample
         client.action('resource_create', Object.assign(ckanResource, {
           package_id: this.state.datasetId
         }))

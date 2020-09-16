@@ -61,15 +61,17 @@ export class ResourceEditor extends React.Component {
     });
   };
 
-  handleSubmitMetadata = (event, index) => {
+  handleSubmitMetadata = async (event, index) => {
     event.preventDefault();
 
     const { resource, client } = this.state;
     // Save resource metadata updates (including schema)
-    const datasetMetadata = client.retrieve(this.state.datasetId);
+    const datasetMetadata = await client.retrieve(this.state.datasetId);
+
     // Here we're only handling single resource but in the future we need to
     // refactor this to manage multiple resources:
-    datasetMetadata.resources[0] = resource.descriptor;
+    delete resource.sample;
+    datasetMetadata.resources.push(resource);
     // TODO: do we need to remove 'sample' attribute from resource descriptor?
     client.push(datasetMetadata);
   };

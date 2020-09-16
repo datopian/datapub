@@ -6224,16 +6224,9 @@ cipher-base@^1.0.0, cipher-base@^1.0.1, cipher-base@^1.0.3:
     inherits "^2.0.1"
     safe-buffer "^5.0.1"
 
-"ckanClient@git+https://github.com/datopian/ckan-client-js":
-  version "1.0.0"
-  resolved "git+https://github.com/datopian/ckan-client-js#1edf3373dce9449c453b44aae25bda6c1284f538"
-  dependencies:
-    axios "^0.19.2"
-    crypto-js "^4.0.0"
-
 "ckanClient@git+https://github.com/datopian/ckan-client-js.git":
   version "0.2.0"
-  resolved "git+https://github.com/datopian/ckan-client-js.git#b3cb22401aab0cd1cb08c5517d8ed30da53df305"
+  resolved "git+https://github.com/datopian/ckan-client-js.git#47c99604aa5f300f732f25cfa8fc0032354b1169"
   dependencies:
     axios "^0.19.2"
     crypto-js "^4.0.0"

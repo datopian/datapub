@@ -8,6 +8,7 @@ import App from './App';
 function mountResourceEditorApp([elementId, config, resource] = ['root', {
   authToken: null,
   api: null,
+  lfs: null,
   organizationId: null,
   datasetId: null
 }, {}]) {
@@ -26,6 +27,7 @@ if (element) {
   const config = {
     datasetId: element.getAttribute('data-dataset-id'),
     api: element.getAttribute('data-api'),
+    lfs: element.getAttribute('data-lfs'),
     authToken: element.getAttribute('data-auth-token'),
     organizationId: element.getAttribute('data-organization-id')
   }

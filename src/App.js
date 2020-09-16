@@ -30,13 +30,14 @@ export class ResourceEditor extends React.Component {
 
   componentWillMount() {
     const { config } = this.props;
-    const { authToken, api, organizationId, datasetId } = config;
+    const { authToken, api, lfs, organizationId, datasetId } = config;
 
     const client = new Client(
       `${authToken}`,
       `${organizationId}`,
       `${datasetId}`,
-      `${api}`
+      `${api}`,
+      `${lfs}`
     );
     this.setState({client})
   }
@@ -142,6 +143,7 @@ export class ResourceEditor extends React.Component {
   config: {
     authToken: "be270cae-1c77-4853-b8c1-30b6cf5e9878",
     api: "http://localhost:5000",
+    lfs: "http://localhost:5001", // Feel free to modify this
     organizationId: "myorg",
     datasetId: "data-test-2",
   },

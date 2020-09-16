@@ -24,9 +24,9 @@ const TableSchema = (props) => {
   } = useTable({ columns, data });
 
   const handleChange = (event, key, index) => {
-    let newObj = [...schema];
-    newObj[index][key] = event.target.value;
-    setSchema(newObj);
+    const newSchema = {...schema};
+    newSchema.fields[index][key] = event.target.value;
+    setSchema(newSchema);
   };
 
   const renderEditSchemaField = (key) => {

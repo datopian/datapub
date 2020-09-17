@@ -18,6 +18,7 @@ class Upload extends React.Component {
       loaded: 0,
       success: false,
       error: false,
+      fileExists: false,
       loading: false,
       timeRemaining: 0,
     };
@@ -45,6 +46,7 @@ class Upload extends React.Component {
       selectedFile,
       loaded: 0,
       success: false,
+      fileExists: false,
       error: false,
       formattedSize,
     });
@@ -86,7 +88,7 @@ class Upload extends React.Component {
 
     // Use client to upload file to the storage and track the progress
     client.pushBlob(resource, this.onUploadProgress)
-      .then((response) => this.setState({ success: response.success, loading: false }))
+      .then((response) => this.setState({ success: response.success, loading: false, fileExists: response.fileExists }))
       .then(() => {
         // Once upload is done, create a resource
         const ckanResource = frictionlessCkanMapper.resourceFrictionlessToCkan(
@@ -104,11 +106,11 @@ class Upload extends React.Component {
   render() {
     const {
       success,
+      fileExists,
       error,
       timeRemaining,
       selectedFile,
       formattedSize,
-      loading,
     } = this.state;
     return (
       <div className="upload-area">
@@ -137,9 +139,10 @@ class Upload extends React.Component {
                 </li>
               </ul>
               <h2 className="upload-message">
-                {success && "File upload success"}
+                { success && !fileExists && !error && "File upload success"}
+                { fileExists && "File already exists in the storage"}
+                { error && "Upload failed"}
               </h2>
-              <h2 className="upload-message">{error && "Upload failed"}</h2>
             </>
           )}
         </div>

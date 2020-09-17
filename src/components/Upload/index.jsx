@@ -11,7 +11,7 @@ class Upload extends React.Component {
     super(props);
     this.state = {
       datasetId: props.datasetId,
-      selectedFile: null,
+      selectedFiles: [],
       fileSize: 0,
       formattedSize: "0 KB",
       start: "",
@@ -21,40 +21,47 @@ class Upload extends React.Component {
       fileExists: false,
       loading: false,
       timeRemaining: 0,
+      uploadProgress: [],
     };
   }
 
   onChangeHandler = async (event) => {
-    let { formattedSize, selectedFile } = this.state;
+    event.preventDefault();
 
-    if (event.target.files.length > 0) {
-      selectedFile = event.target.files[0];
-      const file = data.open(selectedFile);
-      try {
-        const rowStream = await file.rows({ size: 20, keyed: true });
-        file.descriptor.sample = await toArray(rowStream);
-        await file.addSchema();
-      } catch (e) {
-        console.error(e);
-      }
-      formattedSize = onFormatBytes(file.size);
-      const hash = await file.hashSha256();
-      this.props.metadataHandler(Object.assign(file.descriptor, { hash }));
+    let { formattedSize, selectedFiles } = this.state;
+    
+    if (event.target.files.length) {
+      [...event.target.files].forEach( file => {
+        selectedFiles.push(file) 
+
+        this.onClickHandler(file);
+      });
+
+      // const file = data.open(selectedFile);
+      // try {
+      //   const rowStream = await file.rows({size: 20, keyed: true});
+      //   file.descriptor.sample = await toArray(rowStream);
+      //   await file.addSchema();
+      // } catch(e) {
+      //   console.error(e);
+      // }
+
+      // const hash = await file.hashSha256();
+      // this.props.metadataHandler(Object.assign(file.descriptor, {hash}))
+
+      this.setState({
+        selectedFiles,
+        loaded: 0,
+        success: false,
+        error: false,
+        // formattedSize,
+      });
     }
-
-    this.setState({
-      selectedFile,
-      loaded: 0,
-      success: false,
-      fileExists: false,
-      error: false,
-      formattedSize,
-    });
-
-    this.onClickHandler();
   };
 
-  onUploadProgress = (progressEvent) => {
+  onUploadProgress = (progressEvent, hash) => {
+    console.log(progressEvent);
+    console.log(hash);
     this.onTimeRemaining(progressEvent.loaded);
     this.setState({
       loaded: (progressEvent.loaded / progressEvent.total) * 100,
@@ -73,48 +80,36 @@ class Upload extends React.Component {
     });
   };
 
-  onClickHandler = async () => {
-    const start = new Date().getTime();
-    const { selectedFile } = this.state;
+  onClickHandler = async (file) => {
+
     const { client } = this.props;
+    const { selectedFiles } = this.state;
+    console.log(selectedFiles);
+        const resource = data.open(file)
+        const hashSha256 = await resource.hashSha256();
+        resource.descriptor.hash = hashSha256
+        client.pushBlob(resource, (event) => this.onUploadProgress(event, hashSha256))
+              .then((response) => console.log(response))
+              // .then(() => {
+              //   // Once upload is done, create a resource
+              //   const ckanResource = frictionlessCkanMapper.resourceFrictionlessToCkan(
+              //     resource.descriptor
+              //   )
+              //   delete ckanResource.sample
+              //   client.action('resource_create', Object.assign(ckanResource, {
+              //     package_id: this.state.datasetId
+              //   }))
+              // })
+              // .catch((error) => this.setState({ error: true, loading: false }));
 
-    const resource = data.open(selectedFile);
 
-    this.setState({
-      fileSize: resource.size,
-      start,
-      loading: true,
-    });
+    // const start = new Date().getTime();
 
-    this.props.handleUploadStatus({
-      loading: true,
-      error: false,
-      success: false,
-    });
-
-    // Use client to upload file to the storage and track the progress
-    client
-      .pushBlob(resource, this.onUploadProgress)
-      .then((response) => {
-        this.setState({
-          success: response.success,
-          loading: false,
-          fileExists: response.fileExists,
-          loaded: 100
-        });
-        this.props.handleUploadStatus({
-          loading: false,
-          success: response.success,
-        });
-      })
-      .catch((error) => {
-        this.setState({ error: true, loading: false });
-        this.props.handleUploadStatus({
-          loading: false,
-          success: false,
-          error: true,
-        });
-      });
+    // this.setState({
+    //   fileSize: resource.size,
+    //   start,
+    //   loading: true,
+    // });   
   };
 
   render() {
@@ -123,7 +118,7 @@ class Upload extends React.Component {
       fileExists,
       error,
       timeRemaining,
-      selectedFile,
+      selectedFiles,
       formattedSize,
     } = this.state;
     return (
@@ -133,14 +128,14 @@ class Upload extends React.Component {
           onChangeUrl={(event) => console.log("Get url:", event.target.value)}
         />
         <div className="upload-area__info">
-          {selectedFile && (
-            <>
+          {selectedFiles && selectedFiles.map( (item, index) => 
+            <div key={`upload-file-${index}`}>
               <ul className="upload-list">
                 <li className="list-item">
                   <div className="upload-list-item">
                     <div>
-                      <p className="upload-file-name">{selectedFile.name}</p>
-                      <p className="upload-file-size">{formattedSize}</p>
+                      <p className="upload-file-name">{selectedFiles[index].name}</p>
+                      <p className="upload-file-size">{ onFormatBytes(selectedFiles[index].size)}</p>
                     </div>
                     <div>
                       <ProgressBar
@@ -160,7 +155,8 @@ class Upload extends React.Component {
                 {fileExists && "File uploaded successfully"}
                 {error && "Upload failed"}
               </h2>
-            </>
+              <h2 className="upload-message">{error && "Upload failed"}</h2>
+            </div>
           )}
         </div>
       </div>

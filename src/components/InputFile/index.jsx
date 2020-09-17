@@ -12,6 +12,7 @@ const InputFile = ({ onChangeHandler }) => {
                     type="file"
                     name="file"
                     onChange={onChangeHandler}
+                    multiple
                 />
                 <img
                     className="upload-area__drop__icon"

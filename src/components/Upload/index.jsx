@@ -28,7 +28,7 @@ class Upload extends React.Component {
   onChangeHandler = async (event) => {
     event.preventDefault();
 
-    let { formattedSize, selectedFiles } = this.state;
+    let { selectedFiles } = this.state;
     
     if (event.target.files.length) {
       [...event.target.files].forEach( file => {
@@ -54,14 +54,13 @@ class Upload extends React.Component {
         loaded: 0,
         success: false,
         error: false,
-        // formattedSize,
       });
     }
   };
 
   onUploadProgress = (progressEvent, hash) => {
-    console.log(progressEvent);
-    console.log(hash);
+    console.log("Progress: ", progressEvent);
+    console.log("hash:", hash);
     this.onTimeRemaining(progressEvent.loaded);
     this.setState({
       loaded: (progressEvent.loaded / progressEvent.total) * 100,
@@ -119,7 +118,7 @@ class Upload extends React.Component {
       error,
       timeRemaining,
       selectedFiles,
-      formattedSize,
+      loading,
     } = this.state;
     return (
       <div className="upload-area">

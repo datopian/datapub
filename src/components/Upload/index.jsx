@@ -1,9 +1,9 @@
 import React from "react";
 import data from "data.js";
-import frictionlessCkanMapper from 'frictionless-ckan-mapper-js';
+import frictionlessCkanMapper from "frictionless-ckan-mapper-js";
 import toArray from "stream-to-array";
 import ProgressBar from "../ProgressBar";
-import { onFormatBytes } from '../../utils';
+import { onFormatBytes } from "../../utils";
 import Choose from "../Choose";
 
 class Upload extends React.Component {
@@ -31,15 +31,15 @@ class Upload extends React.Component {
       selectedFile = event.target.files[0];
       const file = data.open(selectedFile);
       try {
-        const rowStream = await file.rows({size: 20, keyed: true});
+        const rowStream = await file.rows({ size: 20, keyed: true });
         file.descriptor.sample = await toArray(rowStream);
         await file.addSchema();
-      } catch(e) {
+      } catch (e) {
         console.error(e);
       }
       formattedSize = onFormatBytes(file.size);
       const hash = await file.hashSha256();
-      this.props.metadataHandler(Object.assign(file.descriptor, {hash}))
+      this.props.metadataHandler(Object.assign(file.descriptor, { hash }));
     }
 
     this.setState({
@@ -78,7 +78,7 @@ class Upload extends React.Component {
     const { selectedFile } = this.state;
     const { client } = this.props;
 
-    const resource = data.open(selectedFile)
+    const resource = data.open(selectedFile);
 
     this.setState({
       fileSize: resource.size,
@@ -86,22 +86,48 @@ class Upload extends React.Component {
       loading: true,
     });
 
+    this.props.handleUploadStatus({
+      loading: true,
+      error: false,
+      success: false,
+    });
+
     // Use client to upload file to the storage and track the progress
-    client.pushBlob(resource, this.onUploadProgress)
-      .then((response) => this.setState({ success: response.success, loading: false, fileExists: response.fileExists }))
+    client
+      .pushBlob(resource, this.onUploadProgress)
+      .then((response) => {
+        this.setState({
+          success: response.success,
+          loading: false,
+          fileExists: response.fileExists,
+        });
+        this.props.handleUploadStatus({
+          loading: false,
+          success: response.success,
+        });
+      })
       .then(() => {
         // Once upload is done, create a resource
         const ckanResource = frictionlessCkanMapper.resourceFrictionlessToCkan(
           resource.descriptor
-        )
-        delete ckanResource.sample
-        client.action('resource_create', Object.assign(ckanResource, {
-          package_id: this.state.datasetId
-        }))
+        );
+        delete ckanResource.sample;
+        client.action(
+          "resource_create",
+          Object.assign(ckanResource, {
+            package_id: this.state.datasetId,
+          })
+        );
       })
-      .catch((error) => this.setState({ error: true, loading: false }));
+      .catch((error) => {
+        this.setState({ error: true, loading: false });
+        this.props.handleUploadStatus({
+          loading: false,
+          success: false,
+          error: true,
+        });
+      });
   };
-
 
   render() {
     const {
@@ -114,7 +140,10 @@ class Upload extends React.Component {
     } = this.state;
     return (
       <div className="upload-area">
-        <Choose onChangeHandler={this.onChangeHandler} onChangeUrl={(event) => console.log("Get url:", event.target.value)}/>
+        <Choose
+          onChangeHandler={this.onChangeHandler}
+          onChangeUrl={(event) => console.log("Get url:", event.target.value)}
+        />
         <div className="upload-area__info">
           {selectedFile && (
             <>
@@ -139,9 +168,9 @@ class Upload extends React.Component {
                 </li>
               </ul>
               <h2 className="upload-message">
-                { success && !fileExists && !error && "File upload success"}
-                { fileExists && "File already exists in the storage"}
-                { error && "Upload failed"}
+                {success && !fileExists && !error && "File upload success"}
+                {fileExists && "File already exists in the storage"}
+                {error && "Upload failed"}
               </h2>
             </>
           )}

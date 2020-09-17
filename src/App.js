@@ -83,6 +83,18 @@ export class ResourceEditor extends React.Component {
     this.setState({ui});
   };
 
+  handleUploadStatus = (status) => {
+    const { ui } = this.state;
+    const newUiState = {
+      ...ui,
+      success: status.success,
+      error: status.error,
+      loading: status.loading,
+    }
+
+    this.setState({ui: newUiState})
+  }
+
   render() {
     const {
       loading,
@@ -101,6 +113,7 @@ export class ResourceEditor extends React.Component {
             resource={this.state.resource}
             metadataHandler={this.metadataHandler}
             datasetId={this.state.datasetId}
+            handleUploadStatus={this.handleUploadStatus}
           />
 
           <div className="upload-switcher">

@@ -6231,7 +6231,7 @@ cipher-base@^1.0.0, cipher-base@^1.0.1, cipher-base@^1.0.3:
 
 "ckanClient@git+https://github.com/datopian/ckan-client-js.git":
   version "0.2.0"
-  resolved "git+https://github.com/datopian/ckan-client-js.git#700b835b5707655a88c48c060ea07f2481d2e553"
+  resolved "git+https://github.com/datopian/ckan-client-js.git#bfece67874d8bfed78589a80ae5866c0373d2d6e"
   dependencies:
     axios "^0.19.2"
     crypto-js "^4.0.0"

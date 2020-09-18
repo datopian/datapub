@@ -2,6 +2,8 @@ import React from "react";
 import data from "data.js";
 import frictionlessCkanMapper from "frictionless-ckan-mapper-js";
 import toArray from "stream-to-array";
+import { v4 as uuidv4 } from 'uuid';
+
 import ProgressBar from "../ProgressBar";
 import { onFormatBytes } from "../../utils";
 import Choose from "../Choose";
@@ -14,19 +16,12 @@ class Upload extends React.Component {
       selectedFiles: [],
       fileSize: 0,
       formattedSize: "0 KB",
-      start: "",
-      loaded: 0,
-      success: false,
-      error: false,
-      fileExists: false,
-      loading: false,
-      timeRemaining: 0,
       uploadProgress: [],
     };
   }
 
   onChangeHandler = async (event) => {
-    event.preventDefault();
+    // event.preventDefault();
 
     let { selectedFiles } = this.state;
     
@@ -50,44 +45,61 @@ class Upload extends React.Component {
       // this.props.metadataHandler(Object.assign(file.descriptor, {hash}))
 
       this.setState({
+        ...this.state,
         selectedFiles,
-        loaded: 0,
-        success: false,
-        error: false,
       });
     }
   };
 
-  onUploadProgress = (progressEvent, hash) => {
-    console.log("Progress: ", progressEvent);
-    console.log("hash:", hash);
-    this.onTimeRemaining(progressEvent.loaded);
-    this.setState({
-      loaded: (progressEvent.loaded / progressEvent.total) * 100,
-    });
+  onUploadProgress = (progressEvent, id) => {
+    const { uploadProgress } = this.state;
+    const checkUploadProgress = uploadProgress.find(item => (item.id === id));
+
+    if (checkUploadProgress) {
+      const newUploadProgressState = uploadProgress.map(obj =>
+        obj.id === id ? { ...obj, loaded: (progressEvent.loaded / progressEvent.total) * 100, timeRemaining: this.onTimeRemaining(progressEvent.loaded, obj.start, obj.size) } : obj
+      );
+      this.setState({uploadProgress: newUploadProgressState})
+    } 
   };
 
-  onTimeRemaining = (progressLoaded) => {
+  onTimeRemaining = (progressLoaded, start, size) => {
     const end = new Date().getTime();
-    const duration = (end - this.state.start) / 1000;
+    const duration = (end - start) / 1000;
     const bps = progressLoaded / duration;
     const kbps = bps / 1024;
-    const timeRemaining = (this.state.fileSize - progressLoaded) / kbps;
+    const timeRemaining = (size - progressLoaded) / kbps;
 
-    this.setState({
-      timeRemaining: timeRemaining / 1000,
-    });
-  };
+    return timeRemaining / 1000
+  }
 
   onClickHandler = async (file) => {
+    const { client } = this.props; 
+    const start = new Date().getTime();
+    let newState = this.state.uploadProgress;
 
-    const { client } = this.props;
-    const { selectedFiles } = this.state;
-    console.log(selectedFiles);
-        const resource = data.open(file)
-        const hashSha256 = await resource.hashSha256();
-        resource.descriptor.hash = hashSha256
-        client.pushBlob(resource, (event) => this.onUploadProgress(event, hashSha256))
+    const fileProgress = {
+      id: uuidv4(),
+      loaded: 0,
+      size: file.size,
+      start: start,
+      name: file.name,
+      error: false,
+      success: false,
+      fileExists: false,
+    }
+
+    newState.push(fileProgress)
+
+    this.setState({
+      uploadProgress: newState
+    })
+
+    const resource = data.open(file)
+    const hashSha256 = await resource.hashSha256();
+    resource.descriptor.hash = hashSha256
+
+    client.pushBlob(resource, (event) => this.onUploadProgress(event, fileProgress.id))
               .then((response) => console.log(response))
               // .then(() => {
               //   // Once upload is done, create a resource
@@ -99,27 +111,22 @@ class Upload extends React.Component {
               //     package_id: this.state.datasetId
               //   }))
               // })
-              // .catch((error) => this.setState({ error: true, loading: false }));
-
-
-    // const start = new Date().getTime();
-
-    // this.setState({
-    //   fileSize: resource.size,
-    //   start,
-    //   loading: true,
-    // });   
+              .catch((error) => this.handleStatus(newState, fileProgress.id, true, "error"))
   };
 
+  handleStatus = (state, id, value, name) => {
+
+    state.map(item => {
+      if(item.id === id) {
+        return item[name] = value
+      }
+      return item
+    })
+    this.setState({ uploadProgress: state })
+  }
+
   render() {
-    const {
-      success,
-      fileExists,
-      error,
-      timeRemaining,
-      selectedFiles,
-      loading,
-    } = this.state;
+    const { uploadProgress } = this.state;
     return (
       <div className="upload-area">
         <Choose
@@ -127,34 +134,30 @@ class Upload extends React.Component {
           onChangeUrl={(event) => console.log("Get url:", event.target.value)}
         />
         <div className="upload-area__info">
-          {selectedFiles && selectedFiles.map( (item, index) => 
+          { uploadProgress.map( (item, index) => 
             <div key={`upload-file-${index}`}>
               <ul className="upload-list">
                 <li className="list-item">
                   <div className="upload-list-item">
                     <div>
-                      <p className="upload-file-name">{selectedFiles[index].name}</p>
-                      <p className="upload-file-size">{ onFormatBytes(selectedFiles[index].size)}</p>
+                      <p className="upload-file-name">{item.name}</p>
+                      <p className="upload-file-size">{ onFormatBytes(item.size)}</p>
                     </div>
                     <div>
-                      <ProgressBar
-                        progress={Math.round(this.state.loaded)}
+                      {item.error && "Upload failed" }
+                      {!item.error && !item.success && <ProgressBar
+                        progress={Math.round(item.loaded)}
                         size={50}
                         strokeWidth={5}
                         circleOneStroke="#d9edfe"
                         circleTwoStroke={"#7ea9e1"}
-                        timeRemaining={timeRemaining}
-                      />
+                        timeRemaining={item.timeRemaining}
+                      />}
+                      {item.success && "Upload success"}
                     </div>
                   </div>
                 </li>
               </ul>
-              <h2 className="upload-message">
-                {success && !fileExists && !error && "File uploaded successfully"}
-                {fileExists && "File uploaded successfully"}
-                {error && "Upload failed"}
-              </h2>
-              <h2 className="upload-message">{error && "Upload failed"}</h2>
             </div>
           )}
         </div>

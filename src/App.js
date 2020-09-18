@@ -14,6 +14,7 @@ export class ResourceEditor extends React.Component {
     super(props);
     this.state = {
       datasetId: this.props.config.datasetId,
+      resourceId: "",
       resource: this.props.resource || {},
       ui: {
         fileOrLink: '',
@@ -72,6 +73,7 @@ export class ResourceEditor extends React.Component {
     // Here we're only handling single resource but in the future we need to
     // refactor this to manage multiple resources:
     delete resource.sample;
+    resource.id = this.state.resourceId
     datasetMetadata.resources.push(resource);
     // TODO: do we need to remove 'sample' attribute from resource descriptor?
     client.push(datasetMetadata);
@@ -95,6 +97,9 @@ export class ResourceEditor extends React.Component {
     this.setState({ui: newUiState})
   }
 
+  onChangeResourceId = (resourceId) => {
+    this.setState({resourceId})
+  }
   render() {
     const {
       loading,
@@ -114,6 +119,7 @@ export class ResourceEditor extends React.Component {
             metadataHandler={this.metadataHandler}
             datasetId={this.state.datasetId}
             handleUploadStatus={this.handleUploadStatus}
+            onChangeResourceId={this.onChangeResourceId}
           />
 
           <div className="upload-switcher">

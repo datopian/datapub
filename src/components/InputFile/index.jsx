@@ -15,7 +15,7 @@ const InputFile = ({ onChangeHandler }) => {
                 />
                 <img
                     className="upload-area__drop__icon"
-                    src={UploadIcon}
+                    src="https://www.shareicon.net/data/256x256/2015/09/05/96087_cloud_512x512.png"
                     alt="upload-icon"
                 />
                 <span className="upload-area__drop__text">

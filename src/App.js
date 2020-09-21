@@ -24,7 +24,6 @@ export class ResourceEditor extends React.Component {
         success: false,
         error: false,
         loading: false,
-        metadataOrSchema: 'metadata'
       },
       client: null,
       isResourceEdit: false,
@@ -98,8 +97,7 @@ export class ResourceEditor extends React.Component {
     });
   };
 
-  handleSubmitMetadata = async (event, index) => {
-    event.preventDefault();
+  handleSubmitMetadata = async (index) => {
 
     const { resource, client } = this.state;
 
@@ -207,7 +205,6 @@ export class ResourceEditor extends React.Component {
     const {
       loading,
       success,
-      metadataOrSchema,
     } = this.state.ui;
 
     return (
@@ -226,34 +223,23 @@ export class ResourceEditor extends React.Component {
             onChangeResourceId={this.onChangeResourceId}
           />
 
-          <div className="upload-switcher">
-            <Switcher
-              metadataOrSchema={metadataOrSchema}
-              switcher={this.switcher}
-            />
-          </div>
-
           <div className="upload-edit-area">
-            {metadataOrSchema === 'metadata' && (
               <Metadata
                 loading={loading}
                 uploadSuccess={success}
                 metadata={this.state.resource}
-                handleSubmit={this.handleSubmitMetadata}
                 handleChange={this.handleChangeMetadata}
                 isResourceEdit={this.state.isResourceEdit}
                 deleteResource={this.deleteResource}
                 updateResource={this.createResource}
               />
-            )}
-            {metadataOrSchema === 'schema' && (
               <TableSchema
                 schema={this.state.resource.schema || {fields: []}}
                 data={
                   this.state.resource.sample || []
                 }
               />
-            )}
+              <button  disabled={!success} className="btn" onClick={this.handleSubmitMetadata}>Save and Publish</button>
           </div>
         </div>
       </div>

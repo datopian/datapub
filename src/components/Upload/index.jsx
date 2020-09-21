@@ -106,22 +106,6 @@ class Upload extends React.Component {
           success: response.success,
         });
       })
-      .then(() => {
-        // Once upload is done, create a resource
-        const ckanResource = frictionlessCkanMapper.resourceFrictionlessToCkan(
-          resource.descriptor
-          );
-          delete ckanResource.sample;
-          client.action(
-            "resource_create",
-            Object.assign(ckanResource, {
-              package_id: this.state.datasetId,
-              name: resource.descriptor.name
-            })
-            ).then(response => {
-              this.props.onChangeResourceId(response.result.id)
-            })
-          })
       .catch((error) => {
         this.setState({ error: true, loading: false });
         this.props.handleUploadStatus({

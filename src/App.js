@@ -1,6 +1,8 @@
 import React from 'react';
 import { Client } from "ckanClient";
 import PropTypes from "prop-types";
+import frictionlessCkanMapper from "frictionless-ckan-mapper-js";
+import { Redirect } from 'react-router'
 
 import Metadata from "./components/Metadata";
 import TableSchema from "./components/TableSchema";
@@ -24,7 +26,8 @@ export class ResourceEditor extends React.Component {
         loading: false,
         metadataOrSchema: 'metadata'
       },
-      client: null
+      client: null,
+      redirect: false
     };
     this.metadataHandler = this.metadataHandler.bind(this);
   }
@@ -67,17 +70,48 @@ export class ResourceEditor extends React.Component {
     event.preventDefault();
 
     const { resource, client } = this.state;
-    // Save resource metadata updates (including schema)
-    const datasetMetadata = await client.retrieve(this.state.datasetId);
 
-    // Here we're only handling single resource but in the future we need to
-    // refactor this to manage multiple resources:
-    delete resource.sample;
-    resource.id = this.state.resourceId
-    datasetMetadata.resources.push(resource);
-    // TODO: do we need to remove 'sample' attribute from resource descriptor?
-    client.push(datasetMetadata);
+    await this.createResource(resource)
+  
+    // Change state of dataset to active if draft atm
+    // this relates to how CKAN v2 has a phased dataset creation. See e.g.
+    // https://github.com/ckan/ckan/blob/master/ckan/controllers/package.py#L917
+
+    // only need to do this test if in resource create mode if editing a
+    // resource this is unnecessary
+    // TODO: update this in future to check for edit mode
+    const isResourceCreate = true;
+    if (isResourceCreate) {
+      const datasetMetadata = await client.action('package_show', {id: this.state.datasetId});
+      if (datasetMetadata.state == 'draft') {
+        datasetMetadata.state = 'active';
+        await client.action('package_update', datasetMetadata)
+      }
+    }
+
+    // Redirect to dataset page
+    this.setState({redirect: true})
   };
+
+
+  createResource = async (resource) => {
+    const { client } = this.state;
+
+    const ckanResource = frictionlessCkanMapper.resourceFrictionlessToCkan(
+        resource
+      );
+
+    delete ckanResource.sample;
+
+    await  client.action(
+        "resource_create",
+        Object.assign(ckanResource, {
+          package_id: this.state.datasetId,
+        })).then(response => {
+          this.onChangeResourceId(response.result.id)
+        })
+    
+  }
 
   switcher = (name) => {
     const ui = {...this.state.ui}
@@ -106,6 +140,13 @@ export class ResourceEditor extends React.Component {
       success,
       metadataOrSchema,
     } = this.state.ui;
+
+    const { redirect } = this.state;
+
+    if (redirect) {
+      return <Redirect to={`/dataset/${this.state.datasetId}`}/>;
+    }
+
     return (
       <div className="App">
         <div className="upload-wrapper">

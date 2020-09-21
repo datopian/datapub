@@ -5,6 +5,7 @@ import "./Metadata.css";
 import encodeData from "../../db/encode.json";
 import formatData from "../../db/resource_formats.json";
 
+<<<<<<< HEAD
 //TODO: add the custom fields as a props and render it in metadata component
 const customFields = [
   {
@@ -30,6 +31,13 @@ const Metadata = ({ metadata, handleChange, handleSubmit, uploadSuccess, isResou
           return handleSubmit(event, 0)
         }}
       >
+=======
+const Metadata = ({ metadata, handleChange, uploadSuccess }) => {
+  return (
+    <>
+      <h3 className="metadata-name">{metadata.path}</h3>
+      <form className="metadata-form">
+>>>>>>> [ui][s] removed switcher and update css styles - #39
         <div className="metadata-input">
           <label className="metadata-label" htmlFor="title">
             Title:
@@ -150,7 +158,6 @@ const Metadata = ({ metadata, handleChange, handleSubmit, uploadSuccess, isResou
 Metadata.propTypes = {
   metadata: PropTypes.object.isRequired,
   handleChange: PropTypes.func.isRequired,
-  handleSubmit: PropTypes.func.isRequired,
   uploadSuccess: PropTypes.bool.isRequired,
   isResourceEdit: PropTypes.bool.isRequired,
   deleteResource: PropTypes.func.isRequired,

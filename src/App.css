@@ -33,7 +33,6 @@ code {
   grid-template-areas:
     "header header"
     "uploadArea uploadArea"
-    "switcher switcher"
     "editArea editArea";
   row-gap: 20px;
   column-gap: 20px;

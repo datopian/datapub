@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { useTable } from "react-table";
 import types from "../../db/types.json";
@@ -8,13 +8,13 @@ import "./TableSchema.css";
 const TableSchema = (props) => {
   const [schema, setSchema] = useState(props.schema);
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const data = React.useMemo(() => [...props.data], []);
+  const data = React.useMemo(() => [...props.data], [schema]);
 
   const columnsSchema = schema.fields.map((item, index) => {
     return { Header: item.name ? item.name : `column_${index + 1}`, accessor: item.name ? item.name : `column_${index + 1}`};
   });
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const columns = React.useMemo(() => [...columnsSchema], []);
+  const columns = React.useMemo(() => [...columnsSchema], [schema]);
   const {
     getTableProps,
     getTableBodyProps,
@@ -28,6 +28,12 @@ const TableSchema = (props) => {
     newSchema.fields[index][key] = event.target.value;
     setSchema(newSchema);
   };
+
+  //if the the user upload a new file, will update the state
+  //and render with the new values
+  useEffect( () => { 
+    setSchema(props.schema);
+  }, [ props.schema ] );
 
   const renderEditSchemaField = (key) => {
     if (key === "type") {

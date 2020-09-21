@@ -72,11 +72,23 @@ export class ResourceEditor extends React.Component {
 
     await this.createResource(resource)
   
-    // Save resource metadata updates (including schema)
-    const datasetMetadata = await client.retrieve(this.state.datasetId);
-    //TODO: set state of dataset to publish
-    await client.push(datasetMetadata)
+    // Change state of dataset to active if draft atm
+    // this relates to how CKAN v2 has a phased dataset creation. See e.g.
+    // https://github.com/ckan/ckan/blob/master/ckan/controllers/package.py#L917
 
+    // only need to do this test if in resource create mode if editing a
+    // resource this is unnecessary
+    // TODO: update this in future to check for edit mode
+    const isResourceCreate = true;
+    if (isResourceCreate) {
+      const datasetMetadata = await client.action('package_show', {id: this.state.datasetId});
+      if (datasetMetadata.state == 'draft') {
+        datasetMetadata.state = 'active';
+        await client.action('package_update', datasetMetadata)
+      }
+    }
+
+    // TODO: redirect to dataset page
   };
 
 

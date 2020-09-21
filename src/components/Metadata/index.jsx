@@ -78,7 +78,7 @@ const Metadata = ({ metadata, handleChange, handleSubmit, uploadSuccess }) => {
             ))}
           </select>
         </div>
-        <button  disabled={!uploadSuccess} className="metadata-btn">Save Metadata</button>
+        <button  disabled={!uploadSuccess} className="metadata-btn">Save and Publish</button>
       </form>
     </>
   );

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Client } from "ckanClient";
 import PropTypes from "prop-types";
+import frictionlessCkanMapper from "frictionless-ckan-mapper-js";
 
 import Metadata from "./components/Metadata";
 import TableSchema from "./components/TableSchema";
@@ -24,7 +25,8 @@ export class ResourceEditor extends React.Component {
         loading: false,
         metadataOrSchema: 'metadata'
       },
-      client: null
+      client: null,
+      redirect: false
     };
     this.metadataHandler = this.metadataHandler.bind(this);
   }
@@ -67,17 +69,35 @@ export class ResourceEditor extends React.Component {
     event.preventDefault();
 
     const { resource, client } = this.state;
+
+    await this.createResource(resource)
+  
     // Save resource metadata updates (including schema)
     const datasetMetadata = await client.retrieve(this.state.datasetId);
+    //TODO: set state of dataset to publish
+    await client.push(datasetMetadata)
 
-    // Here we're only handling single resource but in the future we need to
-    // refactor this to manage multiple resources:
-    delete resource.sample;
-    resource.id = this.state.resourceId
-    datasetMetadata.resources.push(resource);
-    // TODO: do we need to remove 'sample' attribute from resource descriptor?
-    client.push(datasetMetadata);
   };
+
+
+  createResource = async (resource) => {
+    const { client } = this.state;
+
+    const ckanResource = frictionlessCkanMapper.resourceFrictionlessToCkan(
+        resource
+      );
+
+    delete ckanResource.sample;
+
+    await  client.action(
+        "resource_create",
+        Object.assign(ckanResource, {
+          package_id: this.state.datasetId,
+        })).then(response => {
+          this.onChangeResourceId(response.result.id)
+        })
+    
+  }
 
   switcher = (name) => {
     const ui = {...this.state.ui}
@@ -106,6 +126,7 @@ export class ResourceEditor extends React.Component {
       success,
       metadataOrSchema,
     } = this.state.ui;
+
     return (
       <div className="App">
         <div className="upload-wrapper">

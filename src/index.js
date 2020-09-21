@@ -1,8 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
-import { BrowserRouter as Router } from "react-router-dom"
-
 
 // Mount the ResourceEditor app explicitly
 // (make sure you call the function after it's loaded)
@@ -35,12 +33,10 @@ if (element) {
 
   ReactDOM.render(
     <React.StrictMode>
-      <Router>
         <App
           config={config}
           resource={ element.getAttribute('data-resource')}
         />
-      </Router>
     </React.StrictMode>,
     element
   );

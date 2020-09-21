@@ -2,7 +2,6 @@ import React from 'react';
 import { Client } from "ckanClient";
 import PropTypes from "prop-types";
 import frictionlessCkanMapper from "frictionless-ckan-mapper-js";
-import { Redirect } from 'react-router'
 
 import Metadata from "./components/Metadata";
 import TableSchema from "./components/TableSchema";
@@ -90,7 +89,7 @@ export class ResourceEditor extends React.Component {
     }
 
     // Redirect to dataset page
-    this.setState({redirect: true})
+    return window.location.href=`/dataset/${this.state.datasetId}`; 
   };
 
 
@@ -140,12 +139,6 @@ export class ResourceEditor extends React.Component {
       success,
       metadataOrSchema,
     } = this.state.ui;
-
-    const { redirect } = this.state;
-
-    if (redirect) {
-      return <Redirect to={`/dataset/${this.state.datasetId}`}/>;
-    }
 
     return (
       <div className="App">

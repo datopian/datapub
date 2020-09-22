@@ -100,16 +100,17 @@ export class ResourceEditor extends React.Component {
         resource
       );
 
-    delete ckanResource.sample;
-
-    await  client.action(
-        "resource_create",
-        Object.assign(ckanResource, {
-          package_id: this.state.datasetId,
-        })).then(response => {
+    delete ckanResource.sample;    
+    // create a copy from ckanResource to add package_id and name
+    // without name the resource name in ckan-blob-storage is Unnamed resource
+    let ckanResourceCopy = {
+      ...ckanResource,
+      package_id: this.state.datasetId,
+      name: resource.name || resource.title
+    }
+    await  client.action("resource_create", ckanResourceCopy).then(response => {
           this.onChangeResourceId(response.result.id)
         })
-    
   }
 
   switcher = (name) => {

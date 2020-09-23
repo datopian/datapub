@@ -9,7 +9,8 @@ function mountResourceEditorApp([elementId, config, resource] = ['root', {
   api: null,
   lfs: null,
   organizationId: null,
-  datasetId: null
+  datasetId: null,
+  resourceId: null,
 }, {}]) {
   ReactDOM.render(
     <React.StrictMode>
@@ -28,7 +29,8 @@ if (element) {
     api: element.getAttribute('data-api'),
     lfs: element.getAttribute('data-lfs'),
     authToken: element.getAttribute('data-auth-token'),
-    organizationId: element.getAttribute('data-organization-id')
+    organizationId: element.getAttribute('data-organization-id'),
+    resourceId: element.getAttribute('data-resource-id')
   }
 
   ReactDOM.render(

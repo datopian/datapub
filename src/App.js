@@ -27,14 +27,14 @@ export class ResourceEditor extends React.Component {
         metadataOrSchema: 'metadata'
       },
       client: null,
-      redirect: false
+      isResourceEdit: null,
     };
     this.metadataHandler = this.metadataHandler.bind(this);
   }
 
-  componentWillMount() {
+ async componentWillMount() {
     const { config } = this.props;
-    const { authToken, api, lfs, organizationId, datasetId } = config;
+    const { authToken, api, lfs, organizationId, datasetId, resourceId } = config;
 
     const client = new Client(
       `${authToken}`,
@@ -43,6 +43,18 @@ export class ResourceEditor extends React.Component {
       `${api}`,
       `${lfs}`
     );
+
+    if (resourceId) {
+      const resource = await client.action('resource_show', {id: resourceId});
+
+      return this.setState({
+        client,
+        resourceId,
+        resource: resource.result,
+        isResourceEdit: true
+      })
+    }
+
     this.setState({client})
   }
 

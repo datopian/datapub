@@ -3,7 +3,6 @@ import { Client } from "ckanClient";
 import PropTypes from "prop-types";
 import frictionlessCkanMapper from "frictionless-ckan-mapper-js";
 import { v4 as uuidv4 } from 'uuid';
-import data from "data.js";
 
 import Metadata from "./components/Metadata";
 import TableSchema from "./components/TableSchema";

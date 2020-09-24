@@ -52,16 +52,15 @@ export class ResourceEditor extends React.Component {
   }
 
   handleChangeMetadata = (event) => {
+
     const target = event.target;
     const value = target.value;
     const name = target.name;
-    const { resource } = this.state;
+    let resourceCopy =  this.state.resource
+    resourceCopy[name] = value
 
     this.setState({
-      resource: {
-        ...resource,
-        [name]: value,
-      },
+      resource: resourceCopy,
     });
   };
 
@@ -97,19 +96,27 @@ export class ResourceEditor extends React.Component {
 
   createResource = async (resource) => {
     const { client } = this.state;
+    const { config } = this.props;
+    const { organizationId, datasetId } = config;
 
     const ckanResource = frictionlessCkanMapper.resourceFrictionlessToCkan(
         resource
       );
 
     delete ckanResource.sample;    
-    // create a copy from ckanResource to add package_id and name
-    // without name the resource name in ckan-blob-storage is Unnamed resource
+    // create a copy from ckanResource to add package_id, name, url, sha256,size, lfs_prefix, url, url_type
+    // without this properties ckan-blob-storage doesn't work properly
     let ckanResourceCopy = {
       ...ckanResource,
       package_id: this.state.datasetId,
-      name: resource.name || resource.title
+      name: resource.name || resource.title,
+      sha256: resource.hash,
+      size: resource.size,
+      lfs_prefix: `${organizationId}/${datasetId}`,
+      url: resource.name,
+      url_type: "upload"
     }
+
     await  client.action("resource_create", ckanResourceCopy).then(response => {
           this.onChangeResourceId(response.result.id)
         })

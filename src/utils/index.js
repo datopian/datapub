@@ -25,9 +25,14 @@ const onFormatBytes = (bytes, decimals = 1) => {
     return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i];
   };
 
+const removeHyphen = (id) => {
+   return id.replace(/-/g, "");
+  };
+
 export {
     getFileExtension,
     onFormatTitle,
     onFormatName,
     onFormatBytes,
+    removeHyphen,
 }

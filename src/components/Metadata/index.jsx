@@ -33,7 +33,7 @@ const Metadata = ({ metadata, handleChange, handleSubmit, uploadSuccess }) => {
             type="text"
             name="title"
             id="title"
-            value={metadata.title}
+            value={metadata.title || metadata.name}
             onChange={handleChange}
           />
         </div>
@@ -80,7 +80,7 @@ const Metadata = ({ metadata, handleChange, handleSubmit, uploadSuccess }) => {
             className="metadata-input__input"
             name="format"
             id="format"
-            value={metadata.format || ""}
+            value={(metadata.format || "").toLowerCase()}
             onChange={handleChange}
             required
           >

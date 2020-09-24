@@ -2,13 +2,14 @@ import React from 'react';
 import { Client } from "ckanClient";
 import PropTypes from "prop-types";
 import frictionlessCkanMapper from "frictionless-ckan-mapper-js";
+import { v4 as uuidv4 } from 'uuid';
 
 import Metadata from "./components/Metadata";
 import TableSchema from "./components/TableSchema";
 import Switcher from "./components/Switcher";
-import './App.css';
-
 import Upload from './components/Upload'
+import './App.css';
+import { removeHyphen } from './utils';
 
 export class ResourceEditor extends React.Component {
   constructor(props) {
@@ -104,6 +105,8 @@ export class ResourceEditor extends React.Component {
       );
 
     delete ckanResource.sample;    
+    //generate an unique id for bq_table_name property
+    let bqTableName = uuidv4()
     // create a copy from ckanResource to add package_id, name, url, sha256,size, lfs_prefix, url, url_type
     // without this properties ckan-blob-storage doesn't work properly
     let ckanResourceCopy = {
@@ -114,7 +117,8 @@ export class ResourceEditor extends React.Component {
       size: resource.size,
       lfs_prefix: `${organizationId}/${datasetId}`,
       url: resource.name,
-      url_type: "upload"
+      url_type: "upload",
+      bq_table_name: removeHyphen(bqTableName),
     }
 
     await  client.action("resource_create", ckanResourceCopy).then(response => {

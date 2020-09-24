@@ -45,22 +45,31 @@ export class ResourceEditor extends React.Component {
       `${lfs}`
     );
 
+    //Check if the user is editing resource
     if (resourceId) {
-      const file = data.open(`${api}/${datasetId}/${resourceId}`);
+      let resource;
+      let schema;
+      let sample;
+      let sampleCopy = []
       try {
-        await file.addSchema();
-        console.log("test")
+        // try to parse to json the schema and sample to be able to use in tableschema component
+        resource = await client.action('resource_show', {id: resourceId});
+        schema = JSON.parse(resource.result.schema.replace(/u'?'/g, "'").replace(/'/g,'"').replace(/\W"\W/g, '[]'))
+        sample = JSON.parse(resource.result.sample.replace(/u'?'/g, "'").replace(/'/g,'"').replace(/\W"\W/g, '[]'))
+        // push the values to an array
+        for (const property in sample) {
+          sampleCopy.push(sample[property])
+        }
+        // push converted values to schema and sample
+        resource.result.schema = schema
+        resource.result.sample = sampleCopy
       } catch (e) {
         console.error(e);
+        //generate an empty values not to break the tableschema component
+        resource.result.schema = {fields: []}
+        resource.result.sample = []
       }
-      console.log("test file: ", file)
-      let resource = await client.action('resource_show', {id: resourceId});
-      // resource.result.schema = JSON.parse(JSON.stringify(resource.result.schema))
-      let test = JSON.parse(resource.result.schema.replace(/u'?'/g, "'").replace(/'/g,'"').replace(/\W"\W/g, '[]'))
 
-      resource.result.schema = test
-      console.log(resource.result)
-      console.log(test)
       return this.setState({
         client,
         resourceId,
@@ -129,7 +138,10 @@ export class ResourceEditor extends React.Component {
     const ckanResource = frictionlessCkanMapper.resourceFrictionlessToCkan(
         resource
       );
-
+    
+    //create a valid format from sample
+    let data = {...ckanResource.sample}
+    //delete sample because is an invalid format
     delete ckanResource.sample;    
     //generate an unique id for bq_table_name property
     let bqTableName = uuidv4()
@@ -145,6 +157,7 @@ export class ResourceEditor extends React.Component {
       url: resource.name,
       url_type: "upload",
       bq_table_name: removeHyphen(bqTableName),
+      sample: data
     }
 
     await  client.action("resource_create", ckanResourceCopy).then(response => {

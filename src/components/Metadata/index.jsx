@@ -16,7 +16,7 @@ const customFields = [
   },
 ];
 
-const Metadata = ({ metadata, handleChange, handleSubmit, uploadSuccess }) => {
+const Metadata = ({ metadata, handleChange, handleSubmit, uploadSuccess, isResourceEdit }) => {
   return (
     <>
       <h3 className="metadata-name">{metadata.path}</h3>
@@ -122,9 +122,11 @@ const Metadata = ({ metadata, handleChange, handleSubmit, uploadSuccess }) => {
               </select>
             </div>
           ))}
-        <button disabled={!uploadSuccess} className="metadata-btn">
-          Save and Publish
-        </button>
+        {!isResourceEdit && (
+          <button disabled={!uploadSuccess} className="metadata-btn">
+            Save and Publish
+          </button>
+        )}
       </form>
     </>
   );

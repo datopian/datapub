@@ -28,7 +28,7 @@ export class ResourceEditor extends React.Component {
         metadataOrSchema: 'metadata'
       },
       client: null,
-      isResourceEdit: null,
+      isResourceEdit: false,
     };
     this.metadataHandler = this.metadataHandler.bind(this);
   }
@@ -47,7 +47,7 @@ export class ResourceEditor extends React.Component {
 
     //Check if the user is editing resource
     if (resourceId) {
-      let resource;
+      let resource = {};
       let schema;
       let sample;
       let sampleCopy = []
@@ -165,6 +165,23 @@ export class ResourceEditor extends React.Component {
         })
   }
 
+  
+  updateResource = async () => {
+    const { resource, client, datasetId } = this.state
+
+    await  client.action("resource_update", resource)
+
+    return window.location.href=`/dataset/${datasetId}`
+  }
+
+  deleteResource = async () => {
+    const { resource, client, datasetId } = this.state
+
+    await  client.action("resource_delete", {id: resource.id})
+
+    return window.location.href=`/dataset/${datasetId}`
+  }
+
   switcher = (name) => {
     const ui = {...this.state.ui}
     ui.metadataOrSchema = name
@@ -224,6 +241,7 @@ export class ResourceEditor extends React.Component {
                 metadata={this.state.resource}
                 handleSubmit={this.handleSubmitMetadata}
                 handleChange={this.handleChangeMetadata}
+                isResourceEdit={this.state.isResourceEdit}
               />
             )}
             {metadataOrSchema === 'schema' && (
@@ -234,6 +252,16 @@ export class ResourceEditor extends React.Component {
                 }
               />
             )}
+            {this.state.isResourceEdit && 
+              <div>
+                <button className="btn btn-delete"  onClick={this.deleteResource}>
+                  Delete
+                </button>
+                <button className="btn" onClick={this.updateResource}>
+                  Update
+                </button>
+              </div>
+            }
           </div>
         </div>
       </div>

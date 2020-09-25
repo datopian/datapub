@@ -46,7 +46,7 @@ const Metadata = ({ metadata, handleChange, handleSubmit, uploadSuccess, isResou
             type="text"
             name="description"
             id="description"
-            value={metadata.description}
+            value={metadata.description || ""}
             onChange={handleChange}
           />
         </div>

@@ -5,11 +5,25 @@ import "./Metadata.css";
 import encodeData from "../../db/encode.json";
 import formatData from "../../db/resource_formats.json";
 
+//TODO: add the custom fields as a props and render it in metadata component
+const customFields = [
+  {
+    label: "Access Restriction",
+    name: "restricted",
+    input_type: "select",
+    values: ['{"level": "public"}', '{"level": "private"}'],
+    options: ["Public", "Private"],
+  },
+];
+
 const Metadata = ({ metadata, handleChange, handleSubmit, uploadSuccess }) => {
   return (
     <>
       <h3 className="metadata-name">{metadata.path}</h3>
-      <form className="metadata-form" onSubmit={(event) => handleSubmit(event, 0)}>
+      <form
+        className="metadata-form"
+        onSubmit={(event) => handleSubmit(event, 0)}
+      >
         <div className="metadata-input">
           <label className="metadata-label" htmlFor="title">
             Title:
@@ -46,6 +60,7 @@ const Metadata = ({ metadata, handleChange, handleSubmit, uploadSuccess }) => {
             id="encoding"
             value={metadata.encoding || ""}
             onChange={handleChange}
+            required
           >
             <option value="" disabled>
               Select...
@@ -67,6 +82,7 @@ const Metadata = ({ metadata, handleChange, handleSubmit, uploadSuccess }) => {
             id="format"
             value={metadata.format || ""}
             onChange={handleChange}
+            required
           >
             <option value="" disabled>
               Select...
@@ -78,7 +94,37 @@ const Metadata = ({ metadata, handleChange, handleSubmit, uploadSuccess }) => {
             ))}
           </select>
         </div>
-        <button  disabled={!uploadSuccess} className="metadata-btn">Save and Publish</button>
+        {customFields &&
+          customFields.map((item) => (
+            <div className="metadata-input">
+              <label className="metadata-label" htmlFor="format">
+                {item.label}:
+              </label>
+              <select
+                className="metadata-input__input"
+                name={item.name}
+                id={item.name}
+                value={metadata[item.name] || ""}
+                onChange={handleChange}
+                required
+              >
+                <option value="" disabled>
+                  Select...
+                </option>
+                {item.options.map((option, index) => (
+                  <option
+                    key={`${item.name}-${index}`}
+                    value={item.values[index]}
+                  >
+                    {option}
+                  </option>
+                ))}
+              </select>
+            </div>
+          ))}
+        <button disabled={!uploadSuccess} className="metadata-btn">
+          Save and Publish
+        </button>
       </form>
     </>
   );

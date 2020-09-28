@@ -16,13 +16,19 @@ const customFields = [
   },
 ];
 
-const Metadata = ({ metadata, handleChange, handleSubmit, uploadSuccess }) => {
+const Metadata = ({ metadata, handleChange, handleSubmit, uploadSuccess, isResourceEdit, deleteResource, updateResource}) => {
   return (
     <>
       <h3 className="metadata-name">{metadata.path}</h3>
       <form
         className="metadata-form"
-        onSubmit={(event) => handleSubmit(event, 0)}
+        onSubmit={(event) => {
+          if (isResourceEdit) {
+            event.preventDefault();
+            return updateResource(metadata)
+          }
+          return handleSubmit(event, 0)
+        }}
       >
         <div className="metadata-input">
           <label className="metadata-label" htmlFor="title">
@@ -33,7 +39,7 @@ const Metadata = ({ metadata, handleChange, handleSubmit, uploadSuccess }) => {
             type="text"
             name="title"
             id="title"
-            value={metadata.title}
+            value={metadata.title || metadata.name}
             onChange={handleChange}
           />
         </div>
@@ -46,7 +52,7 @@ const Metadata = ({ metadata, handleChange, handleSubmit, uploadSuccess }) => {
             type="text"
             name="description"
             id="description"
-            value={metadata.description}
+            value={metadata.description || ""}
             onChange={handleChange}
           />
         </div>
@@ -80,7 +86,7 @@ const Metadata = ({ metadata, handleChange, handleSubmit, uploadSuccess }) => {
             className="metadata-input__input"
             name="format"
             id="format"
-            value={metadata.format || ""}
+            value={(metadata.format || "").toLowerCase()}
             onChange={handleChange}
             required
           >
@@ -96,7 +102,7 @@ const Metadata = ({ metadata, handleChange, handleSubmit, uploadSuccess }) => {
         </div>
         {customFields &&
           customFields.map((item) => (
-            <div className="metadata-input">
+            <div key={`metadata-custom-${item.name}`} className="metadata-input">
               <label className="metadata-label" htmlFor="format">
                 {item.label}:
               </label>
@@ -122,9 +128,20 @@ const Metadata = ({ metadata, handleChange, handleSubmit, uploadSuccess }) => {
               </select>
             </div>
           ))}
-        <button disabled={!uploadSuccess} className="metadata-btn">
-          Save and Publish
-        </button>
+        {!isResourceEdit ? (
+          <button disabled={!uploadSuccess} className="metadata-btn">
+            Save and Publish
+          </button>
+        ) : (
+              <div>
+                <button type="button" className="btn btn-delete" onClick={deleteResource}>
+                  Delete
+                </button>
+                <button className="btn">
+                  Update
+                </button>
+              </div>
+        )}
       </form>
     </>
   );
@@ -135,6 +152,9 @@ Metadata.propTypes = {
   handleChange: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,
   uploadSuccess: PropTypes.bool.isRequired,
+  isResourceEdit: PropTypes.bool.isRequired,
+  deleteResource: PropTypes.func.isRequired,
+  updateResource: PropTypes.func.isRequired,
 };
 
 export default Metadata;

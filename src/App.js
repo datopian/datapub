@@ -27,14 +27,14 @@ export class ResourceEditor extends React.Component {
         metadataOrSchema: 'metadata'
       },
       client: null,
-      redirect: false
+      isResourceEdit: false,
     };
     this.metadataHandler = this.metadataHandler.bind(this);
   }
 
-  componentWillMount() {
+ async componentDidMount() {
     const { config } = this.props;
-    const { authToken, api, lfs, organizationId, datasetId } = config;
+    const { authToken, api, lfs, organizationId, datasetId, resourceId } = config;
 
     const client = new Client(
       `${authToken}`,
@@ -43,6 +43,41 @@ export class ResourceEditor extends React.Component {
       `${api}`,
       `${lfs}`
     );
+
+    //Check if the user is editing resource
+    //TODO: create a custom_resource_show action in ckan-blob-storage to remove the lines below
+    //BE CAREFUL don't remove the try catch until create a custom_resource_show in ckan-blob-storage
+    if (resourceId) {
+      let resource = await client.action('resource_show', {id: resourceId});
+      let schema;
+      let sample;
+      let sampleCopy = []
+      try {
+        // try to parse to json the schema and sample to be able to use in tableschema component
+        schema = JSON.parse(resource.result.schema.replace(/u'',/g, "'none',").replace(/u'?'/g, "'").replace(/'/g,'"').replace(/\W"\W/g, '[]'))
+        sample = JSON.parse(resource.result.sample.replace(/u'?'/g, "'").replace(/'/g,'"').replace(/\W"\W/g, '[]'))
+        // push the values to an array
+        for (const property in sample) {
+          sampleCopy.push(sample[property])
+        }
+        // push converted values to schema and sample
+        resource.result.schema = schema
+        resource.result.sample = sampleCopy
+      } catch (e) {
+        console.error(e);
+        //generate an empty values not to break the tableschema component
+        resource.result.schema = {fields: []}
+        resource.result.sample = []
+      }
+
+      return this.setState({
+        client,
+        resourceId,
+        resource: resource.result,
+        isResourceEdit: true
+      })
+    }
+
     this.setState({client})
   }
 
@@ -98,12 +133,15 @@ export class ResourceEditor extends React.Component {
   createResource = async (resource) => {
     const { client } = this.state;
     const { config } = this.props;
-    const { organizationId, datasetId } = config;
+    const { organizationId, datasetId, resourceId } = config;
 
     const ckanResource = frictionlessCkanMapper.resourceFrictionlessToCkan(
         resource
       );
-
+    
+    //create a valid format from sample
+    let data = {...ckanResource.sample}
+    //delete sample because is an invalid format
     delete ckanResource.sample;    
     //generate an unique id for bq_table_name property
     let bqTableName = uuidv4()
@@ -119,11 +157,31 @@ export class ResourceEditor extends React.Component {
       url: resource.name,
       url_type: "upload",
       bq_table_name: removeHyphen(bqTableName),
+      sample: data
     }
 
-    await  client.action("resource_create", ckanResourceCopy).then(response => {
+    //Check if the user is editing resource, call resource_update and redirect to the dataset page
+    if (resourceId) {
+      ckanResourceCopy = {
+        ...ckanResourceCopy,
+        id: resourceId
+      }
+      await client.action("resource_update", ckanResourceCopy)
+
+      return window.location.href=`/dataset/${datasetId}`
+    }
+    await client.action("resource_create", ckanResourceCopy).then(response => {
           this.onChangeResourceId(response.result.id)
         })
+  }
+
+  deleteResource = async () => {
+    const { resource, client, datasetId } = this.state
+    if (window.confirm("Are you sure to delete this resource?")) {
+      await client.action("resource_delete", {id: resource.id})
+
+      return window.location.href=`/dataset/${datasetId}`
+    }
   }
 
   switcher = (name) => {
@@ -185,6 +243,9 @@ export class ResourceEditor extends React.Component {
                 metadata={this.state.resource}
                 handleSubmit={this.handleSubmitMetadata}
                 handleChange={this.handleChangeMetadata}
+                isResourceEdit={this.state.isResourceEdit}
+                deleteResource={this.deleteResource}
+                updateResource={this.createResource}
               />
             )}
             {metadataOrSchema === 'schema' && (

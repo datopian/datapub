@@ -3,6 +3,7 @@ import { Client } from "ckanClient";
 import PropTypes from "prop-types";
 import frictionlessCkanMapper from "frictionless-ckan-mapper-js";
 import { v4 as uuidv4 } from 'uuid';
+import data from "data.js";
 
 import Metadata from "./components/Metadata";
 import TableSchema from "./components/TableSchema";
@@ -45,8 +46,21 @@ export class ResourceEditor extends React.Component {
     );
 
     if (resourceId) {
-      const resource = await client.action('resource_show', {id: resourceId});
+      const file = data.open(`${api}/${datasetId}/${resourceId}`);
+      try {
+        await file.addSchema();
+        console.log("test")
+      } catch (e) {
+        console.error(e);
+      }
+      console.log("test file: ", file)
+      let resource = await client.action('resource_show', {id: resourceId});
+      // resource.result.schema = JSON.parse(JSON.stringify(resource.result.schema))
+      let test = JSON.parse(resource.result.schema.replace(/u'?'/g, "'").replace(/'/g,'"').replace(/\W"\W/g, '[]'))
 
+      resource.result.schema = test
+      console.log(resource.result)
+      console.log(test)
       return this.setState({
         client,
         resourceId,

@@ -32,7 +32,7 @@ export class ResourceEditor extends React.Component {
     this.metadataHandler = this.metadataHandler.bind(this);
   }
 
- async componentWillMount() {
+ async componentDidMount() {
     const { config } = this.props;
     const { authToken, api, lfs, organizationId, datasetId, resourceId } = config;
 
@@ -244,6 +244,8 @@ export class ResourceEditor extends React.Component {
                 handleSubmit={this.handleSubmitMetadata}
                 handleChange={this.handleChangeMetadata}
                 isResourceEdit={this.state.isResourceEdit}
+                deleteResource={this.deleteResource}
+                updateResource={this.createResource}
               />
             )}
             {metadataOrSchema === 'schema' && (
@@ -254,16 +256,6 @@ export class ResourceEditor extends React.Component {
                 }
               />
             )}
-            {this.state.isResourceEdit && 
-              <div>
-                <button className="btn btn-delete"  onClick={this.deleteResource}>
-                  Delete
-                </button>
-                <button className="btn" onClick={() => this.createResource(this.state.resource)}>
-                  Update
-                </button>
-              </div>
-            }
           </div>
         </div>
       </div>

@@ -16,7 +16,7 @@ export class ResourceEditor extends React.Component {
     this.state = {
       datasetId: this.props.config.datasetId,
       resourceId: "",
-      resource: this.props.resource || {},
+      resource: this.props.resource || [],
       ui: {
         fileOrLink: "",
         uploadComplete: undefined,
@@ -88,10 +88,14 @@ export class ResourceEditor extends React.Component {
     this.setState({ client });
   }
 
-  metadataHandler(resource) {
-    this.setState({
-      resource,
-    });
+  metadataHandler(file) {
+    const { resource } = this.state;
+    const newResource = [
+      ...resource,
+      file
+    ]
+
+    this.setState({resource: newResource})
   }
 
   handleChangeMetadata = (event) => {

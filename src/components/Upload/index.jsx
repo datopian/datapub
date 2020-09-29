@@ -10,18 +10,15 @@ import Choose from "../Choose";
 
 class Upload extends React.Component {
   constructor(props) {
-    super(props);
+    super();
     this.state = {
-      datasetId: props.datasetId,
       selectedFiles: [],
-      fileSize: 0,
-      formattedSize: "0 KB",
       uploadProgress: [],
     };
   }
 
   onChangeHandler = async (event) => {
-    // event.preventDefault();
+    event.preventDefault();
 
     let { selectedFiles } = this.state;
 
@@ -110,17 +107,12 @@ class Upload extends React.Component {
       .pushBlob(resource, (event) =>
         this.onUploadProgress(event, fileProgress.id)
       )
-      .then((response) => console.log(response))
-      // .then(() => {
-      //   // Once upload is done, create a resource
-      //   const ckanResource = frictionlessCkanMapper.resourceFrictionlessToCkan(
-      //     resource.descriptor
-      //   )
-      //   delete ckanResource.sample
-      //   client.action('resource_create', Object.assign(ckanResource, {
-      //     package_id: this.state.datasetId
-      //   }))
-      // })
+      .then((response) => { 
+        if (response.fileExists) {
+          return this.handleStatus(newState, fileProgress.id, true, "fileExists")
+        }
+        return this.handleStatus(newState, fileProgress.id, true, "success")
+      })
       .catch((error) =>
         this.handleStatus(newState, fileProgress.id, true, "error")
       );
@@ -158,7 +150,7 @@ class Upload extends React.Component {
                     </div>
                     <div>
                       {item.error && "Upload failed"}
-                      {!item.error && !item.success && (
+                      {!item.error && !item.success && !item.fileExists && (
                         <ProgressBar
                           progress={Math.round(item.loaded)}
                           size={50}
@@ -169,6 +161,7 @@ class Upload extends React.Component {
                         />
                       )}
                       {item.success && "Upload success"}
+                      {item.fileExists && "File already exists in the storage"}
                     </div>
                   </div>
                 </li>

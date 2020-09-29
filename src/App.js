@@ -144,7 +144,7 @@ export class ResourceEditor extends React.Component {
     //delete sample because is an invalid format
     delete ckanResource.sample;    
     //generate an unique id for bq_table_name property
-    let bqTableName = uuidv4()
+    let bqTableName = ckanResource.bq_table_name ? ckanResource.bq_table_name : uuidv4()
     // create a copy from ckanResource to add package_id, name, url, sha256,size, lfs_prefix, url, url_type
     // without this properties ckan-blob-storage doesn't work properly
     let ckanResourceCopy = {

@@ -45,35 +45,28 @@ export class ResourceEditor extends React.Component {
     );
 
     //Check if the user is editing resource
-    //TODO: create a custom_resource_show action in ckan-blob-storage to remove the lines below
-    //BE CAREFUL don't remove the try catch until create a custom_resource_show in ckan-blob-storage
     if (resourceId) {
-      let resource = await client.action('resource_show', {id: resourceId});
-      let schema;
-      let sample;
+      const resource = await client.action('resource_show', {id: resourceId});
+      let resourceCopy = resource.result
       let sampleCopy = []
       try {
-        // try to parse to json the schema and sample to be able to use in tableschema component
-        schema = JSON.parse(resource.result.schema.replace(/u'',/g, "'none',").replace(/u'?'/g, "'").replace(/'/g,'"').replace(/\W"\W/g, '[]'))
-        sample = JSON.parse(resource.result.sample.replace(/u'?'/g, "'").replace(/'/g,'"').replace(/\W"\W/g, '[]'))
         // push the values to an array
-        for (const property in sample) {
-          sampleCopy.push(sample[property])
+        for (const property in resourceCopy.sample) {
+          sampleCopy.push(resourceCopy.sample[property])
         }
-        // push converted values to schema and sample
-        resource.result.schema = schema
-        resource.result.sample = sampleCopy
+        // push sample as an array to be able to render in tableschema component
+        resourceCopy.sample = sampleCopy
       } catch (e) {
         console.error(e);
-        //generate an empty values not to break the tableschema component
-        resource.result.schema = {fields: []}
-        resource.result.sample = []
+        //generate empty values not to break the tableschema component
+        resourceCopy.schema = {fields: []}
+        resourceCopy.sample = []
       }
 
       return this.setState({
         client,
         resourceId,
-        resource: resource.result,
+        resource: resourceCopy,
         isResourceEdit: true
       })
     }

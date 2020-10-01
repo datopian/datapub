@@ -47,15 +47,20 @@ export class ResourceEditor extends React.Component {
     //Check if the user is editing resource
     if (resourceId) {
       const resource = await client.action('resource_show', {id: resourceId});
+      const resourceSchema = await client.action('resource_schema_show', {id: resourceId});
+      const resourceSample = await client.action('resource_sample_show', {id: resourceId});
+      
       let resourceCopy = resource.result
       let sampleCopy = []
+     
       try {
         // push the values to an array
-        for (const property in resourceCopy.sample) {
-          sampleCopy.push(resourceCopy.sample[property])
+        for (const property in resourceSample.result) {
+          sampleCopy.push(resourceSample.result[property])
         }
         // push sample as an array to be able to render in tableschema component
         resourceCopy.sample = sampleCopy
+        resourceCopy.schema = resourceSchema.result
       } catch (e) {
         console.error(e);
         //generate empty values not to break the tableschema component

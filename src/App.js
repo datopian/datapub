@@ -17,6 +17,7 @@ export class ResourceEditor extends React.Component {
       datasetId: this.props.config.datasetId,
       resourceId: "",
       resource: this.props.resource || [],
+      resourceSelected: [],
       ui: {
         fileOrLink: "",
         uploadComplete: undefined,
@@ -90,12 +91,9 @@ export class ResourceEditor extends React.Component {
 
   metadataHandler(file) {
     const { resource } = this.state;
-    const newResource = [
-      ...resource,
-      file
-    ]
+    const newResource = [...resource, file];
 
-    this.setState({resource: newResource})
+    this.setState({ resource: newResource });
   }
 
   handleChangeMetadata = (event) => {
@@ -213,8 +211,18 @@ export class ResourceEditor extends React.Component {
     this.setState({ resourceId });
   };
 
+  handleEditResource = (uploadId) => {
+    const { resource } = this.state;
+    const resourceSelected = resource.find(
+      (item) => item.uploadId === uploadId
+    );
+    this.setState({ resourceSelected });
+  };
+
   render() {
-    const { loading, success } = this.state.ui;
+    const { loading, success, metadataOrSchema } = this.state.ui;
+
+    const { resourceSelected } = this.state;
 
     return (
       <div className="App">
@@ -239,19 +247,28 @@ export class ResourceEditor extends React.Component {
             datasetId={this.state.datasetId}
             handleUploadStatus={this.handleUploadStatus}
             onChangeResourceId={this.onChangeResourceId}
+            handleEditResource={this.handleEditResource}
           />
 
           <div className="upload-edit-area">
-            <Metadata
-              metadata={this.state.resource}
-              handleChange={this.handleChangeMetadata}
-            />
-            {this.state.resource.schema && (
-              <TableSchema
-                schema={this.state.resource.schema}
-                data={this.state.resource.sample || []}
-              />
-            )}
+            {resourceSelected && metadataOrSchema === "metadata" && (
+                <Metadata
+                  loading={loading}
+                  uploadSuccess={success}
+                  metadata={resourceSelected}
+                  handleSubmit={this.handleSubmitMetadata}
+                  handleChange={this.handleChangeMetadata}
+                  isResourceEdit={this.state.isResourceEdit}
+                  deleteResource={this.deleteResource}
+                  updateResource={this.createResource}
+                />
+              )}
+              {resourceSelected && metadataOrSchema === "schema" && (
+                <TableSchema
+                  schema={resourceSelected.schema || { fields: [] }}
+                  data={resourceSelected.sample || []}
+                />
+              )}
             {!this.state.isResourceEdit ? (
               <button disabled={!success} className="btn">
                 Save and Publish
@@ -274,20 +291,6 @@ export class ResourceEditor extends React.Component {
     );
   }
 }
-
-/**
- * If the parent component doesn't specify a `config` and scope prop, then
- * the default values will be used.
- * */
-ResourceEditor.defaultProps = {
-  config: {
-    authToken: "be270cae-1c77-4853-b8c1-30b6cf5e9878",
-    api: "http://localhost:5000",
-    lfs: "http://localhost:5001", // Feel free to modify this
-    organizationId: "myorg",
-    datasetId: "data-test-2",
-  },
-};
 
 ResourceEditor.propTypes = {
   config: PropTypes.object.isRequired,

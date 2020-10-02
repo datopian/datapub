@@ -73,8 +73,9 @@ class Upload extends React.Component {
     const start = new Date().getTime();
     let newState = this.state.uploadProgress;
 
+    const uploadId = uuidv4()
     const fileProgress = {
-      id: uuidv4(),
+      id: uploadId,
       loaded: 0,
       size: file.size,
       start: start,
@@ -101,7 +102,7 @@ class Upload extends React.Component {
       console.error(e);
     }
 
-    this.props.metadataHandler(Object.assign(resource.descriptor, { hash }));
+    this.props.metadataHandler(Object.assign(resource.descriptor, { hash, uploadId }));
 
     client
       .pushBlob(resource, (event) =>
@@ -138,7 +139,7 @@ class Upload extends React.Component {
         />
         <div className="upload-area__info">
           {uploadProgress.map((item, index) => (
-            <div key={`upload-file-${index}`}>
+            <div key={`upload-file-${index}`} onClick={() => this.props.handleEditResource(item.id)}>
               <ul className="upload-list">
                 <li className="list-item">
                   <div className="upload-list-item">
@@ -160,8 +161,7 @@ class Upload extends React.Component {
                           timeRemaining={item.timeRemaining}
                         />
                       )}
-                      {item.success && "Upload success"}
-                      {item.fileExists && "File already exists in the storage"}
+                      {(item.success || item.fileExists) && "Upload successfully"}
                     </div>
                   </div>
                 </li>

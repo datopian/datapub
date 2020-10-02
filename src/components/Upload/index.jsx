@@ -100,6 +100,7 @@ class Upload extends React.Component {
           success: response.success,
           loading: false,
           fileExists: response.fileExists,
+          loaded: 100
         });
         this.props.handleUploadStatus({
           loading: false,
@@ -155,8 +156,8 @@ class Upload extends React.Component {
                 </li>
               </ul>
               <h2 className="upload-message">
-                {success && !fileExists && !error && "File upload success"}
-                {fileExists && "File already exists in the storage"}
+                {success && !fileExists && !error && "File uploaded successfully"}
+                {fileExists && "File uploaded successfully"}
                 {error && "Upload failed"}
               </h2>
             </>

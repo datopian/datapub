@@ -79,8 +79,8 @@ const TableSchema = (props) => {
           <div className="table-schema-help_row">Type</div>
           <div className="table-schema-help_row">Format</div>
         </div>
-        <div className="table">
-          <table {...getTableProps()}>
+        <div className="table-schema-info">
+          <table className="table-schema-info_table" {...getTableProps()}>
             <thead>
               {headerGroups.map((headerGroup) => (
                 <tr

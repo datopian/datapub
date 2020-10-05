@@ -1,15 +1,14 @@
-import React from 'react';
+import React from "react";
 import { Client } from "ckanClient";
 import PropTypes from "prop-types";
 import frictionlessCkanMapper from "frictionless-ckan-mapper-js";
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from "uuid";
 
 import Metadata from "./components/Metadata";
 import TableSchema from "./components/TableSchema";
-import Switcher from "./components/Switcher";
-import Upload from './components/Upload'
-import './App.css';
-import { removeHyphen } from './utils';
+import Upload from "./components/Upload";
+import "./App.css";
+import { removeHyphen } from "./utils";
 
 export class ResourceEditor extends React.Component {
   constructor(props) {
@@ -19,7 +18,7 @@ export class ResourceEditor extends React.Component {
       resourceId: "",
       resource: this.props.resource || {},
       ui: {
-        fileOrLink: '',
+        fileOrLink: "",
         uploadComplete: undefined,
         success: false,
         error: false,
@@ -31,9 +30,16 @@ export class ResourceEditor extends React.Component {
     this.metadataHandler = this.metadataHandler.bind(this);
   }
 
- async componentDidMount() {
+  async componentDidMount() {
     const { config } = this.props;
-    const { authToken, api, lfs, organizationId, datasetId, resourceId } = config;
+    const {
+      authToken,
+      api,
+      lfs,
+      organizationId,
+      datasetId,
+      resourceId,
+    } = config;
 
     const client = new Client(
       `${authToken}`,
@@ -45,64 +51,66 @@ export class ResourceEditor extends React.Component {
 
     //Check if the user is editing resource
     if (resourceId) {
-      const resource = await client.action('resource_show', {id: resourceId});
-      const resourceSchema = await client.action('resource_schema_show', {id: resourceId});
-      const resourceSample = await client.action('resource_sample_show', {id: resourceId});
-      
-      let resourceCopy = resource.result
-      let sampleCopy = []
-     
+      const resource = await client.action("resource_show", { id: resourceId });
+      const resourceSchema = await client.action("resource_schema_show", {
+        id: resourceId,
+      });
+      const resourceSample = await client.action("resource_sample_show", {
+        id: resourceId,
+      });
+
+      let resourceCopy = resource.result;
+      let sampleCopy = [];
+
       try {
         // push the values to an array
         for (const property in resourceSample.result) {
-          sampleCopy.push(resourceSample.result[property])
+          sampleCopy.push(resourceSample.result[property]);
         }
         // push sample as an array to be able to render in tableschema component
-        resourceCopy.sample = sampleCopy
-        resourceCopy.schema = resourceSchema.result
+        resourceCopy.sample = sampleCopy;
+        resourceCopy.schema = resourceSchema.result;
       } catch (e) {
         console.error(e);
         //generate empty values not to break the tableschema component
-        resourceCopy.schema = {fields: []}
-        resourceCopy.sample = []
+        resourceCopy.schema = { fields: [] };
+        resourceCopy.sample = [];
       }
 
       return this.setState({
         client,
         resourceId,
         resource: resourceCopy,
-        isResourceEdit: true
-      })
+        isResourceEdit: true,
+      });
     }
 
-    this.setState({client})
+    this.setState({ client });
   }
 
   metadataHandler(resource) {
     this.setState({
-      resource
-    })
+      resource,
+    });
   }
 
   handleChangeMetadata = (event) => {
-
     const target = event.target;
     const value = target.value;
     const name = target.name;
-    let resourceCopy =  this.state.resource
-    resourceCopy[name] = value
+    let resourceCopy = this.state.resource;
+    resourceCopy[name] = value;
 
     this.setState({
       resource: resourceCopy,
     });
   };
 
-  handleSubmitMetadata = async (index) => {
-
+  handleSubmitMetadata = async () => {
     const { resource, client } = this.state;
 
-    await this.createResource(resource)
-  
+    await this.createResource(resource);
+
     // Change state of dataset to active if draft atm
     // this relates to how CKAN v2 has a phased dataset creation. See e.g.
     // https://github.com/ckan/ckan/blob/master/ckan/controllers/package.py#L917
@@ -112,19 +120,20 @@ export class ResourceEditor extends React.Component {
     // TODO: update this in future to check for edit mode
     const isResourceCreate = true;
     if (isResourceCreate) {
-      const datasetMetadata = await client.action('package_show', {id: this.state.datasetId});
+      const datasetMetadata = await client.action("package_show", {
+        id: this.state.datasetId,
+      });
       let result = datasetMetadata.result;
 
-      if (result.state == 'draft') {
-        result.state = 'active';
-        await client.action('package_update', result)
+      if (result.state == "draft") {
+        result.state = "active";
+        await client.action("package_update", result);
       }
     }
 
     // Redirect to dataset page
-    return window.location.href=`/dataset/${this.state.datasetId}`; 
+    return (window.location.href = `/dataset/${this.state.datasetId}`);
   };
-
 
   createResource = async (resource) => {
     const { client } = this.state;
@@ -132,15 +141,17 @@ export class ResourceEditor extends React.Component {
     const { organizationId, datasetId, resourceId } = config;
 
     const ckanResource = frictionlessCkanMapper.resourceFrictionlessToCkan(
-        resource
-      );
-    
+      resource
+    );
+
     //create a valid format from sample
-    let data = {...ckanResource.sample}
+    let data = { ...ckanResource.sample };
     //delete sample because is an invalid format
-    delete ckanResource.sample;    
+    delete ckanResource.sample;
     //generate an unique id for bq_table_name property
-    let bqTableName = ckanResource.bq_table_name ? ckanResource.bq_table_name : uuidv4()
+    let bqTableName = ckanResource.bq_table_name
+      ? ckanResource.bq_table_name
+      : uuidv4();
     // create a copy from ckanResource to add package_id, name, url, sha256,size, lfs_prefix, url, url_type
     // without this properties ckan-blob-storage doesn't work properly
     let ckanResourceCopy = {
@@ -153,37 +164,33 @@ export class ResourceEditor extends React.Component {
       url: resource.name,
       url_type: "upload",
       bq_table_name: removeHyphen(bqTableName),
-      sample: data
-    }
+      sample: data,
+    };
 
     //Check if the user is editing resource, call resource_update and redirect to the dataset page
     if (resourceId) {
       ckanResourceCopy = {
         ...ckanResourceCopy,
-        id: resourceId
-      }
-      await client.action("resource_update", ckanResourceCopy)
+        id: resourceId,
+      };
+      await client.action("resource_update", ckanResourceCopy);
 
-      return window.location.href=`/dataset/${datasetId}`
+      return (window.location.href = `/dataset/${datasetId}`);
     }
-    await client.action("resource_create", ckanResourceCopy).then(response => {
-          this.onChangeResourceId(response.result.id)
-        })
-  }
+    await client
+      .action("resource_create", ckanResourceCopy)
+      .then((response) => {
+        this.onChangeResourceId(response.result.id);
+      });
+  };
 
   deleteResource = async () => {
-    const { resource, client, datasetId } = this.state
+    const { resource, client, datasetId } = this.state;
     if (window.confirm("Are you sure to delete this resource?")) {
-      await client.action("resource_delete", {id: resource.id})
+      await client.action("resource_delete", { id: resource.id });
 
-      return window.location.href=`/dataset/${datasetId}`
+      return (window.location.href = `/dataset/${datasetId}`);
     }
-  }
-
-  switcher = (name) => {
-    const ui = {...this.state.ui}
-    ui.metadataOrSchema = name
-    this.setState({ui});
   };
 
   handleUploadStatus = (status) => {
@@ -193,23 +200,30 @@ export class ResourceEditor extends React.Component {
       success: status.success,
       error: status.error,
       loading: status.loading,
-    }
+    };
 
-    this.setState({ui: newUiState})
-  }
+    this.setState({ ui: newUiState });
+  };
 
   onChangeResourceId = (resourceId) => {
-    this.setState({resourceId})
-  }
+    this.setState({ resourceId });
+  };
+
   render() {
-    const {
-      loading,
-      success,
-    } = this.state.ui;
+    const { loading, success } = this.state.ui;
 
     return (
       <div className="App">
-        <div className="upload-wrapper">
+        <form
+          className="upload-wrapper"
+          onSubmit={(event) => {
+            event.preventDefault();
+            if (this.state.isResourceEdit) {
+              return this.createResource(this.state.resource);
+            }
+            return this.handleSubmitMetadata();
+          }}
+        >
           <div className="upload-header">
             <h2 className="upload-header__title">Resource Editor</h2>
           </div>
@@ -224,24 +238,34 @@ export class ResourceEditor extends React.Component {
           />
 
           <div className="upload-edit-area">
-              <Metadata
-                loading={loading}
-                uploadSuccess={success}
-                metadata={this.state.resource}
-                handleChange={this.handleChangeMetadata}
-                isResourceEdit={this.state.isResourceEdit}
-                deleteResource={this.deleteResource}
-                updateResource={this.createResource}
-              />
+            <Metadata
+              metadata={this.state.resource}
+              handleChange={this.handleChangeMetadata}
+            />
+            {this.state.resource.schema && (
               <TableSchema
-                schema={this.state.resource.schema || {fields: []}}
-                data={
-                  this.state.resource.sample || []
-                }
+                schema={this.state.resource.schema}
+                data={this.state.resource.sample || []}
               />
-              <button  disabled={!success} className="btn" onClick={this.handleSubmitMetadata}>Save and Publish</button>
+            )}
+            {!this.state.isResourceEdit ? (
+              <button disabled={!success} className="btn">
+                Save and Publish
+              </button>
+            ) : (
+              <div className="resource-edit-actions">
+                <button
+                  type="button"
+                  className="btn btn-delete"
+                  onClick={this.deleteResource}
+                >
+                  Delete
+                </button>
+                <button className="btn">Update</button>
+              </div>
+            )}
           </div>
-        </div>
+        </form>
       </div>
     );
   }
@@ -251,7 +275,7 @@ export class ResourceEditor extends React.Component {
  * If the parent component doesn't specify a `config` and scope prop, then
  * the default values will be used.
  * */
- ResourceEditor.defaultProps = {
+ResourceEditor.defaultProps = {
   config: {
     authToken: "be270cae-1c77-4853-b8c1-30b6cf5e9878",
     api: "http://localhost:5000",

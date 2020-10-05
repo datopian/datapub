@@ -1,13 +1,19 @@
-.table {
+.table-schema-info {
   max-width: 585px;
   overflow: overlay;
   max-height: 675px;
+}
+
+.table-schema-info_table {
+  width: auto !important;
 }
 
 .table-container {
   display: flex;
   justify-content: center;
   justify-items: center;
+  margin-top: 2.6rem;
+  margin-bottom: 2rem;
 }
 
 .table-schema-help {

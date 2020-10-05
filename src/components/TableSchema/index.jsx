@@ -10,8 +10,8 @@ const TableSchema = (props) => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const data = React.useMemo(() => [...props.data], []);
 
-  const columnsSchema = schema.fields.map((item) => {
-    return { Header: item.name, accessor: item.name };
+  const columnsSchema = schema.fields.map((item, index) => {
+    return { Header: item.name ? item.name : `column_${index + 1}`, accessor: item.name ? item.name : `column_${index + 1}`};
   });
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const columns = React.useMemo(() => [...columnsSchema], []);

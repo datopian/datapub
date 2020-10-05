@@ -14,10 +14,8 @@ code {
 
 .App {
   text-align: center;
-  background-color: hsl(220, 13%, 18%);
   min-height: 100vh;
   color: #222;
-  padding-top: 10%;
 }
 
 .upload-wrapper {

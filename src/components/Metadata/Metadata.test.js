@@ -56,21 +56,4 @@ describe("<Metadata />", () => {
     expect(inputRestricted.props().value).toEqual("private");
     expect(inputEncoding.props().value).toEqual("utf-8");
   });
-
-  it("should render in edit mode", () => {
-    const wrapper = shallow(
-      <Metadata
-        metadata={{}}
-        handleChange={handleChange}
-        handleSubmit={handleSubmit}
-        deleteResource={deleteResource}
-        updateResource={updateResource}
-        uploadSuccess={false}
-        isResourceEdit={true}
-      />
-    );
-
-    expect(wrapper.find(".btn")).toHaveLength(2)
-    expect(wrapper.find(".btn-delete")).toHaveLength(1)
-  });
 });

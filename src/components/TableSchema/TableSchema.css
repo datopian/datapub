@@ -1,7 +1,11 @@
-.table {
+.table-schema-info {
   max-width: 585px;
   overflow: overlay;
   max-height: 675px;
+}
+
+.table-schema-info_table {
+  width: auto !important;
 }
 
 .table-container {

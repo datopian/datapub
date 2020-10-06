@@ -17,7 +17,7 @@ export class ResourceEditor extends React.Component {
       datasetId: this.props.config.datasetId,
       resourceId: "",
       resource: this.props.resource || [],
-      resourceSelected: [],
+      resourceSelected: {},
       uploadProgress: [],
       uploadProgressSelected: {},
       ui: {

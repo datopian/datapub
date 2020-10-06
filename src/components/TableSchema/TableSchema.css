@@ -12,6 +12,8 @@
   display: flex;
   justify-content: center;
   justify-items: center;
+  margin-top: 2.6rem;
+  margin-bottom: 2rem;
 }
 
 .table-schema-help {

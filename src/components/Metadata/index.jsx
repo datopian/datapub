@@ -16,20 +16,11 @@ const customFields = [
   },
 ];
 
-const Metadata = ({ metadata, handleChange, handleSubmit, uploadSuccess, isResourceEdit, deleteResource, updateResource}) => {
+const Metadata = ({ metadata, handleChange}) => {
   return (
     <>
       <h3 className="metadata-name">{metadata.path}</h3>
-      <form
-        className="metadata-form"
-        onSubmit={(event) => {
-          if (isResourceEdit) {
-            event.preventDefault();
-            return updateResource(metadata)
-          }
-          return handleSubmit(event, 0)
-        }}
-      >
+      <div className="metadata-form">
         <div className="metadata-input">
           <label className="metadata-label" htmlFor="title">
             Title:
@@ -128,21 +119,7 @@ const Metadata = ({ metadata, handleChange, handleSubmit, uploadSuccess, isResou
               </select>
             </div>
           ))}
-        {!isResourceEdit ? (
-          <button disabled={!uploadSuccess} className="metadata-btn">
-            Save and Publish
-          </button>
-        ) : (
-              <div>
-                <button type="button" className="btn btn-delete" onClick={deleteResource}>
-                  Delete
-                </button>
-                <button className="btn">
-                  Update
-                </button>
-              </div>
-        )}
-      </form>
+      </div>
     </>
   );
 };
@@ -150,11 +127,6 @@ const Metadata = ({ metadata, handleChange, handleSubmit, uploadSuccess, isResou
 Metadata.propTypes = {
   metadata: PropTypes.object.isRequired,
   handleChange: PropTypes.func.isRequired,
-  handleSubmit: PropTypes.func.isRequired,
-  uploadSuccess: PropTypes.bool.isRequired,
-  isResourceEdit: PropTypes.bool.isRequired,
-  deleteResource: PropTypes.func.isRequired,
-  updateResource: PropTypes.func.isRequired,
 };
 
 export default Metadata;

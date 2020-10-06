@@ -33,7 +33,6 @@ code {
   grid-template-areas:
     "header header"
     "uploadArea uploadArea"
-    "switcher switcher"
     "editArea editArea";
   row-gap: 20px;
   column-gap: 20px;
@@ -113,8 +112,8 @@ code {
   grid-area: editArea;
 }
 
-
 .btn {
+  max-width: 220px;
   margin: 2rem;
   border-radius: 5px;
   padding: 10px 25px;
@@ -158,4 +157,9 @@ code {
 
 .btn-delete:hover {
   background-color: #C70E00;
+}
+
+.resource-edit-actions {
+  display: flex;
+  justify-content: space-between;
 }

@@ -102,11 +102,11 @@ export class ResourceEditor extends React.Component {
     const target = event.target;
     const value = target.value;
     const name = target.name;
-    let resourceCopy = this.state.resource;
+    let resourceCopy = this.state.resourceSelected;
     resourceCopy[name] = value;
 
     this.setState({
-      resource: resourceCopy,
+      resourceSelected: resourceCopy,
     });
   };
 
@@ -253,7 +253,6 @@ export class ResourceEditor extends React.Component {
             metadataHandler={this.metadataHandler}
             datasetId={this.state.datasetId}
             handleUploadStatus={this.handleUploadStatus}
-            onChangeResourceId={this.onChangeResourceId}
             handleEditResource={this.handleEditResource}
             uploadProgress={uploadProgress}
             handleUploadProgress={this.handleUploadProgress}

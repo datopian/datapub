@@ -8,7 +8,7 @@ import "./TableSchema.css";
 const TableSchema = (props) => {
   const [schema, setSchema] = useState(props.schema);
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const data = React.useMemo(() => [...props.data], [schema]);
+  const data = React.useMemo(() => [...props.data], [props.data]);
 
   const columnsSchema = schema.fields.map((item, index) => {
     return {

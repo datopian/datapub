@@ -29,7 +29,7 @@ code {
   min-height: 60%;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  grid-template-rows: auto  300px auto auto;
+  grid-template-rows: auto 300px auto auto;
   grid-template-areas:
     "header header"
     "uploadArea uploadArea"
@@ -64,10 +64,32 @@ code {
 
 .upload-list {
   padding: 0;
+  overflow-y: auto;
+  max-height: 280px;
+}
+
+.upload-list::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  background-color: #fff;
+}
+
+.upload-list::-webkit-scrollbar {
+  width: 8px;
+  background-color: #fff;
+}
+
+.upload-list::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.2);
+  background-color: #e3e9ed;
 }
 
 .list-item {
   display: flex;
+  cursor: pointer;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
 }
 
 .upload-list-item {
@@ -120,7 +142,7 @@ code {
   height: 45px;
   font-size: 1.2rem;
   color: #fff;
-  background-color: #00A7E1;
+  background-color: #00a7e1;
   outline: none;
   border: none;
   cursor: pointer;
@@ -147,7 +169,7 @@ code {
   border: none;
   cursor: pointer;
   box-shadow: 0 4px 11px 3px rgba(18, 22, 33, 0.05);
-  background-color: #F11301;
+  background-color: #f11301;
 }
 
 .btn-delete :disabled {

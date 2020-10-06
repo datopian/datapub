@@ -138,10 +138,9 @@ class Upload extends React.Component {
           onChangeUrl={(event) => console.log("Get url:", event.target.value)}
         />
         <div className="upload-area__info">
-          {uploadProgress.map((item, index) => (
-            <div key={`upload-file-${index}`} onClick={() => this.props.handleEditResource(item.id)}>
               <ul className="upload-list">
-                <li className="list-item">
+              {uploadProgress.map((item, index) => (
+                <li className="list-item"  key={`upload-file-${index}`} onClick={() => this.props.handleEditResource(item.id)}>
                   <div className="upload-list-item">
                     <div>
                       <p className="upload-file-name">{item.name}</p>
@@ -165,9 +164,8 @@ class Upload extends React.Component {
                     </div>
                   </div>
                 </li>
+              ))}
               </ul>
-            </div>
-          ))}
         </div>
       </div>
     );

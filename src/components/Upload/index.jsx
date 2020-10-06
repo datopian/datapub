@@ -1,6 +1,5 @@
 import React from "react";
 import data from "data.js";
-import frictionlessCkanMapper from "frictionless-ckan-mapper-js";
 import toArray from "stream-to-array";
 import { v4 as uuidv4 } from "uuid";
 
@@ -13,7 +12,6 @@ class Upload extends React.Component {
     super();
     this.state = {
       selectedFiles: [],
-      uploadProgress: [],
     };
   }
 
@@ -37,7 +35,7 @@ class Upload extends React.Component {
   };
 
   onUploadProgress = (progressEvent, id) => {
-    const { uploadProgress } = this.state;
+    const { uploadProgress, handleUploadProgress } = this.props;
     const checkUploadProgress = uploadProgress.find((item) => item.id === id);
 
     if (checkUploadProgress) {
@@ -54,7 +52,7 @@ class Upload extends React.Component {
             }
           : obj
       );
-      this.setState({ uploadProgress: newUploadProgressState });
+      handleUploadProgress(newUploadProgressState);
     }
   };
 
@@ -69,9 +67,9 @@ class Upload extends React.Component {
   };
 
   onClickHandler = async (file) => {
-    const { client } = this.props;
+    const { client, uploadProgress, handleUploadProgress } = this.props;
     const start = new Date().getTime();
-    let newState = this.state.uploadProgress;
+    let newState = uploadProgress;
 
     const uploadId = uuidv4()
     const fileProgress = {
@@ -87,9 +85,7 @@ class Upload extends React.Component {
 
     newState.push(fileProgress);
 
-    this.setState({
-      uploadProgress: newState,
-    });
+    handleUploadProgress(newState);
 
     const resource = data.open(file);
     const hash = await resource.hashSha256();
@@ -120,17 +116,18 @@ class Upload extends React.Component {
   };
 
   handleStatus = (state, id, value, name) => {
+    const { handleUploadProgress } = this.props;
     state.map((item) => {
       if (item.id === id) {
         return (item[name] = value);
       }
       return item;
     });
-    this.setState({ uploadProgress: state });
+    handleUploadProgress( state );
   };
 
   render() {
-    const { uploadProgress } = this.state;
+    const { uploadProgress } = this.props;
     return (
       <div className="upload-area">
         <Choose

@@ -18,6 +18,8 @@ export class ResourceEditor extends React.Component {
       resourceId: "",
       resource: this.props.resource || [],
       resourceSelected: [],
+      uploadProgress: [],
+      uploadProgressSelected: {},
       ui: {
         fileOrLink: "",
         uploadComplete: undefined,
@@ -212,17 +214,22 @@ export class ResourceEditor extends React.Component {
   };
 
   handleEditResource = (uploadId) => {
-    const { resource } = this.state;
+    const { resource, uploadProgress } = this.state;
     const resourceSelected = resource.find(
       (item) => item.uploadId === uploadId
     );
-    this.setState({ resourceSelected });
+    const uploadProgressSelected = uploadProgress.find(
+      (item) => item.id === uploadId
+    );
+    this.setState({ resourceSelected, uploadProgressSelected });
   };
 
-  render() {
-    const { loading, success, metadataOrSchema } = this.state.ui;
+  handleUploadProgress = (resourceStatus) => {
+    this.setState({ uploadProgress: resourceStatus });
+  }
 
-    const { resourceSelected } = this.state;
+  render() {
+    const { resourceSelected, uploadProgress, uploadProgressSelected } = this.state;
 
     return (
       <div className="App">
@@ -248,29 +255,23 @@ export class ResourceEditor extends React.Component {
             handleUploadStatus={this.handleUploadStatus}
             onChangeResourceId={this.onChangeResourceId}
             handleEditResource={this.handleEditResource}
+            uploadProgress={uploadProgress}
+            handleUploadProgress={this.handleUploadProgress}
           />
 
           <div className="upload-edit-area">
-            {resourceSelected && metadataOrSchema === "metadata" && (
-                <Metadata
-                  loading={loading}
-                  uploadSuccess={success}
-                  metadata={resourceSelected}
-                  handleSubmit={this.handleSubmitMetadata}
-                  handleChange={this.handleChangeMetadata}
-                  isResourceEdit={this.state.isResourceEdit}
-                  deleteResource={this.deleteResource}
-                  updateResource={this.createResource}
-                />
-              )}
-              {resourceSelected && metadataOrSchema === "schema" && (
-                <TableSchema
-                  schema={resourceSelected.schema || { fields: [] }}
-                  data={resourceSelected.sample || []}
-                />
-              )}
+            <Metadata
+              metadata={resourceSelected}
+              handleChange={this.handleChangeMetadata}
+            />
+            {Object.keys(resourceSelected).length > 0 && (
+              <TableSchema
+                schema={resourceSelected.schema || { fields: [] }}
+                data={resourceSelected.sample || []}
+              />
+            )}
             {!this.state.isResourceEdit ? (
-              <button disabled={!success} className="btn">
+              <button disabled={uploadProgressSelected.error || uploadProgressSelected.error === undefined} className="btn">
                 Save and Publish
               </button>
             ) : (

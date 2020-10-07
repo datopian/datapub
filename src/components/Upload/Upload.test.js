@@ -8,7 +8,7 @@ import Upload from ".";
 describe("<Upload />", () => {
   it("render Upload without crashing", () => {
     const div = document.createElement("div");
-    ReactDOM.render(<Upload />, div);
+    ReactDOM.render(<Upload uploadProgress={[]}/>, div);
   });
 
   it.skip('can select a file', () => {

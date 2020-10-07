@@ -6,7 +6,7 @@ import App from "./App";
 describe("<App />", () => {
 
     it("should render in add a resource", () => {
-        const wrapper = shallow(<App/>);
+        const wrapper = shallow(<App config={{}}/>);
 
         expect(wrapper.find(".btn")).toHaveLength(1)
         expect(wrapper.find(".btn-delete")).toHaveLength(0)

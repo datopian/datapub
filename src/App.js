@@ -111,9 +111,9 @@ export class ResourceEditor extends React.Component {
   };
 
   handleSubmitMetadata = async () => {
-    const { resource, client } = this.state;
+    const { resourceSelected, client, uploadProgress } = this.state;
 
-    await this.createResource(resource);
+    await this.createResource(resourceSelected);
 
     // Change state of dataset to active if draft atm
     // this relates to how CKAN v2 has a phased dataset creation. See e.g.
@@ -135,8 +135,16 @@ export class ResourceEditor extends React.Component {
       }
     }
 
-    // Redirect to dataset page
-    return (window.location.href = `/dataset/${this.state.datasetId}`);
+    const filteredUploadProgress = uploadProgress.filter((item) => item.id !== resourceSelected.uploadId)
+
+    this.setState({ uploadProgress: filteredUploadProgress, resourceSelected: {}})
+
+    //Check if the list of resource uploaded was published
+    // and if is empty redirect the user to the dataset page
+    if (this.state.uploadProgress.length === 0) {
+      // Redirect to dataset page
+      return (window.location.href = `/dataset/${this.state.datasetId}`);
+    }
   };
 
   createResource = async (resource) => {
@@ -229,7 +237,7 @@ export class ResourceEditor extends React.Component {
   }
 
   render() {
-    const { resourceSelected, uploadProgress, uploadProgressSelected } = this.state;
+    const { resourceSelected, uploadProgress, uploadProgressSelected, resource } = this.state;
 
     return (
       <div className="App">
@@ -270,7 +278,7 @@ export class ResourceEditor extends React.Component {
               />
             )}
             {!this.state.isResourceEdit ? (
-              <button disabled={uploadProgressSelected.error || uploadProgressSelected.error === undefined} className="btn">
+              <button disabled={uploadProgressSelected.error || uploadProgressSelected.error === undefined || !resourceSelected} className="btn">
                 Save and Publish
               </button>
             ) : (

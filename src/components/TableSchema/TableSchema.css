@@ -5,7 +5,6 @@
 }
 
 .table-schema-info_container {
-  max-height: 675px;
   overflow: overlay;
 }
 
@@ -16,8 +15,8 @@
 }
 
 .table-schema-info_container::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 8px;
+  height: 8px;
   background-color: #fff;
 }
 

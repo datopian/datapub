@@ -16,10 +16,10 @@ const customFields = [
   },
 ];
 
-const Metadata = ({ metadata, handleChange}) => {
+const Metadata = ({ metadata, handleChange }) => {
   return (
     <>
-      <h3 className="metadata-name">{metadata.path}</h3>
+      <h3 className="metadata-name">{metadata.path || ""}</h3>
       <div className="metadata-form">
         <div className="metadata-input">
           <label className="metadata-label" htmlFor="title">
@@ -30,7 +30,7 @@ const Metadata = ({ metadata, handleChange}) => {
             type="text"
             name="title"
             id="title"
-            value={metadata.title || metadata.name}
+            value={metadata.title || metadata.name || ""}
             onChange={handleChange}
           />
         </div>

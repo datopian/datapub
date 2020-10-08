@@ -127,7 +127,7 @@ class Upload extends React.Component {
   };
 
   render() {
-    const { uploadProgress } = this.props;
+    const { uploadProgress, resource } = this.props;
     return (
       <div className="upload-area">
         <Choose
@@ -137,7 +137,13 @@ class Upload extends React.Component {
         <div className="upload-area__info">
               <ul className="upload-list">
               {uploadProgress.map((item, index) => (
-                <li className="list-item"  key={`upload-file-${index}`} onClick={() => this.props.handleEditResource(item.id)}>
+                <li className="list-item"  key={`upload-file-${index}`} onClick={() => {
+                  // Prevent to broke the metadata component if the data.js is reading the file.
+                  if (resource.length === this.state.selectedFiles.length) {
+                    return this.props.handleEditResource(item.id)
+                  }
+                  return alert("Please, wait until to convert all resources.")
+                }}>
                   <div className="upload-list-item">
                     <div>
                       <p className="upload-file-name">{item.name}</p>

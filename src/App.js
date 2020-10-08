@@ -237,7 +237,7 @@ export class ResourceEditor extends React.Component {
   }
 
   render() {
-    const { resourceSelected, uploadProgress, uploadProgressSelected, resource } = this.state;
+    const { resourceSelected, uploadProgress, uploadProgressSelected } = this.state;
 
     return (
       <div className="App">

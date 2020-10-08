@@ -66,7 +66,7 @@ const TableSchema = (props) => {
         <input
           className="table-tbody-input"
           type="text"
-          value={item[key]}
+          value={item[key] || ""}
           onChange={(event) => handleChange(event, key, index)}
         />
       </td>

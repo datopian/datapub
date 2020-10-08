@@ -11,7 +11,10 @@ const TableSchema = (props) => {
   const data = React.useMemo(() => [...props.data], [schema]);
 
   const columnsSchema = schema.fields.map((item, index) => {
-    return { Header: item.name ? item.name : `column_${index + 1}`, accessor: item.name ? item.name : `column_${index + 1}`};
+    return {
+      Header: item.name ? item.name : `column_${index + 1}`,
+      accessor: item.name ? item.name : `column_${index + 1}`,
+    };
   });
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const columns = React.useMemo(() => [...columnsSchema], [schema]);
@@ -24,16 +27,16 @@ const TableSchema = (props) => {
   } = useTable({ columns, data });
 
   const handleChange = (event, key, index) => {
-    const newSchema = {...schema};
+    const newSchema = { ...schema };
     newSchema.fields[index][key] = event.target.value;
     setSchema(newSchema);
   };
 
   //if the the user upload a new file, will update the state
   //and render with the new values
-  useEffect( () => { 
+  useEffect(() => {
     setSchema(props.schema);
-  }, [ props.schema ] );
+  }, [props.schema]);
 
   const renderEditSchemaField = (key) => {
     if (key === "type") {
@@ -73,14 +76,27 @@ const TableSchema = (props) => {
   return (
     <>
       <div className="table-container">
-        <div className="table-schema-help">
-          <div className="table-schema-help_row">Title</div>
-          <div className="table-schema-help_row">Description</div>
-          <div className="table-schema-help_row">Type</div>
-          <div className="table-schema-help_row">Format</div>
-        </div>
-        <div className="table-schema-info">
-          <table className="table-schema-info_table" {...getTableProps()}>
+        <table className="table-schema-help">
+          <tbody>
+            <tr className="table-tbody-help-tr">
+              <td  className="table-tbody-help-td-empty"></td>
+            </tr>
+            <tr className="table-tbody-help-tr">
+              <td  className="table-tbody-help-td">Title</td>
+            </tr>
+            <tr className="table-tbody-help-tr">
+              <td  className="table-tbody-help-td">Description</td>
+            </tr>
+            <tr className="table-tbody-help-tr">
+              <td  className="table-tbody-help-td">Type</td>
+            </tr>
+            <tr className="table-tbody-help-tr">
+              <td  className="table-tbody-help-td">Format</td>
+            </tr>
+          </tbody>
+        </table>
+        <div className="table-schema-info_container">
+          <table  className="table-schema-info_table" {...getTableProps()}>
             <thead>
               {headerGroups.map((headerGroup) => (
                 <tr

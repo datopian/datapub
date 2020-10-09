@@ -4,7 +4,7 @@ import InputFile from "../InputFile";
 import InputUrl from "../InputUrl";
 import './Choose.css'
 
-const Choose = ({ onChangeUrl, onChangeHandler }) => {
+const Choose = ({ onChangeUrl, onChangeHandler, isResourceEdit }) => {
   const [uploadOption, setUploadOption] = useState(false);
 
   return (
@@ -12,7 +12,7 @@ const Choose = ({ onChangeUrl, onChangeHandler }) => {
       {uploadOption ? (
         <>
           {uploadOption === "file" && (
-            <InputFile onChangeHandler={onChangeHandler} />
+            <InputFile isResourceEdit={isResourceEdit} onChangeHandler={onChangeHandler} />
           )}
           {uploadOption === "url" && <InputUrl onChangeUrl={onChangeUrl} />}
         </>

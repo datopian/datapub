@@ -19,6 +19,11 @@ class Upload extends React.Component {
     event.preventDefault();
 
     let { selectedFiles } = this.state;
+    let { isResourceEdit, handleClearResourceSelect } = this.props;
+
+    if(isResourceEdit) {
+      handleClearResourceSelect()
+    }
 
     if (event.target.files.length) {
       [...event.target.files].forEach((file) => {
@@ -83,6 +88,7 @@ class Upload extends React.Component {
       fileExists: false,
     };
 
+
     newState.push(fileProgress);
 
     handleUploadProgress(newState);
@@ -126,11 +132,20 @@ class Upload extends React.Component {
     handleUploadProgress( state );
   };
 
+  checkIfTheFileHasBeenRead = () => {
+    const { resource, isResourceEdit } = this.props;
+    const { selectedFiles } = this.state;
+
+    return isResourceEdit ? resource.length - 1 === selectedFiles.length : resource.length === selectedFiles.length;
+  }
+
+
   render() {
-    const { uploadProgress, resource } = this.props;
+    const { uploadProgress, isResourceEdit } = this.props;
     return (
       <div className="upload-area">
         <Choose
+          isResourceEdit={isResourceEdit}
           onChangeHandler={this.onChangeHandler}
           onChangeUrl={(event) => console.log("Get url:", event.target.value)}
         />
@@ -139,7 +154,9 @@ class Upload extends React.Component {
               {uploadProgress.map((item, index) => (
                 <li className="list-item"  key={`upload-file-${index}`} onClick={() => {
                   // Prevent to broke the metadata component if the data.js is reading the file.
-                  if (resource.length === this.state.selectedFiles.length) {
+                  // the user can select the file when the read process is finished
+                  const canSelectFiles = this.checkIfTheFileHasBeenRead();
+                  if (canSelectFiles) {
                     return this.props.handleEditResource(item.id)
                   }
                   return alert("Please, wait until to convert all resources.")

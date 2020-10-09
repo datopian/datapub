@@ -83,8 +83,9 @@ export class ResourceEditor extends React.Component {
       return this.setState({
         client,
         resourceId,
-        resource: resourceCopy,
+        resource: [resourceCopy],
         isResourceEdit: true,
+        resourceSelected: resourceCopy
       });
     }
 
@@ -148,7 +149,7 @@ export class ResourceEditor extends React.Component {
   };
 
   createResource = async (resource) => {
-    const { client } = this.state;
+    const { client, isResourceEdit } = this.state;
     const { config } = this.props;
     const { organizationId, datasetId, resourceId } = config;
 
@@ -180,7 +181,7 @@ export class ResourceEditor extends React.Component {
     };
 
     //Check if the user is editing resource, call resource_update and redirect to the dataset page
-    if (resourceId) {
+    if (isResourceEdit) {
       ckanResourceCopy = {
         ...ckanResourceCopy,
         id: resourceId,
@@ -236,6 +237,15 @@ export class ResourceEditor extends React.Component {
     this.setState({ uploadProgress: resourceStatus });
   }
 
+  handleClearResourceSelect = () => {
+    console.log("tesd")
+    this.setState({
+      resourceSelected: {},
+      uploadProgress: [],
+      uploadProgressSelected: {},
+    })
+  }
+
   render() {
     const { resourceSelected, uploadProgress, uploadProgressSelected } = this.state;
 
@@ -246,7 +256,7 @@ export class ResourceEditor extends React.Component {
           onSubmit={(event) => {
             event.preventDefault();
             if (this.state.isResourceEdit) {
-              return this.createResource(this.state.resource);
+              return this.createResource(resourceSelected);
             }
             return this.handleSubmitMetadata();
           }}
@@ -258,12 +268,14 @@ export class ResourceEditor extends React.Component {
           <Upload
             client={this.state.client}
             resource={this.state.resource}
+            isResourceEdit={this.state.isResourceEdit}
             metadataHandler={this.metadataHandler}
             datasetId={this.state.datasetId}
             handleUploadStatus={this.handleUploadStatus}
             handleEditResource={this.handleEditResource}
             uploadProgress={uploadProgress}
             handleUploadProgress={this.handleUploadProgress}
+            handleClearResourceSelect={this.handleClearResourceSelect}
           />
 
           <div className="upload-edit-area">

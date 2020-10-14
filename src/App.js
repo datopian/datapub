@@ -8,7 +8,7 @@ import Metadata from "./lib/components/Metadata";
 import TableSchema from "./lib/components/TableSchema";
 import Upload from "./lib/components/Upload";
 import "./App.css";
-import { removeHyphen } from "./utils";
+import { removeHyphen } from "./lib/utils";
 
 export class ResourceEditor extends React.Component {
   constructor(props) {

@@ -3,7 +3,7 @@ import data from "data.js";
 import frictionlessCkanMapper from "frictionless-ckan-mapper-js";
 import toArray from "stream-to-array";
 import ProgressBar from "../ProgressBar";
-import { onFormatBytes } from "../../../src/utils";
+import { onFormatBytes } from "../../utils";
 import Choose from "../Choose";
 
 class Upload extends React.Component {

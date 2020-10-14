@@ -6886,9 +6886,9 @@ data-urls@^1.0.0, data-urls@^1.1.0:
     whatwg-mimetype "^2.2.0"
     whatwg-url "^7.0.0"
 
-"data.js@git+https://github.com/datopian/data.js":
+"data.js@git+https://github.com/datopian/data.js.git":
   version "0.13.0"
-  resolved "git+https://github.com/datopian/data.js#cced1692dbca212bdf75628a287fb2d7f79a0969"
+  resolved "git+https://github.com/datopian/data.js.git#953de612a4b958280b60a0cd8d31ee5b3878996b"
   dependencies:
     chardet "1.3.0"
     csv-parse "4.12.0"

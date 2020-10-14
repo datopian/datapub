@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { useTable } from "react-table";
-import types from "../../db/types.json";
+import types from "../../../src/db/types.json";
 
 import "./TableSchema.css";
 

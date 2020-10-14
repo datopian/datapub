@@ -1,7 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
 import './InputFile.css'
-import UploadIcon from "../../assets/images/computing-cloud.svg";
 
 const InputFile = ({ onChangeHandler }) => {
 

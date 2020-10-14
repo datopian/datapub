@@ -4,9 +4,9 @@ import PropTypes from "prop-types";
 import frictionlessCkanMapper from "frictionless-ckan-mapper-js";
 import { v4 as uuidv4 } from "uuid";
 
-import Metadata from "./components/Metadata";
-import TableSchema from "./components/TableSchema";
-import Upload from "./components/Upload";
+import Metadata from "./lib/components/Metadata";
+import TableSchema from "./lib/components/TableSchema";
+import Upload from "./lib/components/Upload";
 import "./App.css";
 import { removeHyphen } from "./utils";
 

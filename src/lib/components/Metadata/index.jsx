@@ -2,8 +2,8 @@ import React from "react";
 import PropTypes from "prop-types";
 
 import "./Metadata.css";
-import encodeData from "../../db/encode.json";
-import formatData from "../../db/resource_formats.json";
+import encodeData from "../../../src/db/encode.json";
+import formatData from "../../../src/db/resource_formats.json";
 
 //TODO: add the custom fields as a props and render it in metadata component
 const customFields = [

@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.onFormatBytes = exports.onFormatName = exports.onFormatTitle = exports.getFileExtension = void 0;
+exports.removeHyphen = exports.onFormatBytes = exports.onFormatName = exports.onFormatTitle = exports.getFileExtension = void 0;
 
 var getFileExtension = function getFileExtension(filename) {
   return /[.]/.exec(filename) ? /[^.]+$/.exec(filename)[0] : undefined;
@@ -34,3 +34,9 @@ var onFormatBytes = function onFormatBytes(bytes) {
 };
 
 exports.onFormatBytes = onFormatBytes;
+
+var removeHyphen = function removeHyphen(id) {
+  return id.replace(/-/g, "");
+};
+
+exports.removeHyphen = removeHyphen;

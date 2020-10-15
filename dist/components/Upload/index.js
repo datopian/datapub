@@ -7,9 +7,11 @@ exports.default = void 0;
 
 var _react = _interopRequireDefault(require("react"));
 
-var _ckan3JsSdk = require("ckan3-js-sdk");
+var _data = _interopRequireDefault(require("data.js"));
 
-var _propTypes = _interopRequireDefault(require("prop-types"));
+var _frictionlessCkanMapperJs = _interopRequireDefault(require("frictionless-ckan-mapper-js"));
+
+var _streamToArray = _interopRequireDefault(require("stream-to-array"));
 
 var _ProgressBar = _interopRequireDefault(require("../ProgressBar"));
 
@@ -61,7 +63,7 @@ var Upload = /*#__PURE__*/function (_React$Component) {
 
     _defineProperty(_assertThisInitialized(_this), "onChangeHandler", /*#__PURE__*/function () {
       var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(event) {
-        var _this$state, formattedSize, selectedFile, file, hash;
+        var _this$state, formattedSize, selectedFile, file, rowStream, hash;
 
         return regeneratorRuntime.wrap(function _callee$(_context) {
           while (1) {
@@ -70,46 +72,68 @@ var Upload = /*#__PURE__*/function (_React$Component) {
                 _this$state = _this.state, formattedSize = _this$state.formattedSize, selectedFile = _this$state.selectedFile;
 
                 if (!(event.target.files.length > 0)) {
-                  _context.next = 9;
+                  _context.next = 23;
                   break;
                 }
 
                 selectedFile = event.target.files[0];
-                formattedSize = (0, _utils.onFormatBytes)(selectedFile.size);
-                file = new _ckan3JsSdk.FileAPI.HTML5File(selectedFile);
+                file = _data.default.open(selectedFile);
+                _context.prev = 4;
                 _context.next = 7;
-                return file.sha256();
-
-              case 7:
-                hash = _context.sent;
-
-                _this.props.metadataHandler({
-                  name: (0, _utils.onFormatName)(selectedFile.name),
-                  path: selectedFile.name,
-                  title: (0, _utils.onFormatTitle)(selectedFile.name),
-                  format: (0, _utils.getFileExtension)(selectedFile.name),
-                  bytes: selectedFile.size,
-                  mediatype: selectedFile.type,
-                  hash: "SHA256:".concat(hash)
+                return file.rows({
+                  size: 20,
+                  keyed: true
                 });
 
-              case 9:
+              case 7:
+                rowStream = _context.sent;
+                _context.next = 10;
+                return (0, _streamToArray.default)(rowStream);
+
+              case 10:
+                file.descriptor.sample = _context.sent;
+                _context.next = 13;
+                return file.addSchema();
+
+              case 13:
+                _context.next = 18;
+                break;
+
+              case 15:
+                _context.prev = 15;
+                _context.t0 = _context["catch"](4);
+                console.error(_context.t0);
+
+              case 18:
+                formattedSize = (0, _utils.onFormatBytes)(file.size);
+                _context.next = 21;
+                return file.hashSha256();
+
+              case 21:
+                hash = _context.sent;
+
+                _this.props.metadataHandler(Object.assign(file.descriptor, {
+                  hash: hash
+                }));
+
+              case 23:
                 _this.setState({
                   selectedFile: selectedFile,
                   loaded: 0,
                   success: false,
+                  fileExists: false,
                   error: false,
                   formattedSize: formattedSize
                 });
 
                 _this.onClickHandler();
 
-              case 11:
+              case 25:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee);
+        }, _callee, null, [[4, 15]]);
       }));
 
       return function (_x) {
@@ -138,51 +162,55 @@ var Upload = /*#__PURE__*/function (_React$Component) {
     });
 
     _defineProperty(_assertThisInitialized(_this), "onClickHandler", /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
-      var start, selectedFile, _this$props, scopes, config, authzUrl, authToken, api, organizationId, datasetId, file, uploader;
-
+      var start, selectedFile, client, resource;
       return regeneratorRuntime.wrap(function _callee2$(_context2) {
         while (1) {
           switch (_context2.prev = _context2.next) {
             case 0:
               start = new Date().getTime();
               selectedFile = _this.state.selectedFile;
-              _this$props = _this.props, scopes = _this$props.scopes, config = _this$props.config, authzUrl = _this$props.authzUrl;
-              authToken = config.authToken, api = config.api, organizationId = config.organizationId, datasetId = config.datasetId; // create an instance of a object
-
-              file = new _ckan3JsSdk.FileAPI.HTML5File(selectedFile);
-              uploader = new _ckan3JsSdk.Uploader("".concat(authToken), "".concat(organizationId), "".concat(datasetId), "".concat(api));
+              client = _this.props.client;
+              resource = _data.default.open(selectedFile);
 
               _this.setState({
-                fileSize: file.size(),
+                fileSize: resource.size,
                 start: start,
                 loading: true
-              }); // Get the JWT token from authz and upload file to the storage
+              });
+
+              _this.props.handleUploadStatus({
+                loading: true,
+                error: false,
+                success: false
+              }); // Use client to upload file to the storage and track the progress
 
 
-              fetch("".concat(authzUrl), {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                  Authorization: authToken
-                },
-                body: JSON.stringify(scopes)
-              }).then(function (response) {
-                return response.json();
-              }).then(function (response) {
-                return uploader.push(file, response.result.token, _this.onUploadProgress);
-              }).then(function (response) {
-                return _this.setState({
+              client.pushBlob(resource, _this.onUploadProgress).then(function (response) {
+                _this.setState({
                   success: response.success,
-                  loading: false
+                  loading: false,
+                  fileExists: response.fileExists,
+                  loaded: 100
+                });
+
+                _this.props.handleUploadStatus({
+                  loading: false,
+                  success: response.success
                 });
               }).catch(function (error) {
-                return _this.setState({
+                _this.setState({
                   error: true,
                   loading: false
                 });
+
+                _this.props.handleUploadStatus({
+                  loading: false,
+                  success: false,
+                  error: true
+                });
               });
 
-            case 8:
+            case 7:
             case "end":
               return _context2.stop();
           }
@@ -191,6 +219,7 @@ var Upload = /*#__PURE__*/function (_React$Component) {
     })));
 
     _this.state = {
+      datasetId: props.datasetId,
       selectedFile: null,
       fileSize: 0,
       formattedSize: "0 KB",
@@ -198,6 +227,7 @@ var Upload = /*#__PURE__*/function (_React$Component) {
       loaded: 0,
       success: false,
       error: false,
+      fileExists: false,
       loading: false,
       timeRemaining: 0
     };
@@ -209,11 +239,11 @@ var Upload = /*#__PURE__*/function (_React$Component) {
     value: function render() {
       var _this$state2 = this.state,
           success = _this$state2.success,
+          fileExists = _this$state2.fileExists,
           error = _this$state2.error,
           timeRemaining = _this$state2.timeRemaining,
           selectedFile = _this$state2.selectedFile,
-          formattedSize = _this$state2.formattedSize,
-          loading = _this$state2.loading;
+          formattedSize = _this$state2.formattedSize;
       return /*#__PURE__*/_react.default.createElement("div", {
         className: "upload-area"
       }, /*#__PURE__*/_react.default.createElement(_Choose.default, {
@@ -242,36 +272,12 @@ var Upload = /*#__PURE__*/function (_React$Component) {
         timeRemaining: timeRemaining
       }))))), /*#__PURE__*/_react.default.createElement("h2", {
         className: "upload-message"
-      }, success && "File upload success"), /*#__PURE__*/_react.default.createElement("h2", {
-        className: "upload-message"
-      }, error && "Upload failed"))));
+      }, success && !fileExists && !error && "File uploaded successfully", fileExists && "File uploaded successfully", error && "Upload failed"))));
     }
   }]);
 
   return Upload;
 }(_react.default.Component);
-/**
- * If the parent component doesn't specify a `config` and scope prop, then
- * the default values will be used.
- * */
 
-
-Upload.defaultProps = {
-  config: {
-    authToken: "be270cae-1c77-4853-b8c1-30b6cf5e9878",
-    api: "http://localhost:9419",
-    organizationId: "myorg",
-    datasetId: "data-test-2"
-  },
-  scopes: {
-    scopes: ["obj:myorg/data-test-2/*:read,write"]
-  },
-  authzUrl: "http://localhost:5000/api/action/authz_authorize"
-};
-Upload.propTypes = {
-  config: _propTypes.default.object.isRequired,
-  scopes: _propTypes.default.object.isRequired,
-  authzUrl: _propTypes.default.string.isRequired
-};
 var _default = Upload;
 exports.default = _default;

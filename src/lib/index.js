@@ -6,5 +6,6 @@ import ProgressBar from "./components/ProgressBar";
 import Switcher from "./components/Switcher";
 import TableSchema from "./components/TableSchema";
 import Upload from "./components/Upload";
+import ResourceEditor from "./App"
 
-export { Upload, Choose, InputFile, InputUrl, Metadata, ProgressBar, Switcher, TableSchema };
+export { Upload, Choose, InputFile, InputUrl, Metadata, ProgressBar, Switcher, TableSchema, ResourceEditor };

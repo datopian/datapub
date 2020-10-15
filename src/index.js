@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './App';
+import App from './lib/App';
 
 // Mount the ResourceEditor app explicitly
 // (make sure you call the function after it's loaded)
@@ -45,4 +45,4 @@ if (element) {
 }
 
 
-export { ResourceEditor } from './App';
+export { ResourceEditor } from './lib/App';

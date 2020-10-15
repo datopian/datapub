@@ -1,5 +1,5 @@
 import React from "react";
-import data from "data.js";
+import * as data from "data.js";
 import frictionlessCkanMapper from "frictionless-ckan-mapper-js";
 import toArray from "stream-to-array";
 import ProgressBar from "../ProgressBar";

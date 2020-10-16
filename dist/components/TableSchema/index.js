@@ -25,6 +25,12 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
 
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -46,7 +52,7 @@ function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 var TableSchema = function TableSchema(props) {
-  var _useState = (0, _react.useState)(props.schema.fields),
+  var _useState = (0, _react.useState)(props.schema),
       _useState2 = _slicedToArray(_useState, 2),
       schema = _useState2[0],
       setSchema = _useState2[1]; // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -54,18 +60,18 @@ var TableSchema = function TableSchema(props) {
 
   var data = _react.default.useMemo(function () {
     return _toConsumableArray(props.data);
-  }, []);
+  }, [schema]);
 
-  var columnsSchema = props.schema.fields.map(function (item) {
+  var columnsSchema = schema.fields.map(function (item, index) {
     return {
-      Header: item.name,
-      accessor: item.name
+      Header: item.name ? item.name : "column_".concat(index + 1),
+      accessor: item.name ? item.name : "column_".concat(index + 1)
     };
   }); // eslint-disable-next-line react-hooks/exhaustive-deps
 
   var columns = _react.default.useMemo(function () {
     return _toConsumableArray(columnsSchema);
-  }, []);
+  }, [schema]);
 
   var _useTable = (0, _reactTable.useTable)({
     columns: columns,
@@ -78,15 +84,21 @@ var TableSchema = function TableSchema(props) {
       prepareRow = _useTable.prepareRow;
 
   var handleChange = function handleChange(event, key, index) {
-    var newObj = _toConsumableArray(schema);
+    var newSchema = _objectSpread({}, schema);
 
-    newObj[index][key] = event.target.value;
-    setSchema(newObj);
-  };
+    newSchema.fields[index][key] = event.target.value;
+    setSchema(newSchema);
+  }; //if the the user upload a new file, will update the state
+  //and render with the new values
+
+
+  (0, _react.useEffect)(function () {
+    setSchema(props.schema);
+  }, [props.schema]);
 
   var renderEditSchemaField = function renderEditSchemaField(key) {
     if (key === "type") {
-      return schema.map(function (item, index) {
+      return schema.fields.map(function (item, index) {
         return /*#__PURE__*/_react.default.createElement("td", {
           key: "schema-type-field-".concat(key, "-").concat(index)
         }, /*#__PURE__*/_react.default.createElement("select", {
@@ -104,7 +116,7 @@ var TableSchema = function TableSchema(props) {
       });
     }
 
-    return schema.map(function (item, index) {
+    return schema.fields.map(function (item, index) {
       return /*#__PURE__*/_react.default.createElement("td", {
         key: "schema-field-".concat(key, "-").concat(index)
       }, /*#__PURE__*/_react.default.createElement("input", {
@@ -120,25 +132,33 @@ var TableSchema = function TableSchema(props) {
 
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement("div", {
     className: "table-container"
-  }, /*#__PURE__*/_react.default.createElement("div", {
+  }, /*#__PURE__*/_react.default.createElement("table", {
     className: "table-schema-help"
-  }, /*#__PURE__*/_react.default.createElement("div", {
-    className: "table-schema-help_row"
-  }, "Title"), /*#__PURE__*/_react.default.createElement("div", {
-    className: "table-schema-help_row"
-  }, "Description"), /*#__PURE__*/_react.default.createElement("div", {
-    className: "table-schema-help_row"
-  }, "Type"), /*#__PURE__*/_react.default.createElement("div", {
-    className: "table-schema-help_row"
-  }, "Format"), /*#__PURE__*/_react.default.createElement("button", {
-    className: "table-btn-save",
-    disabled: !props.uploadSuccess,
-    onClick: function onClick() {
-      return props.handleSubmitSchema(schema, 1);
-    }
-  }, "Save")), /*#__PURE__*/_react.default.createElement("div", {
-    className: "table"
-  }, /*#__PURE__*/_react.default.createElement("table", getTableProps(), /*#__PURE__*/_react.default.createElement("thead", null, headerGroups.map(function (headerGroup) {
+  }, /*#__PURE__*/_react.default.createElement("tbody", null, /*#__PURE__*/_react.default.createElement("tr", {
+    className: "table-tbody-help-tr"
+  }, /*#__PURE__*/_react.default.createElement("td", {
+    className: "table-tbody-help-td-empty"
+  })), /*#__PURE__*/_react.default.createElement("tr", {
+    className: "table-tbody-help-tr"
+  }, /*#__PURE__*/_react.default.createElement("td", {
+    className: "table-tbody-help-td"
+  }, "Title")), /*#__PURE__*/_react.default.createElement("tr", {
+    className: "table-tbody-help-tr"
+  }, /*#__PURE__*/_react.default.createElement("td", {
+    className: "table-tbody-help-td"
+  }, "Description")), /*#__PURE__*/_react.default.createElement("tr", {
+    className: "table-tbody-help-tr"
+  }, /*#__PURE__*/_react.default.createElement("td", {
+    className: "table-tbody-help-td"
+  }, "Type")), /*#__PURE__*/_react.default.createElement("tr", {
+    className: "table-tbody-help-tr"
+  }, /*#__PURE__*/_react.default.createElement("td", {
+    className: "table-tbody-help-td"
+  }, "Format")))), /*#__PURE__*/_react.default.createElement("div", {
+    className: "table-schema-info_container"
+  }, /*#__PURE__*/_react.default.createElement("table", _extends({
+    className: "table-schema-info_table"
+  }, getTableProps()), /*#__PURE__*/_react.default.createElement("thead", null, headerGroups.map(function (headerGroup) {
     return /*#__PURE__*/_react.default.createElement("tr", _extends({
       className: "table-thead-tr"
     }, headerGroup.getHeaderGroupProps()), headerGroup.headers.map(function (column) {

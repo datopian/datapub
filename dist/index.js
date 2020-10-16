@@ -39,17 +39,22 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 // Mount the ResourceEditor app explicitly
 // (make sure you call the function after it's loaded)
 function mountResourceEditorApp() {
-  var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : ['root', undefined],
-      _ref2 = _slicedToArray(_ref, 2),
+  var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : ['root', {
+    authToken: null,
+    api: null,
+    lfs: null,
+    organizationId: null,
+    datasetId: null,
+    resourceId: null
+  }, {}],
+      _ref2 = _slicedToArray(_ref, 3),
       elementId = _ref2[0],
-      datasetId = _ref2[1];
-
-  if (!datasetId) {
-    throw Error('Dataset id is required.');
-  }
+      config = _ref2[1],
+      resource = _ref2[2];
 
   _reactDom.default.render( /*#__PURE__*/_react.default.createElement(_react.default.StrictMode, null, /*#__PURE__*/_react.default.createElement(_App.default, {
-    datasetId: datasetId
+    config: config,
+    resource: resource
   })), document.getElementById(elementId));
 }
 
@@ -58,8 +63,17 @@ function mountResourceEditorApp() {
 var element = document.getElementById('ResourceEditor');
 
 if (element) {
-  _reactDom.default.render( /*#__PURE__*/_react.default.createElement(_react.default.StrictMode, null, /*#__PURE__*/_react.default.createElement(_App.default, {
+  var config = {
     datasetId: element.getAttribute('data-dataset-id'),
+    api: element.getAttribute('data-api'),
+    lfs: element.getAttribute('data-lfs'),
+    authToken: element.getAttribute('data-auth-token'),
+    organizationId: element.getAttribute('data-organization-id'),
+    resourceId: element.getAttribute('data-resource-id')
+  };
+
+  _reactDom.default.render( /*#__PURE__*/_react.default.createElement(_react.default.StrictMode, null, /*#__PURE__*/_react.default.createElement(_App.default, {
+    config: config,
     resource: element.getAttribute('data-resource')
   })), element);
 }

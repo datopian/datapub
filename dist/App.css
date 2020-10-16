@@ -14,10 +14,8 @@ code {
 
 .App {
   text-align: center;
-  background-color: hsl(220, 13%, 18%);
   min-height: 100vh;
   color: #222;
-  padding-top: 10%;
 }
 
 .upload-wrapper {
@@ -31,11 +29,10 @@ code {
   min-height: 60%;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  grid-template-rows: auto  500px auto auto;
+  grid-template-rows: auto  300px auto auto;
   grid-template-areas:
     "header header"
     "uploadArea uploadArea"
-    "switcher switcher"
     "editArea editArea";
   row-gap: 20px;
   column-gap: 20px;
@@ -113,4 +110,56 @@ code {
 
 .upload-edit-area {
   grid-area: editArea;
+}
+
+.btn {
+  max-width: 220px;
+  margin: 2rem;
+  border-radius: 5px;
+  padding: 10px 25px;
+  height: 45px;
+  font-size: 1.2rem;
+  color: #fff;
+  background-color: #00A7E1;
+  outline: none;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 11px 3px rgba(18, 22, 33, 0.05);
+}
+
+.btn:disabled {
+  background: #e3e9ed !important;
+  cursor: default;
+}
+
+.btn:hover {
+  background-color: #009ace;
+}
+
+.btn-delete {
+  margin: 2rem;
+  border-radius: 5px;
+  padding: 10px 25px;
+  height: 45px;
+  font-size: 1.2rem;
+  color: #fff;
+  outline: none;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 11px 3px rgba(18, 22, 33, 0.05);
+  background-color: #F11301;
+}
+
+.btn-delete :disabled {
+  background: #e3e9ed !important;
+  cursor: default;
+}
+
+.btn-delete:hover {
+  background-color: #C70E00;
+}
+
+.resource-edit-actions {
+  display: flex;
+  justify-content: space-between;
 }

@@ -2,22 +2,34 @@
   "name": "datapub",
   "version": "0.1.0",
   "private": false,
-  "main": "dist/index.js",
+  "main": "dist/core.js",
+  "module": "dist/core.js",
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/datopian/datapub"
+  },
   "dependencies": {
     "axios": "^0.19.2",
     "ckanClient": "git+https://github.com/datopian/ckan-client-js.git",
     "data.js": "git+https://github.com/datopian/data.js.git",
     "frictionless-ckan-mapper-js": "^1.0.0",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1",
-    "react-scripts": "^3.4.3",
-    "react-table": "^7.5.0",
     "stream-to-array": "^2.3.0",
-    "uuidv4": "^6.2.3"
+    "uuidv4": "^6.2.3",
+    "react-table": "^7.5.0",
+    "react-scripts": "^3.4.3"
+  },
+  "peerDependencies": {
+    "react": "^16.13.0",
+    "react-dom": "^16.13.0"
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build:ckan": "react-scripts build",
+    "build": "rm -rf dist && NODE_ENV=production babel src --out-dir dist --copy-files --ignore __tests__,spec.js,test.js,__snapshots__",
     "dist": "rm -rf dist/ && mkdir dist && mkdir dist/css && NODE_ENV=production babel src/ -d dist/ --copy-files",
     "test": "react-scripts test",
     "test:watch": "npm run test -- --coverage --watchAll",
@@ -60,6 +72,7 @@
     "babel-loader": "^8.1.0",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.3",
+    "eslint-plugin-react-hooks": "^4.1.2",
     "react-test-renderer": "^16.13.1"
   },
   "babel": {

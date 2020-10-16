@@ -26,7 +26,7 @@ var InputFile = function InputFile(_ref) {
     onChange: onChangeHandler
   }), /*#__PURE__*/_react.default.createElement("img", {
     className: "upload-area__drop__icon",
-    src: _computingCloud.default,
+    src: "https://www.shareicon.net/data/256x256/2015/09/05/96087_cloud_512x512.png",
     alt: "upload-icon"
   }), /*#__PURE__*/_react.default.createElement("span", {
     className: "upload-area__drop__text"

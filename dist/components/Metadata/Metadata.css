@@ -41,10 +41,11 @@
   box-sizing: border-box;
 }
 
-.metadata-btn {
+.btn {
   margin-top: 17px;
   border-radius: 5px;
-  padding: 10px 25px;
+  padding: 10px;
+  width: 50%;
   height: 45px;
   font-size: 1.2rem;
   color: #fff;
@@ -55,11 +56,11 @@
   box-shadow: 0 4px 11px 3px rgba(18, 22, 33, 0.05);
 }
 
-.metadata-btn:disabled {
+.btn:disabled {
   background: #e3e9ed !important;
   cursor: default;
 }
 
-.metadata-btn:hover {
+.btn:hover {
   background-color: #009ace;
 }

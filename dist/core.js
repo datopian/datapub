@@ -51,6 +51,30 @@ Object.defineProperty(exports, "Upload", {
     return _Upload.default;
   }
 });
+Object.defineProperty(exports, "encodeData", {
+  enumerable: true,
+  get: function get() {
+    return _encode.default;
+  }
+});
+Object.defineProperty(exports, "formatData", {
+  enumerable: true,
+  get: function get() {
+    return _resource_formats.default;
+  }
+});
+Object.defineProperty(exports, "licenses", {
+  enumerable: true,
+  get: function get() {
+    return _licenses.default;
+  }
+});
+Object.defineProperty(exports, "types", {
+  enumerable: true,
+  get: function get() {
+    return _types.default;
+  }
+});
 
 var _Choose = _interopRequireDefault(require("./components/Choose"));
 
@@ -67,5 +91,13 @@ var _Switcher = _interopRequireDefault(require("./components/Switcher"));
 var _TableSchema = _interopRequireDefault(require("./components/TableSchema"));
 
 var _Upload = _interopRequireDefault(require("./components/Upload"));
+
+var _encode = _interopRequireDefault(require("./db/encode.json"));
+
+var _resource_formats = _interopRequireDefault(require("./db/resource_formats.json"));
+
+var _licenses = _interopRequireDefault(require("./db/licenses.json"));
+
+var _types = _interopRequireDefault(require("./db/types.json"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }

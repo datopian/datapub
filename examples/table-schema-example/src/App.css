@@ -1,0 +1,165 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
+.App {
+  text-align: center;
+  min-height: 100vh;
+  color: #222;
+}
+
+.upload-wrapper {
+  width: 100%;
+  min-width: 360px;
+  max-width: 960px;
+  margin: 0 auto;
+  background-color: #fff;
+  padding: 32px 24px;
+  border-radius: 12px;
+  min-height: 60%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto  300px auto auto;
+  grid-template-areas:
+    "header header"
+    "uploadArea uploadArea"
+    "editArea editArea";
+  row-gap: 20px;
+  column-gap: 20px;
+}
+
+.upload-header {
+  grid-area: header;
+  border-bottom: 1px solid #e3ebff;
+}
+
+.upload-header__title {
+  color: #3f4656;
+  font-weight: 400;
+}
+
+.upload-area {
+  grid-area: uploadArea;
+  display: grid;
+  grid-template-columns: 40% auto;
+  grid-template-rows: 1fr 1fr;
+  grid-template-areas: "drop info";
+  align-items: center;
+}
+
+.upload-area__info {
+  grid-area: info;
+  padding-top: 20px;
+}
+
+.upload-list {
+  padding: 0;
+}
+
+.list-item {
+  display: flex;
+}
+
+.upload-list-item {
+  margin: 0 auto;
+  background-color: #fff;
+  padding: 8px 24px;
+  list-style: none;
+  max-width: 480px;
+  width: 85%;
+  border-top-left-radius: 8px;
+  border-bottom-left-radius: 8px;
+  color: #222;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 4px 11px 3px rgba(18, 22, 33, 0.05);
+}
+
+.upload-file-name {
+  max-width: 19ch;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #3f4656;
+}
+
+.upload-file-size {
+  text-align: left;
+  font-size: 0.75rem;
+  color: lightslategrey;
+}
+
+.upload-message {
+  color: #3f4656;
+}
+
+.upload-switcher {
+  grid-area: switcher;
+}
+
+.upload-edit-area {
+  grid-area: editArea;
+}
+
+.btn {
+  max-width: 220px;
+  margin: 2rem;
+  border-radius: 5px;
+  padding: 10px 25px;
+  height: 45px;
+  font-size: 1.2rem;
+  color: #fff;
+  background-color: #00A7E1;
+  outline: none;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 11px 3px rgba(18, 22, 33, 0.05);
+}
+
+.btn:disabled {
+  background: #e3e9ed !important;
+  cursor: default;
+}
+
+.btn:hover {
+  background-color: #009ace;
+}
+
+.btn-delete {
+  margin: 2rem;
+  border-radius: 5px;
+  padding: 10px 25px;
+  height: 45px;
+  font-size: 1.2rem;
+  color: #fff;
+  outline: none;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 11px 3px rgba(18, 22, 33, 0.05);
+  background-color: #F11301;
+}
+
+.btn-delete :disabled {
+  background: #e3e9ed !important;
+  cursor: default;
+}
+
+.btn-delete:hover {
+  background-color: #C70E00;
+}
+
+.resource-edit-actions {
+  display: flex;
+  justify-content: space-between;
+}

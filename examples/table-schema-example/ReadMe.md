@@ -1,13 +1,13 @@
-## Using Datapub in your React App
+## Using TableSchema Component In your React App
 
-In this example, you'll learn how to use two Datapub components in your react application. By the end of this example, you'll have a working application like the one below:
+In this example, you'll extend this [basic example](../reusable_datapub_basic) to include a TableSchema component. By the end of this example, you'll have a working application like the one below:
 
-<img src='./assets/upload.png' alt='Datapub reusable page after test upload' />
+<img src='./assets/table.png' alt='Datapub reusable page after test upload' />
 
 ### Pre-requisite
 
 - Have Node and Npm/Yarn installed
-- Have create-react-app
+- Have create-react-app installed
 
 ### Set-up
 In a new folder of your work space, open a terminal and create a new react application:
@@ -40,21 +40,20 @@ import React from 'react';
 import { Client } from "ckanClient";
 import PropTypes from "prop-types";
 import frictionlessCkanMapper from "frictionless-ckan-mapper-js";
-import { Upload, Metadata } from "datapub";
+import { Upload, TableSchema } from "datapub";
 import './App.css';
 ```
-You're are creating a client for accessing CKAN using the ckanClient package, importing the frictionless-ckan-mapper for mapping schema, and most importantly importing two components (upload and metadata) from datapub. 
+You're are creating a client for accessing CKAN using the ckanClient package, importing the frictionless-ckan-mapper for mapping schema, and most importantly importing two components (upload and TableSchema) from datapub. 
 
-__Note:__ Available components that you can reuse from datapub are:
-- Metadata
-- Choose
-- InputFile
-- InputUrl
-- ProgressBar
-- Upload
-- TableSchema
+The TableSchema component displays a react-table with 20 rows of sample data from any uploaded CSV file. Properties displayed by the TableSchema includes:
 
-Next, you can add your custom `ResourceEditor`. Copy and paste the code below just in your App.js script:
+- Column names
+- Title: Editable field that can be used to change the names of columns before saving. 
+- Description: Editable field that can be used to describe each column.
+- Inferred Column types
+- Format
+
+Next, you'll add the `ResourceEditor`. Copy and paste the code below just in your App.js script:
 
 ```javascript
 
@@ -247,9 +246,7 @@ export class ResourceEditor extends React.Component {
 }
 ```
 
-# TODO: Some brief explanation on the ResourceEditor
-
-Next, you'll add two Datapub components (Upload and Metadata). At the end of `ResourceEditor` class, add the react render method, and initialize the Datapub components you have imported as shown below:
+Next, you'll the Datapub components (Upload and TableSchema). At the end of `ResourceEditor` class, add the react render method, and initialize the Datapub components you have imported as shown below:
 
 ```javascript
 
@@ -285,11 +282,14 @@ Next, you'll add two Datapub components (Upload and Metadata). At the end of `Re
           />
 
           <div className="upload-edit-area">
-            <Metadata
-              metadata={this.state.resource}
-              handleChange={this.handleChangeMetadata}
-            />
-           
+
+            {this.state.resource.schema && (
+              <TableSchema
+                schema={this.state.resource.schema}
+                data={this.state.resource.sample || []}
+              />
+            )}
+
             {!this.state.isResourceEdit ? (
               <button disabled={!success} className="btn">
                 Save and Publish
@@ -313,6 +313,10 @@ Next, you'll add two Datapub components (Upload and Metadata). At the end of `Re
   }
 ```
 
+The TableSchema component requires two properties
+- schema (data schema)
+- data (sample data)
+
 The Upload component requires 5 properties:
 - client
 - resource
@@ -320,10 +324,6 @@ The Upload component requires 5 properties:
 - datasetId
 - handleUploadStatus
 - onChangeResourceId
-
-While the Metadata componet requires two properties
-- metadata
-- handleChange
 
 
 Finally, add this last bit of code to define your default configuration for the ResourceEditor before exporting the component. 
@@ -347,7 +347,7 @@ ResourceEditor.propTypes = {
 export default ResourceEditor;
 ```
 
-You can see the full App.js script [here](./code/reusable_datapub_basic/src/App.js)
+You can see the full App.js script [here](./src/App.js)
 
 Next, open your `index.js` script, delete the existing code and paste the one below:
 
@@ -409,23 +409,21 @@ Now you're all set, you can start your application by running:
     yarn start
 ```
 
-Your browser should open at port 3000 if its available and display something similar to the page below:
+Your browser should open at port 3000 if its available.
 
-<img src='./assets/before-css.png' alt='Datapub reusable page before CSS' />
-
-You can customize styling, or add some pre-written ones. Copy the CSS style [here](./code/reusable_datapub_basic/src/App.css) and add to your App.css. 
+You can customize styling, or add some pre-written ones. Copy the CSS style [here](./src/App.css) and add to your App.css. 
 
 Your app should now display like:
 
-<img src='./assets/after-css.png' alt='Datapub reusable page after ading CSS' />
+<img src='./assets/app.png' alt='Datapub' />
 
-Try uploading a file, and the Metadata will displayed. This proves that you have been able to successfully reuse the `Upload` and `Metadata` components from `Datapub`. 
+Try uploading a CSV file, and the `TableSchema` will be displayed automatically. This proves that you have been able to successfully reuse the `Upload` and `TableSchema` components from `Datapub`. 
 
-<img src='./assets/upload.png' alt='Datapub reusable page after test upload' />
+<img src='./assets/table.png' alt='Datapub showing tableschema' />
 
 __Note:__ The upload only failed because you do not have a Ckan client running.
 
 See the full code for this example project [here](./code/reusable_datapub_basic)
 
 ## See Also:
-- [Adding TableSchema Component to your react application](../table-schema-example/ReadMe.md)
+- [Adding Upload and Metadata Component to your react application](../reusable_datapub_basic/ReadMe.md)

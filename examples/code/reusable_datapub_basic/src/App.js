@@ -1,62 +1,10 @@
-## Using Datapub in your React App
-
-In this example, you'll learn how to use two Datapub components in your react application. By the end of this example, you'll have a working application like the one below:
-
-<img src='./assets/upload.png' alt='Datapub reusable page after test upload' />
-
-### Pre-requisite
-
-- Have Node and Npm/Yarn installed
-- Have create-react-app
-
-### Set-up
-In a new folder of your work space, open a terminal and create a new react application:
-```bash
-    create-react-app datapub-extend
-```
-Change directory into datapub-extend and run the application to ensure it was created successfully:
-```bash
-    cd datapub-extend
-    yarn start
-```
-If you can see the react logo in your browser, then everything works fine. In the next section, you'll install Datapub and import some components for use. 
-
-Open `datapub-extend` in your code editor, and add the following to your dependencies in `package.json`:
-
-```json
-    ...
-        "datapub": "git+https://github.com/datopian/datapub.git",
-        "ckanClient": "git+https://github.com/datopian/ckan-client-js.git",
-
-    ...
-```
-
-Run `yarn` or `npm install` in your terminal to install Datapub. This installs the latest version of datapub and ckanClient from Github. 
-
-In your App.js script in `src` folder, delete the auto generated contents and add the import statements below:
-
-```javascript
-import React from 'react';
+import React from "react";
 import { Client } from "ckanClient";
 import PropTypes from "prop-types";
 import frictionlessCkanMapper from "frictionless-ckan-mapper-js";
 import { Upload, Metadata } from "datapub";
-import './App.css';
-```
-You're are creating a client for accessing CKAN using the ckanClient package, importing the frictionless-ckan-mapper for mapping schema, and most importantly importing two components (upload and metadata) from datapub. 
 
-__Note:__ Available components that you can reuse from datapub are:
-- Metadata
-- Choose
-- InputFile
-- InputUrl
-- ProgressBar
-- Upload
-- TableSchema
-
-Next, you can add your custom `ResourceEditor`. Copy and paste the code below just in your App.js script:
-
-```javascript
+import "./App.css";
 
 export class ResourceEditor extends React.Component {
   constructor(props) {
@@ -244,19 +192,8 @@ export class ResourceEditor extends React.Component {
   onChangeResourceId = (resourceId) => {
     this.setState({ resourceId });
   };
-}
-```
 
-# TODO: Some brief explanation on the ResourceEditor
-
-Next, you'll add two Datapub components (Upload and Metadata). At the end of `ResourceEditor` class, add the react render method, and initialize the Datapub components you have imported as shown below:
-
-```javascript
-
-    ...
-    ...
-
-    render() {
+  render() {
     const { success } = this.state.ui;
 
     return (
@@ -272,7 +209,7 @@ Next, you'll add two Datapub components (Upload and Metadata). At the end of `Re
           }}
         >
           <div className="upload-header">
-            <h2 className="upload-header__title">Datapub GDX</h2>
+            <h2 className="upload-header__title">Datapub Extend</h2>
           </div>
 
           <Upload
@@ -311,24 +248,8 @@ Next, you'll add two Datapub components (Upload and Metadata). At the end of `Re
       </div>
     );
   }
-```
+}
 
-The Upload component requires 5 properties:
-- client
-- resource
-- metadataHandler
-- datasetId
-- handleUploadStatus
-- onChangeResourceId
-
-While the Metadata componet requires two properties
-- metadata
-- handleChange
-
-
-Finally, add this last bit of code to define your default configuration for the ResourceEditor before exporting the component. 
-
-```javascript
 
 ResourceEditor.defaultProps = {
   config: {
@@ -345,87 +266,3 @@ ResourceEditor.propTypes = {
 };
 
 export default ResourceEditor;
-```
-
-You can see the full App.js script [here](./code/reusable_datapub_basic/src/App.js)
-
-Next, open your `index.js` script, delete the existing code and paste the one below:
-
-```javascript
-import React from 'react';
-import ReactDOM from 'react-dom';
-import App from './App';
-
-
-const element = document.getElementById('ResourceEditor');
-if (element) {
-  const config = {
-    datasetId: element.getAttribute('data-dataset-id'),
-    api: element.getAttribute('data-api'),
-    lfs: element.getAttribute('data-lfs'),
-    authToken: element.getAttribute('data-auth-token'),
-    organizationId: element.getAttribute('data-organization-id'),
-    resourceId: element.getAttribute('data-resource-id')
-  }
-
-  ReactDOM.render(
-    <React.StrictMode>
-        <App
-          config={config}
-          resource={ element.getAttribute('data-resource')}
-        />
-    </React.StrictMode>,
-    element
-  );
-}
-
-
-export { ResourceEditor } from './App';
-```
-
-This automatically mounts the ResourceEditor component in the your homepage if an element with the ID `ResourceEditor` exists. 
-
-The `ResourceEditor` element does not exist since you've not created one, so open your index.html file in the public folder, delete the:
-
-```html
-    <div id="root"></div>
-```
-and add:
-
-```html
-<div id="ResourceEditor"
-     data-api="http://127.0.0.1:5000"
-    data-lfs="http://localhost:9419" 
-    data-auth-token="be270cae-1c77-4853-b8c1-30b6cf5e9228" 
-    data-dataset-id="sample_1" 
-    data-organization-id="myorg">
-</div>
-```
-
-The properties `data-api`, `data-lfs`, `data-auth-token`, `data-dataset-id`, `data-organization-id` are for connecting to your Ckan instance using ckanClient. 
-
-Now you're all set, you can start your application by running:
-```bash
-    yarn start
-```
-
-Your browser should open at port 3000 if its available and display something similar to the page below:
-
-<img src='./assets/before-css.png' alt='Datapub reusable page before CSS' />
-
-You can customize styleing, or add some pre-written ones. Copy the CSS style [here](./code/reusable_datapub_basic/src/App.css) and add to your App.css. 
-
-Your app should now display like:
-
-<img src='./assets/after-css.png' alt='Datapub reusable page after ading CSS' />
-
-Try uploading a file, and the Metadata will displayed. This proves that you have been able to successfully reuse the `Upload` and `Metadata` components from `Datapub`. 
-
-<img src='./assets/upload.png' alt='Datapub reusable page after test upload' />
-
-__Note:__ The upload only failed because you do not have a Ckan client running.
-
-See the full code for this example project [here](./code/reusable_datapub_basic)
-
-## See Also:
-- [Adding TableSchema Component to your react application]()

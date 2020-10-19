@@ -413,7 +413,7 @@ Your browser should open at port 3000 if its available and display something sim
 
 <img src='./assets/before-css.png' alt='Datapub reusable page before CSS' />
 
-You can customize styleing, or add some pre-written ones. Copy the CSS style [here](./code/reusable_datapub_basic/src/App.css) and add to your App.css. 
+You can customize styling, or add some pre-written ones. Copy the CSS style [here](./code/reusable_datapub_basic/src/App.css) and add to your App.css. 
 
 Your app should now display like:
 

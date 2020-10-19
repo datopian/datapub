@@ -1,5 +1,5 @@
-### This example shows how to integrate two [Datapub]() components (Upload and Metadata) into your React appliaction. 
-For more explanation, go [here]()
+### This example shows how to integrate two Datapub components (Upload and Metadata) into your React appliaction. 
+For more explanation, go [here](examples/reusable_datapub_basic.md)
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 

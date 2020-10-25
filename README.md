@@ -6,66 +6,87 @@
 ![build](https://github.com/datopian/datapub/workflows/datapub%20actions/badge.svg)
 [![The MIT License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](http://opensource.org/licenses/MIT)
 
-React-based framework for building data publishing flows (esp for CKAN). This application will communicate with [ckanext-external-storage](https://github.com/datopian/ckanext-external-storage).
+DataPub is a React-based framework for rapidly building modern data publishing flows (esp for CKAN). It provides a variety of core components as well as example apps and flows.
 
 </div>
 
-## Prerequisites
+## Background
 
-- [Node](https://nodejs.org/en/)
-- [NPM Package Manager](https://www.npmjs.com/)
+This is a brief summary from https://tech.datopian.com/publish/ -- read that for more detail.
 
-## Built with
+### What do we mean by data publishing?
 
-- [create-react-app](https://cryptojs.gitbook.io/docs/)
-- [Storybook](https://storybook.js.org/)
-- [enzyme](https://github.com/enzymejs/enzyme)
-- [Jest](https://jestjs.io/)
-- [Ckan3-js-sdk](https://github.com/datopian/ckan3-js-sdk)
+The process of publishing data files and datasets (collections of files).
 
-## Usage
+Specifically, the process of getting your data files stored and described in a data portal or other platform. Usually it involves steps like:
 
-There are several ways of using this library:
+* Uploading or linking the files into the platform
+* Describing thoese files with high level metadata e.g. the name and description of the dataset or files, their license etc
+* Specific metadata about the data e.g. its structure, what fields there are and their types (e.g. integer, string)
 
-### Automatically mount the app
+### Why DataPub?
 
-Define a HTML element with id `ResourceEditor` where the app will mounted. You also need to have `data-dataset-id` and `data-resource` attributes:
+At Datopian we have been building data publishing flows for nearly 15 years both in tools like CKAN and OpenSpending and in custom applications. Our experience has taught us two things:
 
-```html
-<div id="ResourceEditor" data-dataset-id="test-id" data-resource="{}"></div>
-```
+* Data Publishing flows almost always have some custom aspect. Whether it is a small tweak like adding a specific metadata field or a complex change like add data validation.
+* There are many common components e.g. file upload and common patterns to many overall flows e.g. add a file, add metadata, save!
 
-Where `data-dataset-id` is an id of a CKAN dataset and `data-resource` is a descriptor of a resource. When creating a new resource, you can just skip that attribute.
+This indicates the need for a **framework** -- rather than a single one-size-fits-all application.
 
-### Explicitly mounting
+### The DataPub approach
 
-You can also explicitly call a function to mount the app to specific place in your page:
+* 🏗️ React-based: individual data publishing flows will be React apps that you can boot with standard tools like `create-react-app` and where you can use the full ecosystem of React tooling and components
+* 📦 Core components: provide a suite of tried and tested core components common to many publishing flows such as file upload, table schema editor etc
+* 🚂 Template apps: provide examples of full-scale apps which developers building new flows can use for inspiration and instruction e.g. copy and paste an example and then modify it
 
-```javascript
-const elementId = 'root';
-const datasetId = 'test-id'
-// Make sure the module is loaded first, otherwise, this function won't be available
-mountResourceEditorApp(myElementId, datasetId);
-```
+## Components
 
-### Import specific components
+Components include:
 
-Another way of using the library is to import specific components for your needs:
+* File upload
+* File link
+* Table Schema editor
 
-```javascript
-import React from 'react';
-import { ResourceEditor } from 'datapub';
+TODO: list more if more and link into storybook for these ...
 
-const MyComponent = (props) => {
-  return (
-    <ResourceEditor datasetId={} resource={} />
-  )
-}
-```
+To see all the available components visit our Storybook:
+
+https://datopian.github.io/datapub
+
+## Example Apps
+
+See the `examples` directory.
+
+For other full scale apps using DataPub in the wild see:
+
+* https://github.com/datopian/datapub-nhs
+
+
+## Getting started
+
+There are two ways to get started
+
+* Copy an existing example app from the `examples` directory and then modify it
+* Add DataPub components into either an existing React App or into a newly created a React app created from scratch using e.g. `create-react-app`
+
+Of these two options the former is better when experimenting or for small changes. The latter is better if you are building a more complex application or integrating into an existing application.
+
+TODO: explain briefly the key steps e.g. 
+
+* how you install the library into your app
+* how you import a component (pick a common one)
+* how you might use it ...
+
+TODO BONUS: a short tutorial showing how to do a custom (resource) metadata editor.
+
+
+---
 
 ## Developers
 
 ### Install
+
+Install a recent [Node](https://nodejs.org/en/) version.
 
 First, clone the repo via git:
 
@@ -82,14 +103,15 @@ $ npm install
 
 ### Run
 
+Run the app in the development mode.
+
 ```bash
 $ npm run start
 ```
 
-Run the app in the development mode.<br />
-Open [http://localhost:3000/](http://localhost:3000/) to view it in the browser.
+Then open [http://localhost:3000/](http://localhost:3000/) to view it in the browser.
 
-The page will reload if you make edits.<br />
+The page will reload if you make edits.
 
 ### Storybook
 

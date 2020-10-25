@@ -35,9 +35,9 @@ This indicates the need for a **framework** -- rather than a single one-size-fit
 
 ### The DataPub approach
 
-* 🏗️ React-based: individual data publishing flows will be React apps that you can boot with standard tools like `create-react-app` and where you can use the full ecosystem of React tooling and components
-* 📦 Core components: provide a suite of tried and tested core components common to many publishing flows such as file upload, table schema editor etc
-* 🚂 Template apps: provide examples of full-scale apps which developers building new flows can use for inspiration and instruction e.g. copy and paste an example and then modify it
+* **🏗️ React-based**: individual data publishing flows will be React apps that you can boot with standard tools like `create-react-app` and where you can use the full ecosystem of React tooling and components
+* **📦 Core components**: provide a suite of tried and tested core components common to many publishing flows such as file upload, table schema editor etc
+* **🚂 Template apps**: provide examples of full-scale apps which developers building new flows can use for inspiration and instruction e.g. copy and paste an example and then modify it
 
 ## Components
 
@@ -47,26 +47,27 @@ Components include:
 * File link
 * Table Schema editor
 
-TODO: list more if more and link into storybook for these ...
+TODO: list more if more and link each of these into storybook ...
 
 To see all the available components visit our Storybook:
 
 https://datopian.github.io/datapub
 
-## Example Apps
+## Example Apps
 
-See the `examples` directory.
+See the [`examples`][ex] directory.
 
 For other full scale apps using DataPub in the wild see:
 
 * https://github.com/datopian/datapub-nhs
 
+[ex]: ./examples/
 
 ## Getting started
 
 There are two ways to get started
 
-* Copy an existing example app from the `examples` directory and then modify it
+* Copy an existing example app from the [`examples`][ex] directory and then modify it
 * Add DataPub components into either an existing React App or into a newly created a React app created from scratch using e.g. `create-react-app`
 
 Of these two options the former is better when experimenting or for small changes. The latter is better if you are building a more complex application or integrating into an existing application.

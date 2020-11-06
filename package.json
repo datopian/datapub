@@ -15,12 +15,12 @@
   "dependencies": {
     "axios": "^0.19.2",
     "ckanClient": "git+https://github.com/datopian/ckan-client-js.git",
-    "data.js": "git+https://github.com/datopian/data.js.git",
     "frictionless-ckan-mapper-js": "^1.0.0",
-    "stream-to-array": "^2.3.0",
-    "uuidv4": "^6.2.3",
+    "frictionless.js": "^0.13.2",
+    "react-scripts": "^3.4.3",
     "react-table": "^7.5.0",
-    "react-scripts": "^3.4.3"
+    "stream-to-array": "^2.3.0",
+    "uuidv4": "^6.2.3"
   },
   "peerDependencies": {
     "react": "^16.13.0",

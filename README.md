@@ -37,17 +37,20 @@ This indicates the need for a **framework** -- rather than a single one-size-fit
 
 * **🏗️ React-based**: individual data publishing flows will be React apps that you can boot with standard tools like `create-react-app` and where you can use the full ecosystem of React tooling and components
 * **📦 Core components**: provide a suite of tried and tested core components common to many publishing flows such as file upload, table schema editor etc
-* **🚂 Template apps**: provide examples of full-scale apps which developers building new flows can use for inspiration and instruction e.g. copy and paste an example and then modify it
+* **🚂 [Template apps](./examples/)**: provide examples of full-scale apps which developers building new flows can use for inspiration and instruction e.g. copy and paste an example and then modify it
 
 ## Components
 
 Components include:
 
-* File upload
-* File link
-* Table Schema editor
+* [File Upload](https://datopian.github.io/datapub/iframe.html?id=components-upload--idle)
+* [File Input](https://datopian.github.io/datapub/iframe.html?id=components-input-file--drag-and-drop)
+* [File Input Url](https://datopian.github.io/datapub/iframe.html?id=components-input-url--default)
+* [Table Schema](https://datopian.github.io/datapub/iframe.html?id=components-tableschema--idle)
+* [Metadata](https://datopian.github.io/datapub/iframe.html?id=components-metadata--idle)
+* ProgressBar
+* Switcher
 
-TODO: list more if more and link each of these into storybook ...
 
 To see all the available components visit our Storybook:
 
@@ -72,14 +75,81 @@ There are two ways to get started
 
 Of these two options the former is better when experimenting or for small changes. The latter is better if you are building a more complex application or integrating into an existing application.
 
-TODO: explain briefly the key steps e.g. 
+In order to add DataPub components into a newly created React application, follow the steps below:
 
-* how you install the library into your app
-* how you import a component (pick a common one)
-* how you might use it ...
+**Step 1:** create a new react application:
+```bash
+    create-react-app datapub-extend
+```
+Change directory into datapub-extend and run the application to ensure it was created successfully:
+```bash
+    cd datapub-extend
+    yarn start
+```
+**Step 2:** Install Datapub 
 
-TODO BONUS: a short tutorial showing how to do a custom (resource) metadata editor.
+```bash
+   yarn add git+https://github.com/datopian/datapub.git
+```
+**Step 3:** In the App.js, initialises your app with the Resource editor
 
+```javascript
+...
+export class ResourceEditor extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      datasetId: this.props.config.datasetId,
+      resourceId: "",
+      resource: this.props.resource || {},
+     ...
+    };
+  }
+  ...
+
+```
+
+**Step 4:** Also in App.js, import the components you need. For instance in the code below we import Upload and TableSchema component. 
+
+```javascript
+...
+import { Upload, TableSchema } from "datapub";
+...
+```
+**Step 5:** In the render section of your resource editor, add the Upload and TableSchema components you just imported. 
+
+```javascript
+...
+ <div className="upload-edit-area">
+
+    {this.state.resource.schema && (
+      <TableSchema
+        schema={this.state.resource.schema}
+        data={this.state.resource.sample || []}
+      />
+    )}
+
+    {!this.state.isResourceEdit ? (
+      <button disabled={!success} className="btn">
+        Save and Publish
+      </button>
+    ) : (
+      <div className="resource-edit-actions">
+        <button
+          type="button"
+          className="btn btn-delete"
+          onClick={this.deleteResource}
+        >
+          Delete
+        </button>
+        <button className="btn">Update</button>
+      </div>
+    )}
+  </div>
+  ...
+```
+
+See the full example with code and explanations [here](examples/table-schema)
 
 ---
 

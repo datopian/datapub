@@ -7,9 +7,7 @@ exports.default = void 0;
 
 var _react = _interopRequireDefault(require("react"));
 
-var data = _interopRequireWildcard(require("data.js"));
-
-var _frictionlessCkanMapperJs = _interopRequireDefault(require("frictionless-ckan-mapper-js"));
+var data = _interopRequireWildcard(require("frictionless.js"));
 
 var _streamToArray = _interopRequireDefault(require("stream-to-array"));
 

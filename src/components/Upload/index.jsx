@@ -1,5 +1,5 @@
 import React from "react";
-import * as data from "data.js";
+import * as data from "frictionless-js";
 import frictionlessCkanMapper from "frictionless-ckan-mapper-js";
 import toArray from "stream-to-array";
 import ProgressBar from "../ProgressBar";
@@ -100,7 +100,7 @@ class Upload extends React.Component {
           success: response.success,
           loading: false,
           fileExists: response.fileExists,
-          loaded: 100
+          loaded: 100,
         });
         this.props.handleUploadStatus({
           loading: false,
@@ -156,7 +156,10 @@ class Upload extends React.Component {
                 </li>
               </ul>
               <h2 className="upload-message">
-                {success && !fileExists && !error && "File uploaded successfully"}
+                {success &&
+                  !fileExists &&
+                  !error &&
+                  "File uploaded successfully"}
                 {fileExists && "File uploaded successfully"}
                 {error && "Upload failed"}
               </h2>

@@ -107,6 +107,7 @@ class Upload extends React.Component {
         });
       })
       .catch((error) => {
+        console.error("Upload failed with error: " + error);
         this.setState({ error: true, loading: false });
         this.props.handleUploadStatus({
           loading: false,

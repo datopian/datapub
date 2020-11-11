@@ -34,7 +34,7 @@ class Upload extends React.Component {
         file.descriptor.sample = await toArray(rowStream);
         await file.addSchema();
       } catch (e) {
-        console.error(e);
+        console.warn(e);
       }
       formattedSize = onFormatBytes(file.size);
       const hash = await file.hashSha256();

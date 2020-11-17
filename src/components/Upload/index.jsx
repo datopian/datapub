@@ -37,7 +37,7 @@ class Upload extends React.Component {
         console.warn(e);
       }
       formattedSize = onFormatBytes(file.size);
-      const hash = await file.hashSha256();
+      const hash = await file.hash('sha256');
       this.props.metadataHandler(Object.assign(file.descriptor, { hash }));
     }
 
@@ -50,7 +50,7 @@ class Upload extends React.Component {
       formattedSize,
     });
 
-    this.onClickHandler();
+    await this.onClickHandler();
   };
 
   onUploadProgress = (progressEvent) => {
@@ -96,14 +96,14 @@ class Upload extends React.Component {
       .pushBlob(resource, this.onUploadProgress)
       .then((response) => {
         this.setState({
-          success: response.success,
+          success: true,
           loading: false,
-          fileExists: response.fileExists,
+          fileExists: ! response,
           loaded: 100
         });
         this.props.handleUploadStatus({
           loading: false,
-          success: response.success,
+          success: true,
         });
       })
       .catch((error) => {

@@ -26,24 +26,24 @@ Open `datapub-extend` in your code editor, and add the following to your depende
 ```json
     ...
         "datapub": "git+https://github.com/datopian/datapub.git",
-        "ckanClient": "git+https://github.com/datopian/ckan-client-js.git",
+        "ckan-client": "git+https://github.com/datopian/ckan-client-js.git",
 
     ...
 ```
 
-Run `yarn` or `npm install` in your terminal to install Datapub. This installs the latest version of datapub and ckanClient from Github. 
+Run `yarn` or `npm install` in your terminal to install Datapub. This installs the latest version of datapub and ckan-client from Github. 
 
 In your App.js script in `src` folder, delete the auto generated contents and add the import statements below:
 
 ```javascript
 import React from 'react';
-import { Client } from "ckanClient";
+import { Client } from "ckan-client";
 import PropTypes from "prop-types";
 import frictionlessCkanMapper from "frictionless-ckan-mapper-js";
 import { Upload, Metadata } from "datapub";
 import './App.css';
 ```
-You're are creating a client for accessing CKAN using the ckanClient package, importing the frictionless-ckan-mapper for mapping schema, and most importantly importing two components (upload and metadata) from datapub. 
+You're are creating a client for accessing CKAN using the ckan-client package, importing the frictionless-ckan-mapper for mapping schema, and most importantly importing two components (upload and metadata) from datapub. 
 
 __Note:__ Available components that you can reuse from datapub are:
 - Metadata
@@ -402,7 +402,7 @@ and add:
 </div>
 ```
 
-The properties `data-api`, `data-lfs`, `data-auth-token`, `data-dataset-id`, `data-organization-id` are for connecting to your Ckan instance using ckanClient. 
+The properties `data-api`, `data-lfs`, `data-auth-token`, `data-dataset-id`, `data-organization-id` are for connecting to your Ckan instance using ckan-client. 
 
 Now you're all set, you can start your application by running:
 ```bash

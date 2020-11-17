@@ -1,5 +1,5 @@
 import React from "react";
-import { Client } from "ckanClient";
+import { Client } from "ckan-client";
 import PropTypes from "prop-types";
 import frictionlessCkanMapper from "frictionless-ckan-mapper-js";
 import { v4 as uuidv4 } from "uuid";

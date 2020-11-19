@@ -1,6 +1,6 @@
 {
   "name": "datapub",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "private": false,
   "main": "dist/core.js",
   "module": "dist/core.js",

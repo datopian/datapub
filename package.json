@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "axios": "^0.19.2",
-    "ckan-client": "git+https://github.com/datopian/ckan-client-js.git#v0.4.0",
+    "ckan-client": "git+https://github.com/datopian/ckan-client-js.git#v0.4.1",
     "frictionless-ckan-mapper-js": "^1.0.0",
     "frictionless.js": "^0.13.3",
     "react-scripts": "^3.4.3",

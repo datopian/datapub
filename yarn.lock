@@ -4886,9 +4886,9 @@ cipher-base@^1.0.0, cipher-base@^1.0.1, cipher-base@^1.0.3:
     inherits "^2.0.1"
     safe-buffer "^5.0.1"
 
-"ckan-client@git+https://github.com/datopian/ckan-client-js.git#v0.4.0":
-  version "0.3.0"
-  resolved "git+https://github.com/datopian/ckan-client-js.git#72fb56b46e6a0ae3490754b2b5890c96a3dbb938"
+"ckan-client@git+https://github.com/datopian/ckan-client-js.git#v0.4.2":
+  version "0.4.2"
+  resolved "git+https://github.com/datopian/ckan-client-js.git#f59a13b15b14cbbf0053201af0ccf15150a1b2ae"
   dependencies:
     axios "^0.19.2"
     crypto-js "^4.0.0"
@@ -7230,25 +7230,6 @@ frictionless-ckan-mapper-js@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/frictionless-ckan-mapper-js/-/frictionless-ckan-mapper-js-1.0.0.tgz#856b5bcad12bfbeb72084219fba621aca211700a"
   integrity sha512-/6/5ECgB1sBuKmgbeXHFi4yiSudZszaGUOhlbsqMybGy9IAFwPX8Pu6rqN7aXjTvzWTUJ0bTh2LsNaB9EuPugQ==
-
-frictionless.js@^0.13.2:
-  version "0.13.2"
-  resolved "https://registry.yarnpkg.com/frictionless.js/-/frictionless.js-0.13.2.tgz#6a3472050dc7626873f13693ce414eb143429627"
-  integrity sha512-2XXaURUQRK/eDkDeh3TpFnXMitsSn8CNqYf3T+BR5NqDWJ2QuR2owFAdpAdR4cwH4TuuVnEANK4aVHMwsnZXCQ==
-  dependencies:
-    chardet "1.3.0"
-    csv-parse "4.12.0"
-    csv-sniffer "0.1.1"
-    iconv-lite "0.6.2"
-    lodash "4.17.20"
-    mime-types "2.1.27"
-    node-fetch "2.6.1"
-    readable-web-to-node-stream "^2.0.0"
-    stream-to-array "2.3.0"
-    stream-to-string "1.2.0"
-    tableschema "1.12.3"
-    url-join "4.0.1"
-    xlsx "0.16.7"
 
 frictionless.js@^0.13.3:
   version "0.13.3"

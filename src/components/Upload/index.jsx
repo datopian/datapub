@@ -30,8 +30,6 @@ class Upload extends React.Component {
       selectedFile = event.target.files[0];
       const file = data.open(selectedFile);
       try {
-        const rowStream = await file.rows({ size: 20, keyed: true });
-        file.descriptor.sample = await toArray(rowStream);
         await file.addSchema();
       } catch (e) {
         console.warn(e);

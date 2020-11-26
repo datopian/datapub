@@ -16,7 +16,7 @@
     "axios": "^0.19.2",
     "ckan-client": "git+https://github.com/datopian/ckan-client-js.git#v0.4.2",
     "frictionless-ckan-mapper-js": "^1.0.0",
-    "frictionless.js": "^0.13.3",
+    "frictionless.js": "^0.13.4",
     "react-scripts": "^3.4.3",
     "react-table": "^7.5.0",
     "stream-to-array": "^2.3.0",

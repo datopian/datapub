@@ -89,7 +89,7 @@ Change directory into datapub-extend and run the application to ensure it was cr
 **Step 2:** Install Datapub 
 
 ```bash
-   yarn add git+https://github.com/datopian/datapub.git
+   yarn add datapub
 ```
 **Step 3:** In the App.js, initialises your app with the Resource editor
 

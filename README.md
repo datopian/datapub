@@ -21,7 +21,7 @@ The process of publishing data files and datasets (collections of files).
 Specifically, the process of getting your data files stored and described in a data portal or other platform. Usually it involves steps like:
 
 * Uploading or linking the files into the platform
-* Describing thoese files with high level metadata e.g. the name and description of the dataset or files, their license etc
+* Describing these files with high level metadata e.g. the name and description of the dataset or files, their license etc
 * Specific metadata about the data e.g. its structure, what fields there are and their types (e.g. integer, string)
 
 ### Why DataPub?

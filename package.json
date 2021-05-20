@@ -1,6 +1,6 @@
 {
   "name": "datapub",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "private": false,
   "main": "dist/core.js",
   "module": "dist/core.js",
@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "axios": "^0.19.2",
-    "ckan-client": "git+https://github.com/datopian/ckan-client-js.git#v0.4.2",
+    "ckan-client": "git+https://github.com/datopian/ckan-client-js.git#v0.4.3",
     "frictionless-ckan-mapper-js": "^1.0.0",
     "frictionless.js": "^0.13.4",
     "react-scripts": "^3.4.3",
